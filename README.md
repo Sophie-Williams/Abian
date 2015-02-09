@@ -1,5 +1,5 @@
 # Abian
-Bot-sharing network for Adventure Quest Worlds.
+Bot-sharing network for Adventure Quest Worlds being built from the ground up on [Twitch](https://twitch.tv/zbee_). Because why not?
 
 [Todo list](https://trello.com/b/deYLVjNm)
 
