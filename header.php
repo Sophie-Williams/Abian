@@ -47,7 +47,8 @@ if ($session === true) {
             <li><a href="/u/login">Login</a></li>
             <li><a href="/u/register">Register</a></li>
           <?php elseif (is_array($session)): ?>
-            <li><a href="/u/login">Hello, <?=$session["username"]?></a></li>
+            <li><a href="/u/cp">Hello, <?=$session["username"]?></a></li>
+            <li><a href="/u/logout">Logout</a></li>
           <?php endif; ?>
         </ul>
       </div><!--/.nav-collapse -->

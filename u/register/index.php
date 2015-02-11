@@ -3,12 +3,17 @@ require_once("../../header.php");
 
 $session = $UserSystem->verifySession();
 if ($session === true) {
-  $UserSystem->redirect301("../../");
+  $UserSystem->redirect301("/");
 }
 
 if (isset($_POST["u"])) {
   if ($_POST["p"] === $_POST["cp"]) {
     $register = $UserSystem->addUser($_POST["u"], $_POST["p"], $_POST["e"]);
+    if ($register === true) {
+      $UserSystem->redirect301("/"); #Doesn't send emails. Dunno why. Bye.
+    } else {
+      var_dump($register);
+    }
   } else {
     echo "You suck. Stupid";
   }

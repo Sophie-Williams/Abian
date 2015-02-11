@@ -324,6 +324,20 @@ class Utils {
       ) {
         return $data;
       }
+    } elseif ($type == "e") {
+      if (
+        filter_var(
+          filter_var(
+            $data,
+            FILTER_SANITIZE_EMAIL
+          ),
+          FILTER_VALIDATE_EMAIL
+        )
+        ===
+        $data
+      ) {
+        return $data;
+      }
     }
 
     return "FAILED SANITIZATION";
@@ -343,6 +357,7 @@ class Utils {
     $headers = 'From: noreply@'.DOMAIN."\r\n" .
     'Reply-To: support@'.DOMAIN."\r\n" .
     'X-Mailer: PHP/'.phpversion();
-    mail($recipient, $subject, $message, $headers);
+    $mail = mail($recipient, $subject, $message, $headers);
+    return $mail;
   }
 }

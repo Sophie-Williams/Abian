@@ -104,6 +104,10 @@ class UserSystem extends Database {
         return "tamper";
       }
     } else {
+      if ($rows > 1) {
+        return "sessions";
+        $this->dbDel(["userblobs", ["code"=>$session, "action"=>"session"]]);
+      }
       return "session";
     }
   }
@@ -124,46 +128,50 @@ class UserSystem extends Database {
      if ($usernameUse == 0) {
        $emailUse = $this->dbSel(["users", ["email" => $email]])[0];
        if ($emailUse == 0) {
-         $salt = $this->createSalt($username);
-         $data = [
-           "username" => $username,
-           "password" => hash("sha256", $password.$salt),
-           "email" => $email,
-           "salt" => $salt,
-           "dateRegistered" => time()
-         ];
+         if ($this->sanitize($email, "e") !== "FAILED SANITIZATION") {
+           $salt = $this->createSalt($username);
+           $data = [
+             "username" => $username,
+             "password" => hash("sha256", $password.$salt),
+             "email" => $email,
+             "salt" => $salt,
+             "dateRegistered" => time()
+           ];
 
-         $morech = $this->sanitize($more, "b");
+           $morech = $this->sanitize($more, "b");
 
-         if ($morech !== false && is_array($more)) {
-           foreach ($more as $item) {
-             $data[array_search($item, $more)] = $item;
+           if ($morech !== false && is_array($more)) {
+             foreach ($more as $item) {
+               $data[array_search($item, $more)] = $item;
+             }
            }
-         }
 
-         $this->dbIns(["users", $data]);
-         $blob = $this->insertUserBlob($username, "activate");
-         $link = $this->sanitize(
-           URL_PREFACE."://".DOMAIN."/".ACTIVATE_PG."/?blob={$blob}",
-           "u"
-         );
-         $this->sendMail(
-           $email,
-           "Activate your ".SITENAME." account",
-           "           Hello {$username}
+           $this->dbIns(["users", $data]);
+           $blob = $this->insertUserBlob($username, "activate");
+           $link = $this->sanitize(
+             URL_PREFACE."://".DOMAIN."/".ACTIVATE_PG."/?blob={$blob}",
+             "u"
+           );
+           $mail = $this->sendMail(
+             $email,
+             "Activate your ".SITENAME." account",
+             "           Hello {$username}
 
-           To activate your account, click the link below.
-           {$link}
+             To activate your account, click the link below.
+             {$link}
 
-           ======
+             ======
 
-           If this wasn't you, you can ignore this email.
+             If this wasn't you, you can ignore this email.
 
-           Thank you"
-         );
-         return true;
+             Thank you"
+           );
+           return $mail;
+        } else {
+          return "emailbad";
+        }
        } else {
-         return "email";
+         return "emailused";
        }
      } else {
        return "username";
@@ -278,24 +286,20 @@ class UserSystem extends Database {
    * @return boolean
    */
   public function logOut ($code, $user, $cursess = false, $all = false) {
-    $cursess = $this->sanitize($cursess, "b");
-    $all = $this->sanitize($all, "b");
-
-    if (!$all) {
+    if ($all === false) {
       $this->dbDel(
         [
           "userblobs",
           [
-            "code"=>$code,
-            "user"=>$user,
-            "action"=>"session"
+            "code" => $code,
+            "user" => $user
           ]
         ]
       );
     } else {
       $this->dbDel(["userblobs", ["user"=>$user]]);
     }
-    if ($cursess) {
+    if ($cursess === true) {
       setcookie(
         SITENAME,
         null,
