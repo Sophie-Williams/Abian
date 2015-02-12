@@ -39,8 +39,7 @@ echo <<<EOT
 
     <br>
 
-    <table class="table table-responsive table-rounded table-bordered
-      table-striped">
+    <table class="table table-responsive table-rounded table-bordered">
       <tr>
         <th>Date</th>
         <th>IP</th>

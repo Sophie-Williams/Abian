@@ -10,7 +10,7 @@ if (isset($_POST["u"])) {
   if ($_POST["p"] === $_POST["cp"]) {
     $register = $UserSystem->addUser($_POST["u"], $_POST["p"], $_POST["e"]);
     if ($register === true) {
-      $UserSystem->redirect301("/"); #Doesn't send emails. Dunno why. Bye.
+      $UserSystem->redirect301("/");
     } else {
       var_dump($register);
     }

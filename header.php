@@ -47,8 +47,15 @@ if ($session === true) {
             <li><a href="/u/login">Login</a></li>
             <li><a href="/u/register">Register</a></li>
           <?php elseif (is_array($session)): ?>
-            <li><a href="/u/cp">Hello, <?=$session["username"]?></a></li>
-            <li><a href="/u/logout">Logout</a></li>
+            <li class="dropdown">
+              <a href="/u?zbee" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hello, <?=$session["username"]?> <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/u/cp">Control Panel</a></li>
+                <li><a href="/u/settings">Settings</a></li>
+                <li class="divider"></li>
+                <li><a href="/u/logout">Logout</a></li>
+              </ul>
+            </li>
           <?php endif; ?>
         </ul>
       </div><!--/.nav-collapse -->
