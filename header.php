@@ -1,6 +1,7 @@
 <?php
 require_once("_secret_keys.php");
 require_once("/var/www/abian/libs/usersystem/config.php");
+require_once("/var/www/abian/libs/recaptcha.php");
 $session = $UserSystem->verifySession();
 if ($session === true) {
   $session = $UserSystem->session();
