@@ -1,10 +1,6 @@
 <?php
 require_once("/var/www/abian/header.php");
-$session = $UserSystem->verifySession();
-if ($session === false) {
-  $UserSystem->redirect301("/");
-}
-$session = $UserSystem->session();
+if ($session === false) $UserSystem->redirect301("/");
 
 $error = "";
 
@@ -40,22 +36,22 @@ if (isset($_POST["a"])) {
   $_POST["a"] = $UserSystem->sanitize($_POST["a"]);
   if ($session["twitchName"] !== $_POST["a"]) {
     if (empty($session["twitchName"])) {
-      $hist = $Abian->historify("twitchName.added", "To: " . $_POST["a"]);
+      $hist = $Abian->historify("aqName.added", "To: " . $_POST["a"]);
     } else {
-      $hist = $Abian->historify("twitchName.updated", "To: " . $_POST["a"]);
+      $hist = $Abian->historify("aqName.updated", "To: " . $_POST["a"]);
     }
     $UserSystem->dbUpd(
       [
         "users",
         [
-          "twitchName" => $_POST["a"]
+          "aqName" => $_POST["a"]
         ],
         [
           "id" => $session["id"]
         ]
       ]
     );
-    $session["twitchName"] = $_POST["a"];
+    $session["aqName"] = $_POST["a"];
   }
   $error = "<div class='col-xs-12'>
     <div class='alert alert-success'>
@@ -161,7 +157,7 @@ if (isset($_POST["e"])) {
         $error = "<div class='col-xs-12'>
           <div class='alert alert-success'>
             Email updated to ".$_POST["e"].". A notification email has been sent
-            to your previous email and the new one.
+            to your previous emails and the new one.
           </div>
         </div>";
       } else {
@@ -186,7 +182,7 @@ if (isset($_POST["e"])) {
 echo $error;
 
 echo <<<EOT
-<div class="col-xs-12 col-sm-3">
+<div class="col-xs-12 col-sm-2">
   <div class="list-group">
     <a href="#profile" class="list-group-item">Profile</a>
     <a href="#settings" class="list-group-item">Settings</a>
@@ -196,7 +192,7 @@ echo <<<EOT
 EOT;
 
 echo <<<EOT
-<div class="col-xs-12 col-sm-9">
+<div class="col-xs-12 col-sm-10">
   <div class="well well-sm" id="profile">
     Profile
   </div>
@@ -224,7 +220,7 @@ echo <<<EOT
         <div class="panel-body">
           <form class="form form-vertical" method="post" action="">
             <div class="form-group">
-              <label for="a">Currently: $session[twitchName]</label>
+              <label for="a">Currently: $session[aqName]</label>
               <input type="text" class="form-control" id="a" name="a">
             </div>
             <button type="submit" class="btn btn-primary btn-block">
@@ -362,8 +358,7 @@ foreach ($blobs as $key => $blob) {
   echo "<tr".$ext.">
       <td>".date("Y-m-d\TH:i", $blob["date"])."</td>
       <td>
-        <img src='http://api.hostip.info/flag.php?ip=".$blob["ip"]."' 
-          height='16'>
+        <span class='f32'><i class='flag ".strtolower($blob["a2"])."' title='".$blob["a2"]."'>&nbsp;</i></span>
         ".$blob["ip"]."
       </td>
       <td>".ucfirst($blob["action"])."</td>
@@ -382,7 +377,7 @@ EOT;
  * History
  */
 echo <<<EOT
-  <div class="panel panel-default">
+  <div class="panel panel-default" style="max-height:500px;overflow-y:auto">
     <div class="panel-heading">History</div>
     <div class="panel-body">
       This is a log of events involving your account.
@@ -401,7 +396,7 @@ foreach ($history as $hist) {
   echo "<tr".$ext.">
       <td>".date("Y-m-d\TH:i", $hist["date"])."</td>
       <td>
-        <img src='http://api.hostip.info/flag.php?ip=".$hist["actorIp"]."' height='16'>
+        <span class='f32'><i class='flag ".strtolower($hist["actorA2"])."' title='".$hist["actorA2"]."'>&nbsp;</i></span>
         ".$hist["actorIp"]."
       </td>
       <td>".$hist["action"]."</td>

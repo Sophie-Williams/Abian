@@ -6,7 +6,7 @@ if (is_array($session)) $UserSystem->redirect301("/");
 if (isset($_POST["u"])) {
   $login = $UserSystem->logIn($_POST["u"], $_POST["p"]);
   if ($login === true) {
-    $UserSystem->redirect301("/");
+    $UserSystem->redirect301("/?loggedin");
   }
 }
 ?>

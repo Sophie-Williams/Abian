@@ -222,6 +222,10 @@ class Utils {
       $_SERVER["REMOTE_ADDR"],
       FILTER_SANITIZE_FULL_SPECIAL_CHARS
     );
+    $country = filter_var(
+      $_SERVER["HTTP_CF_IPCOUNTRY"],
+      FILTER_SANITIZE_FULL_SPECIAL_CHARS
+    );
     if (ENCRYPTION === true) {
       $ipAddress = encrypt($ipAddress, $username);
     }
@@ -233,6 +237,7 @@ class Utils {
           "code" => $hash,
           "action" => $action,
           "ip" => $ipAddress,
+          "a2" => $country,
           "date" => time()
         ]
       ]

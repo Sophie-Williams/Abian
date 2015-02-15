@@ -227,6 +227,10 @@ class UserSystem extends Database {
       $_SERVER["REMOTE_ADDR"],
       FILTER_SANITIZE_FULL_SPECIAL_CHARS
     );
+    $country = filter_var(
+      $_SERVER["HTTP_CF_IPCOUNTRY"],
+      FILTER_SANITIZE_FULL_SPECIAL_CHARS
+    );
     $user = $this->session($username);
     if (is_array($user)) {
       $password = hash("sha256", $password.$user["salt"]);
@@ -243,7 +247,8 @@ class UserSystem extends Database {
                 [
                   "ip" => $ipAddress,
                   "lastLoggedIn" => time(),
-                  "oldLastLoggedIn" => $user["lastLoggedIn"]
+                  "oldLastLoggedIn" => $user["lastLoggedIn"],
+                  "a2" => $country
                 ],
                 [
                   "username" => $username

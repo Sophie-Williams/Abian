@@ -16,6 +16,7 @@ if ($session === true) {
 <html>
 <head>
   <link href="/libs/css/bootstrap.css" rel="stylesheet" media="screen">
+  <link href="/libs/css/flags.css" rel="stylesheet" media="screen">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" media="screen">
   <style>
     body {

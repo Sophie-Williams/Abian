@@ -1,4 +1,19 @@
-<?php require_once("header.php"); ?>
+<?php
+require_once("/var/www/abian/header.php");
+if (isset($_GET["loggedin"])) {
+  $url = "http://api.ipinfodb.com/v3/ip-city/?key=dee7b5c2f11bd133955cdf247e546e30d6027c5dd79ad1d31e22787ebbed98c6&format=json&ip=".$_SERVER["REMOTE_ADDR"];
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_URL,$url);
+  $result=json_decode(curl_exec($ch));
+  curl_close($ch);
+  $browser = $Abian->browser();
+  $info = $Abian->codeToCountry($_SERVER["HTTP_CF_IPCOUNTRY"]) . " (" . $_SERVER["HTTP_CF_IPCOUNTRY"] . ") " . $result->regionName . " using " . $browser["Browser"] . " (" . $browser["Version"] . ")";
+  $hist = $Abian->historify("user.login", $info);
+  echo "<div class='alert alert-success'>You have been logged in.</div>";
+}
+?>
 
 <div class="col-sm-8 blog-main">
 
