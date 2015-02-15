@@ -11,7 +11,7 @@ $error = "";
 if (isset($_POST["c"])) {
   $_POST["c"] = $UserSystem->sanitize($_POST["c"]);
   if ($session["company"] !== $_POST["c"]) {
-    if ($session["company"] === NULL) {
+    if (empty($session["company"])) {
       $hist = $Abian->historify("company.added", "To: " . $_POST["c"]);
     } else {
       $hist = $Abian->historify("company.updated", "To: " . $_POST["c"]);
@@ -38,28 +38,86 @@ if (isset($_POST["c"])) {
 
 if (isset($_POST["a"])) {
   $_POST["a"] = $UserSystem->sanitize($_POST["a"]);
-  if ($session["aqName"] !== $_POST["a"]) {
-    if ($session["aqName"] === NULL) {
-      $hist = $Abian->historify("aqName.added", "To: " . $_POST["a"]);
+  if ($session["twitchName"] !== $_POST["a"]) {
+    if (empty($session["twitchName"])) {
+      $hist = $Abian->historify("twitchName.added", "To: " . $_POST["a"]);
     } else {
-      $hist = $Abian->historify("aqName.updated", "To: " . $_POST["a"]);
+      $hist = $Abian->historify("twitchName.updated", "To: " . $_POST["a"]);
     }
     $UserSystem->dbUpd(
       [
         "users",
         [
-          "aqName" => $_POST["a"]
+          "twitchName" => $_POST["a"]
         ],
         [
           "id" => $session["id"]
         ]
       ]
     );
-    $session["aqName"] = $_POST["a"];
+    $session["twitchName"] = $_POST["a"];
   }
   $error = "<div class='col-xs-12'>
     <div class='alert alert-success'>
       Adventure Quest Worlds username updated to ".$_POST["a"].". This will
+      now be displayed publicly on your profile.
+    </div>
+  </div>";
+}
+
+if (isset($_POST["t"])) {
+  $_POST["t"] = $UserSystem->sanitize($_POST["t"]);
+  if ($session["twitchName"] !== $_POST["t"]) {
+    if (empty($session["twitchName"])) {
+      $hist = $Abian->historify("twitchName.added", "To: " . $_POST["t"]);
+    } else {
+      $hist = $Abian->historify("twitchName.updated", "To: " . $_POST["t"]);
+    }
+    $UserSystem->dbUpd(
+      [
+        "users",
+        [
+          "twitchName" => $_POST["t"]
+        ],
+        [
+          "id" => $session["id"]
+        ]
+      ]
+    );
+    $session["twitchName"] = $_POST["t"];
+  }
+  $error = "<div class='col-xs-12'>
+    <div class='alert alert-success'>
+      Twitch username updated to ".$_POST["t"].". This will
+      now be displayed publicly on your profile.
+    </div>
+  </div>";
+}
+
+if (isset($_POST["g"])) {
+  $_POST["g"] = $UserSystem->sanitize($_POST["g"]);
+  if ($session["githubName"] !== $_POST["g"]) {
+    if (empty($session["githubName"])) {
+      $hist = $Abian->historify("githubName.added", "To: " . $_POST["g"]);
+    } else {
+      $hist = $Abian->historify("githubName.updated", "To: " . $_POST["g"]);
+    }
+    $UserSystem->dbUpd(
+      [
+        "users",
+        [
+          "githubName" => $_POST["g"]
+        ],
+        [
+          "id" => $session["id"]
+        ]
+      ]
+    );
+    $session["githubName"] = $_POST["g"];
+  }
+  $error = "<div class='col-xs-12'>
+    <div class='alert alert-success'>
+      Github username updated to ".$_POST["g"].". This will
       now be displayed publicly on your profile.
     </div>
   </div>";
@@ -70,15 +128,18 @@ echo $error;
 echo <<<EOT
 <div class="col-xs-12 col-sm-3">
   <div class="list-group">
-    <a href="#" class="list-group-item">Profile</a>
-    <a href="#" class="list-group-item">Security</a>
-    <a href="#" class="list-group-item">Settings</a>
+    <a href="#profile" class="list-group-item">Profile</a>
+    <a href="#settings" class="list-group-item">Settings</a>
+    <a href="#security" class="list-group-item">Security</a>
   </div>
 </div>
 EOT;
 
 echo <<<EOT
-<div class="col-xs-12 col-sm-9" id="profile">
+<div class="col-xs-12 col-sm-9">
+  <div class="well well-sm" id="profile">
+    Profile
+  </div>
   <div class="row">
     <div class="col-xs-6">
       <div class="panel panel-default">
@@ -103,11 +164,46 @@ echo <<<EOT
         <div class="panel-body">
           <form class="form form-vertical" method="post" action="">
             <div class="form-group">
-              <label for="a">Currently: $session[aqName]</label>
+              <label for="a">Currently: $session[twitchName]</label>
               <input type="text" class="form-control" id="a" name="a">
             </div>
             <button type="submit" class="btn btn-primary btn-block">
               Update AQW Name
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Twitch Username</div>
+        <div class="panel-body">
+          <form class="form form-vertical" method="post" action="">
+            <div class="form-group">
+              <label for="t">Currently: $session[twitchName]</label>
+              <input type="text" class="form-control" id="t" name="t">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Update Twitch Username
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Github Username</div>
+        <div class="panel-body">
+          <form class="form form-vertical" method="post" action="">
+            <div class="form-group">
+              <label for="g">Currently: $session[githubName]</label>
+              <input type="text" class="form-control" id="g" name="g">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Update Github Username
             </button>
           </form>
         </div>
@@ -127,12 +223,44 @@ foreach ($badges as $key => $badge) {
   $desc = $badge["description"];
   $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
   $desc = str_replace("%twitch", substr(sha1($session["id"].$session["username"]), 0, 7), $desc);
-  $has = '<i class="fa fa-check"></i>';
-  $has = '';
-  echo '&nbsp;<span class="label label-'.$badge["type"].'" data-toggle="popover" data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ' . $has;
+  $desc = str_replace("%github", substr(sha1($session["id"].$session["username"]), 0, 7), $desc);
+  $has = $hasIt = '';
+  $hasIt = $UserSystem->dbSel(["badging", ["user" => $session["id"], "badge" => $badge["id"]]]);
+  if (!isset($hasIt[1])) $hasIt[1] = ["badge" => -1];
+  if ($hasIt[0] > 0 && intval($hasIt[1]["badge"]) == $badge["id"]) {
+    $has = '<abbr title="You have this one!"><i class="fa fa-check"></i></abbr>';
+  }
+  echo '&nbsp;<span class="label label-'.$badge["type"].'" data-toggle="popover" data-placement="top" data-content="'.$desc.'">'.$badge["name"].' '.$has.'</span> ';
 }
 
+$emailChanged = $session["emailChanged"] > 0 ? date("Y-m-d\TH:i", $session["emailChanged"]) : "Never";
 echo <<<EOT
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="well well-sm" id="settings">
+    Settings
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Email</div>
+        <div class="panel-body">
+          <form class="form form-vertical" method="post" action="">
+            <div class="form-group">
+              <label for="e">Currently: <abbr title="Changed $emailChanged">
+                $session[email]</abbr></label>
+              <input type="text" class="form-control" id="e" name="e">
+            </div>
+            <div class="form-group">
+              <label for="pe">Current Password</label>
+              <input type="password" class="form-control" id="pe" name="pe">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Update email address
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -144,6 +272,9 @@ EOT;
  * Active sessions (userblobs)
  */
 echo <<<EOT
+  <div class="well well-sm" id="security">
+    Security
+  </div>
   <div class="panel panel-default">
     <div class="panel-heading">Active Sessions</div>
     <div class="panel-body">
@@ -171,7 +302,8 @@ foreach ($blobs as $key => $blob) {
   echo "<tr".$ext.">
       <td>".date("Y-m-d\TH:i", $blob["date"])."</td>
       <td>
-        <img src='http://api.hostip.info/flag.php?ip=".$blob["ip"]."' height='16'>
+        <img src='http://api.hostip.info/flag.php?ip=".$blob["ip"]."' 
+          height='16'>
         ".$blob["ip"]."
       </td>
       <td>".ucfirst($blob["action"])."</td>

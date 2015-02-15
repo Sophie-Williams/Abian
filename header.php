@@ -20,6 +20,7 @@ if ($session === true) {
   <style>
     body {
       margin-top: 70px;
+      position: relative;
     }
     .label {
       cursor: pointer;
@@ -33,7 +34,6 @@ if ($session === true) {
   <![endif]-->
 </head>
 <body>
-
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">

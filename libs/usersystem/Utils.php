@@ -32,6 +32,33 @@ class Utils {
     }
   }
 
+
+  /**
+  * Operates similarly to str_replace() or PDO's prepare statement
+  * Example: $UserSystem->str_replace_arr("needle", "tack", "haystrack")
+  * https://gist.github.com/Zbee/feae70c0465e1e98cc29
+  *
+  * @access public
+  * @param string $database
+  * @return void
+  */
+  public function str_replace_arr ($find, $replace, $string) {
+    $x = 0;
+    $n = 0;
+    $str = '';
+    $string = explode($find, $string);
+    foreach ($string as $s) {
+      if ($n > 0) {
+        $str .= $replace[$x].$s;
+        $x += 1;
+      } else {
+        $str .= $s;
+      }
+      $n += 1;
+    }
+    return $str;
+  }
+
   /**
   * Encrypts any data and makes it only decryptable by the same user.
   * Example: $UserSystem->encrypt("myEmail", 2)
