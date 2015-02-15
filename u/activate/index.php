@@ -1,8 +1,7 @@
 <?php
 require_once("../../header.php");
 
-$session = $UserSystem->verifySession();
-if ($session === true) {
+if (is_array($session)) {
   $UserSystem->redirect301("/");
 } elseif (isset($_GET["blob"])) {
   $activate = $UserSystem->activateUser($_GET["blob"]);

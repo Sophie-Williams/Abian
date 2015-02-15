@@ -1,10 +1,7 @@
 <?php
 require_once("../../header.php");
 
-$session = $UserSystem->verifySession();
-if ($session === true) {
-  $UserSystem->redirect301("/");
-}
+if (is_array($session)) $UserSystem->redirect301("/");
 
 $recaptcha = recaptcha_get_html($re["site"]);
 

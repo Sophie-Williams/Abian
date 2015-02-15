@@ -123,6 +123,66 @@ if (isset($_POST["g"])) {
   </div>";
 }
 
+if (isset($_POST["e"])) {
+  $_POST["e"] = $UserSystem->sanitize($_POST["e"], "e");
+  if ($session["email"] !== $_POST["e"]) {
+    if (hash("sha256", $_POST["pe"].$session["salt"]) === $session["password"]) {
+      $hist = $Abian->historify("email.updated", "To: " . $_POST["e"]);
+      $UserSystem->dbUpd(
+        [
+          "users",
+          [
+            "email" => $_POST["e"],
+            "oldEmail" => $session["email"],
+            "emailChanged" => time()
+          ],
+          [
+            "id" => $session["id"]
+          ]
+        ]
+      );
+      $se = true;
+      if ($_POST["e"] == $session["oldEmail"] || $_POST["e"] == $session["email"]) $se = false;
+      if ($se) {
+        $UserSystem->sendMail(
+          [$session["email"], $session["oldEmail"], $_POST["e"]],
+          "Your email has been changed on " . SITENAME,
+          "        Hello, ".$session["username"].".
+
+          Your email has been updated on ".SITENAME." from ".$session["email"]." to ".$_POST["e"].".
+
+          ---
+
+          If you did not initiate this change, you should update your passwords.
+
+          Thank you.
+          "
+        );
+        $error = "<div class='col-xs-12'>
+          <div class='alert alert-success'>
+            Email updated to ".$_POST["e"].". A notification email has been sent
+            to your previous email and the new one.
+          </div>
+        </div>";
+      } else {
+        $error = "<div class='col-xs-12'>
+          <div class='alert alert-success'>
+            Email updated to ".$_POST["e"].".
+          </div>
+        </div>";
+      }
+      $session["oldEmail"] = $session["email"];
+      $session["email"] = $_POST["e"];
+    } else {
+      $error = "<div class='col-xs-12'>
+        <div class='alert alert-danger'>
+          The entered password was not correct. Email has not been changed.
+        </div>
+      </div>";
+    }
+  }
+}
+
 echo $error;
 
 echo <<<EOT

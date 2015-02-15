@@ -1,10 +1,8 @@
 <?php
 require_once("/var/www/abian/header.php");
 $user = isset($_GET) && count($_GET) > 0 ? array_search(array_values($_GET)[0], $_GET) : null;
-$session = $UserSystem->verifySession();
-if ($session === true && $user === null) $UserSystem->redirect301("/u/cp");
+if (is_array($session) && $user === null) $UserSystem->redirect301("/u/cp");
 if ($session === false && $user === null) $UserSystem->redirect301("/");
-if ($session === true) $session = $UserSystem->session();
 $user = $UserSystem->session($user);
 
 $email = md5(strtolower(trim($user["email"])));
