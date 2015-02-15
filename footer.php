@@ -19,5 +19,8 @@
   if ($(window).height() > $(".container").height()) {
     //$("#btt").remove();
   }
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  })
   </script>
 </body>

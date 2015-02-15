@@ -1,7 +1,9 @@
 <?php
 require_once("_secret_keys.php");
 require_once("/var/www/abian/libs/usersystem/config.php");
+require_once("/var/www/abian/libs/Abian.php");
 require_once("/var/www/abian/libs/recaptcha.php");
+$Abian = new Abian;
 $session = $UserSystem->verifySession();
 if ($session === true) {
   $session = $UserSystem->session();
@@ -14,9 +16,13 @@ if ($session === true) {
 <html>
 <head>
   <link href="/libs/css/bootstrap.css" rel="stylesheet" media="screen">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" media="screen">
   <style>
     body {
       margin-top: 70px;
+    }
+    .label {
+      cursor: pointer;
     }
   </style>
 
@@ -48,15 +54,12 @@ if ($session === true) {
             <li><a href="/u/login">Login</a></li>
             <li><a href="/u/register">Register</a></li>
           <?php elseif (is_array($session)): ?>
-            <li class="dropdown">
-              <a href="/u?zbee" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hello, <?=$session["username"]?> <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="/u/cp">Control Panel</a></li>
-                <li><a href="/u/settings">Settings</a></li>
-                <li class="divider"></li>
-                <li><a href="/u/logout">Logout</a></li>
-              </ul>
-            </li>
+            <li><a href="/u/?<?=$session["username"]?>">
+              <!--<img src="https://www.gravatar.com/avatar/<?=md5(strtolower(trim($session["email"])))?>?s=32" style="height:20px" class="img-rounded" />-->
+              <?=$session["username"]?>
+            </a></li>
+            <li><a href="/u/cp"><i class="fa fa-cog"></i></a></li>
+            <li><a href="/u/logout"><i class="fa fa-sign-out"></i></a></li>
           <?php endif; ?>
         </ul>
       </div><!--/.nav-collapse -->

@@ -49,7 +49,7 @@ class Database extends Utils {
     $entries = substr($entries, 0, -2);
     $stmt = $this->DATABASE->prepare("
       INSERT INTO $data[0] ($cols) VALUES ($entries)
-    "); #Twitch @Sniperzeelite I love 5 ever!!!
+    "); #Twitch @Sniperzeelite I love u 5 ever!!!
     $stmt->execute($enArr);
     return true;
   }
@@ -163,8 +163,13 @@ class Database extends Utils {
       array_push($qmark, $item[1]);
     }
     $equals = substr($equals, 5);
+    if (isset($data[2])) {
+      $order = "order by ".$data[2][0]." ".$data[2][1];
+    } else {
+      $order = "";
+    }
     $stmt = $this->DATABASE->prepare("
-      select * from ".$this->quoteIdent(DB_PREFACE.ucfirst($data[0]))." where $equals
+      select * from ".$this->quoteIdent(DB_PREFACE.ucfirst($data[0]))." where $equals ".$order."
     ");
     $stmt->execute($qmark);
     $arr = [(is_object($stmt) ? $stmt->rowCount() : 0)];

@@ -130,12 +130,20 @@ class UserSystem extends Database {
        if ($emailUse == 0) {
          if ($this->sanitize($email, "e") !== "FAILED SANITIZATION") {
            $salt = $this->createSalt($username);
+           $ipAddress = filter_var(
+             $_SERVER["REMOTE_ADDR"],
+             FILTER_SANITIZE_FULL_SPECIAL_CHARS
+           );
+           if (ENCRYPTION === true) {
+             $ipAddress = encrypt($ipAddress, $username);
+           }
            $data = [
              "username" => $username,
              "password" => hash("sha256", $password.$salt),
              "email" => $email,
              "salt" => $salt,
-             "dateRegistered" => time()
+             "dateRegistered" => time(),
+             "ip" => $ipAddress
            ];
 
            $morech = $this->sanitize($more, "b");
