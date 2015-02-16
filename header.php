@@ -7,6 +7,10 @@ $Abian = new Abian;
 $session = $UserSystem->verifySession();
 if ($session === true) {
   $session = $UserSystem->session();
+  date_default_timezone_set($session["timeZone"]);
+} elseif ($session === "ban") {
+  echo "You are banned from using Abian. If you are unsure why, please open an issue on github.com/zbee/abian.";
+  exit;
 } else {
   $session = false;
 }
@@ -28,6 +32,8 @@ if ($session === true) {
     }
   </style>
 
+  <title>Abian</title>
+
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -44,7 +50,7 @@ if ($session === true) {
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">Abian Bot Network for AQW</a>
+        <a class="navbar-brand" href="/">Abian</a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
@@ -58,8 +64,11 @@ if ($session === true) {
             <li><a href="/u/?<?=$session["username"]?>">
               <!--<img src="https://www.gravatar.com/avatar/<?=md5(strtolower(trim($session["email"])))?>?s=32" style="height:20px" class="img-rounded" />-->
               <?=$session["username"]?>
+              <span class="badge">10</span>
             </a></li>
+            <li><a href="/b/a"><i class="fa fa-plus"></i></a></li>
             <li><a href="/u/cp"><i class="fa fa-cog"></i></a></li>
+            <li><a href="/a"><i class="fa fa-database"></i></a></li>
             <li><a href="/u/logout"><i class="fa fa-sign-out"></i></a></li>
           <?php endif; ?>
         </ul>

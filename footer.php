@@ -25,7 +25,7 @@
             </ul>
           </div>
           <div class="col-xs-6 col-sm-3">
-            Abian Bot Network was created by <a href="https://github.com/zbee">Zbee</a>.
+            Abian was created by <a href="https://github.com/zbee">Zbee</a>.
             <Br>
             <a href="http://opensource.org/"><img src="/libs/img/OSI.png" style="width:30%"></a>
             <a href="http://github.com/zbee/abian"><img src="/libs/img/GitHub.png" style="width:30%"></a>
@@ -41,7 +41,8 @@
             </ul>
           </div>
         </div>
-        Server time is <?=date("Y-m-d\THi", time())?> (America/Denver)
+        Your time is <?=date("Y-m-d\TH:i", time())?> (<?=is_array($session) ? $session["timeZone"] : "America/Denver"?>) <sup><a href="/u/cp#settings">(not right?)</a></sup>, 
+        Server time is <?php date_default_timezone_set("America/Denver");echo date("Y-m-d\TH:i", time());?> (America/Denver)
       </div>
     </div>
   </footer>
