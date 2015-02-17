@@ -1,4 +1,5 @@
 <?php
+$sidebar = false;
 require_once("/var/www/abian/header.php");
 if ($session === false) $UserSystem->redirect301("/u/login");
 
@@ -205,6 +206,75 @@ if (isset($_POST["e"])) {
   }
 }
 
+if (isset($_POST["cp"])) {
+  $_POST["cp"] = hash("sha256", $_POST["cp"].$session["salt"]);
+  if ($session["password"] === $_POST["cp"]) {
+    if ($_POST["cnp"] === $_POST["np"]) {
+      $info = "In " . $Abian->codeToCountry($_SERVER["HTTP_CF_IPCOUNTRY"])
+      . " using " . $Abian->getBrowser() . " on " . $Abian->getOS();
+      $hist = $Abian->historify("password.updated", $info);
+      $salt = $UserSystem->createSalt($session["id"]);
+      $_POST["np"] = hash("sha256", $_POST["np"].$salt);
+      $UserSystem->dbUpd(
+        [
+          "users",
+          [
+            "password" => $_POST["np"],
+            "salt" => $salt,
+            "oldPassword" => $session["password"],
+            "oldSalt" => $session["salt"],
+            "passwordChanged" => time()
+          ],
+          [
+            "id" => $session["id"]
+          ]
+        ]
+      );
+      $session["passwordChanged"] = time();
+      $error = "<div class='col-xs-12'>
+        <div class='alert alert-success'>
+          Password has been updated.
+        </div>
+      </div>";
+    } else {
+      $error = "<div class='col-xs-12'>
+        <div class='alert alert-danger'>
+          New passwords do not equal each other. Password has not been changed.
+        </div>
+      </div>";
+    }
+  } else {
+    $error = "<div class='col-xs-12'>
+      <div class='alert alert-danger'>
+        Current password is not correct. Password has not been changed.
+      </div>
+    </div>";
+  }
+}
+
+if (isset($_POST["s"])) {
+  $_POST["s"] = $UserSystem->sanitize($_POST["s"], "n");
+  $human = $_POST["s"] == 0 ? "Off" : "On";
+  $hist = $Abian->historify("twoStep.updated", "To: " . $human);
+  $UserSystem->dbUpd(
+    [
+      "users",
+      [
+        "twoStep" => $_POST["s"]
+      ],
+      [
+        "id" => $session["id"]
+      ]
+    ]
+  );
+  $session["twoStep"] = $_POST["s"];
+  $error = "<div class='col-xs-12'>
+    <div class='alert alert-success'>
+      Updated Two Step Authentication to be ".$human.".
+    </div>
+  </div>";
+}
+
 echo $error;
 
 echo <<<EOT
@@ -354,12 +424,44 @@ $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 foreach ($timezones as $timezone) {
   echo '<option value="'.$timezone.'">'.$timezone.'</option>';
 }
+
+$passChanged = $session["passwordChanged"] > 0 ? date("Y-m-d\TH:i", $session["passwordChanged"]) : "Never";
+$twoStep = $session["twoStep"] == 0 ? 1 : 0;
+$twoStepH = $session["twoStep"] == 0 ? "Off" : "On";
  
 echo <<<EOT
             </select>
             <br>
             <button type="submit" class="btn btn-primary btn-block">
               Update timezone
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Password</div>
+        <div class="panel-body">
+          Last changed <b>$passChanged</b>
+          <br>
+          <form class="form form-vertical" method="post" action="">
+            <div class="form-group">
+              <label for="cp">Current Password</label>
+              <input type="password" class="form-control" id="cp" name="cp">
+            </div>
+            <div class="form-group">
+              <label for="np">New Password</label>
+              <input type="password" class="form-control" id="np" name="np">
+            </div>
+            <div class="form-group">
+              <label for="cnp">Confirm New Password</label>
+              <input type="password" class="form-control" id="cnp" name="cnp">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Update password
             </button>
           </form>
         </div>
@@ -416,6 +518,28 @@ foreach ($blobs as $key => $blob) {
 
 echo <<<EOT
         </table>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Two Step Authentication</div>
+        <div class="panel-body">
+          Two Step Authentication is currently <b>$twoStepH</b>.
+          <br><br>
+          If Two Step Authentication is activated then when you attempt to 
+          login, you will be stopped after entering the correct password, and
+          will need to follow a link that gets emailed to you.
+          <br>
+          This makes it so that someone cannot simple hack your Abian account,
+          but must also hack your email to gain access to your Abian account.
+          <br><br>
+          <form class="form form-vertical" method="post" action="">
+            <input type="hidden" name="s" value="$twoStep">
+            <button type="submit" class="btn btn-primary btn-block">
+              Toggle Two Step Authentication
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

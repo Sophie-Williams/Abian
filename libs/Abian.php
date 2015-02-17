@@ -146,20 +146,22 @@ class Abian extends UserSystem {
   * @return integer
   */
   public function calcXP ($user) {
+    $xp = 0;
     $user = $this->sanitize($user, "n");
 
     #Check XP from badges
     $xFB = 0;
     $badges = $this->dbSel(["badges", ["value" => [">", 0]]]); #all badges with value
-    unset($badges[0]);
     $badging = $this->dbSel(["badging", ["user" => $user]]); #all badges user has
-    unset($badging[0]);
+    unset($badges[0], $badging[0]);
     foreach ($badging as $badge) { #each badge user has
       foreach ($badges as $b) { #check if it's one of the valued badges
         if ($b["id"] == $badge["badge"]) $xFB += intval($b["value"]); #if yes, add value
       }
     }
-    return $xFB;
+    $xp += $xFB;
+
+    return $xp;
   }
 
   /**
@@ -173,7 +175,7 @@ class Abian extends UserSystem {
   public function calcLeveL ($xp) {
     $xp = $this->sanitize($xp, "n");
     switch ($xp) {
-      case $xp >= 2000000: return [14, 2000000, 10000000];
+      case $xp >= 2000000: return [14, 2000000, 1000000000];
       case $xp >= 675000: return [13, 675000, 2000000];
       case $xp >= 225000: return [12, 225000, 675000];
       case $xp >= 75000: return [11, 75000, 225000];
@@ -189,7 +191,7 @@ class Abian extends UserSystem {
       case $xp >= 5: return [1, 5, 12];
       case $xp >= 0: return [0, 0, 5];
     }
-    return 0;
+    return [-1, 0, 0];
   }
 
   /**

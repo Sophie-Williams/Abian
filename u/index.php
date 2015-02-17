@@ -1,4 +1,5 @@
 <?php
+$sidebar = false;
 require_once("/var/www/abian/header.php");
 $user = isset($_GET) && count($_GET) > 0 ? array_search(array_values($_GET)[0], $_GET) : null;
 if (is_array($session) && $user === null) $UserSystem->redirect301("/u/cp");
@@ -30,7 +31,7 @@ date_default_timezone_set($user["timeZone"]);
 $theirTime = date("Y-m-d\TH:i", time()) . " (" . $user["timeZone"] . ")";
 is_array($session) ? date_default_timezone_set($session["timeZone"]) : date_default_timezone_set("America/Denver");
 
-$xp = $Abian->calcXP($user["id"]);
+if ($user["id"] != $session["id"]) $xp = $Abian->calcXP($user["id"]);
 $lvl = $Abian->calcLevel($xp);
 $percent = number_format(($xp - $lvl[1]) / ($lvl[2] - $lvl[1]) * 100, 0);
 $xp = number_format($xp, 0);
@@ -63,16 +64,20 @@ echo <<<EOT
     <div class="col-xs-12">
 EOT;
 
-$badges = $UserSystem->dbSel(["badging", ["user" => $user["id"]]]);
-if ($badges[0] > 0) {
-  foreach ($badges as $key => $badgeb) {
+$badged = $UserSystem->dbSel(["badging", ["user" => $user["id"]]]);
+if ($badged[0] > 0) {
+  $badges = $UserSystem->dbSel(["badges", ["type" => ["!=", "a"]]]);
+  foreach ($badged as $key => $badgeb) {
     if ($key === 0) continue;
-    $badge = $UserSystem->dbSel(["badges", ["id" => $badgeb["badge"]]])[1];
-    $desc = $badge["description"];
-    $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
-    $desc = str_replace("%twitch", substr(sha1($session["id"].$session["username"]), 0, 7), $desc);
-    $desc = str_replace("%github", substr(sha1($session["id"].$session["username"]), 0, 7), $desc);
-    echo '<span class="label label-'.$badge["type"].'" data-toggle="popover" data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
+    foreach ($badges as $badge) {
+      if ($badge["id"] == $badgeb["badge"]) {
+        $desc = $badge["description"];
+        $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
+        $desc = str_replace("%twitch", substr(sha1($session["id"].$session["username"]), 0, 7), $desc);
+        $desc = str_replace("%github", substr(sha1($session["id"].$session["username"]), 0, 7), $desc);
+        echo '<span class="label label-'.$badge["type"].'" data-toggle="popover" data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
+      }
+    }
   }
 }
 

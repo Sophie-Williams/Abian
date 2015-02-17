@@ -1,4 +1,5 @@
 <?php
+$sidebar = false;
 require_once("../../header.php");
 
 if (is_array($session)) $UserSystem->redirect301("/");

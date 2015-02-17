@@ -1,30 +1,12 @@
 <?php
-$sidebar = false;
-require_once("../../header.php");
-
-if (is_array($session)) $UserSystem->redirect301("/");
-
+require_once("/var/www/abian/header.php");
+if ($session === false) $UserSystem->redirect301("/u/login");
 $recaptcha = recaptcha_get_html($re["site"]);
 
-if (isset($_POST["u"])) {
-  $resp = recaptcha_check_answer ($re["secret"], $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-  if (!$resp->is_valid) {
-    echo "The reCAPTCHA was incorrect: ".$resp->error.".";
-  } else {
-    if ($_POST["p"] === $_POST["cp"]) {
-      $register = $UserSystem->addUser($_POST["u"], $_POST["p"], $_POST["e"]);
-      if ($register === true) {
-        $UserSystem->redirect301("/");
-      }
-    } else {
-      echo "You suck. Stupid";
-    }
-  }
-}
-?>
-
-<div class="col-xs-12 col-md-6">
+echo <<<EOT
+<div class="col-xs-12">
   <div class="well well-md">
+    <h1>Upload your bots</h1>
     <form class="form form-vertical" method="post" action="">
       <div class="form-group">
         <label for="u">Username</label>
@@ -43,17 +25,29 @@ if (isset($_POST["u"])) {
         <input type="password" class="form-control" id="cp" name="cp">
       </div>
       <div class="form-group">
-        <?=$recaptcha?>
+        <label for="b">Bot file</label>
+        <input id="bf" type="file" style="display:none">
+        <div class="input-group">
+          <input id="b" class="form-control input-sm" type="text">
+          <span class="input-group-btn">
+            <a class="btn btn-sm btn-default" onclick="$('#bf').click();">Browse</a>
+          </span>
+        </div>
+        <script type="text/javascript">
+         $('input[type=file]').change(function(e) {
+          console.log("piiiiie");
+          $('#b').val($(this).val());
+        });
+        </script>
+      </div>
+      <div class="form-group">
+        $recaptcha
       </div>
       <button type="submit" class="btn btn-primary btn-block">Register</button>
     </form>
   </div>
 </div>
+EOT;
 
-<div class="col-xs-12 col-md-6">
-  <div class="well well-md">
-    Maybe.
-  </div>
-</div>
-
-<?php require_once("../../footer.php"); ?>
+require_once("/var/www/abian/footer.php");
+?>

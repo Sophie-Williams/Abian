@@ -19,9 +19,7 @@ Utilizes [reCAPTCHA](http://recaptcha.net).
 
 > Copyright (c) 2007 reCAPTCHA -- http://recaptcha.net
 
-> AUTHORS:
-> - Mike Crawford
-> - Ben Maurer
+> Authors: Mike Crawford and Ben Maurer
 
 > MIT License
 
@@ -34,5 +32,13 @@ Utilizes [country-list](https://github.com/umpirsky/country-list).
 Utilizes [emojify.js](https://github.com/hassankhan/emojify.js/).
 
 > Copyright (c) 2014 Hassan Khan, http://hassankhan.me contact@hassankhan.me
+
+> MIT License
+
+Utilizes [Bootstrap](https://github.com/twbs/bootstrap).
+
+> Code and documentation copyright 2011-2015 Twitter, Inc.
+
+> Authors: [mdo](http://github.com/mdo) and [fat](http://github.com/fat)
 
 > MIT License

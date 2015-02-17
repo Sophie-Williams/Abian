@@ -1,5 +1,6 @@
 <?php
-require_once("_secret_keys.php");
+if (!isset($sidebar)) $sidebar = true;
+require_once("/var/www/abian/_secret_keys.php");
 require_once("/var/www/abian/libs/usersystem/config.php");
 require_once("/var/www/abian/libs/Abian.php");
 require_once("/var/www/abian/libs/recaptcha.php");
@@ -14,6 +15,7 @@ if ($session === true) {
 } else {
   $session = false;
 }
+$xp = $Abian->calcXP($session["id"]);
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +31,9 @@ if ($session === true) {
     }
     .label {
       cursor: pointer;
+    }
+    .lin {
+      list-style: none;
     }
   </style>
 
@@ -64,7 +69,7 @@ if ($session === true) {
             <li><a href="/u/?<?=$session["username"]?>">
               <!--<img src="https://www.gravatar.com/avatar/<?=md5(strtolower(trim($session["email"])))?>?s=32" style="height:20px" class="img-rounded" />-->
               <?=$session["username"]?>
-              <span class="badge">10</span>
+              <span class="badge"><?=$Abian->calcLevel($xp)[0]?></span>
             </a></li>
             <li><a href="/b/a"><i class="fa fa-plus"></i></a></li>
             <li><a href="/u/cp"><i class="fa fa-cog"></i></a></li>
@@ -79,3 +84,35 @@ if ($session === true) {
   <div class="container">
 
     <div class="row">
+
+    <?php
+    if ($sidebar) {
+      echo '
+      <div class="col-xs-12 col-sm-2">
+      ';
+
+      $ad = '';
+      $weights = [0, 1, 1, 2, 2, 2, 3, 3, 3, 3];
+      $weights = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+      $weight = $weights[rand(0,9)];
+      $stmt = $UserSystem->dbSel(["ads", ["weight" => $weight, "expiration" => [">", time()], "allowed" => 1, "flavor" => "image"], ["id", "desc, shown asc limit 1"]]);
+      $ad = '<a href="'.$stmt[1]['link'].'"><img src="'.$stmt[1]['content'].'" style="max-width:95%;max-height:100%;" /></a>';
+      $UserSystem->dbUpd(["ads", ["shown" => $stmt[1]["shown"]+1], ["id" => $stmt[1]["id"]]]);
+      $ad .= '<br><br>Good ad? 
+        <button class="btn btn-small"><i class="fa fa-thumbs-o-up"></i></button>
+        <button class="btn btn-small"><i class="fa fa-thumbs-o-down"></i></button>
+        <br>Pst! <a href="/a/premium">Premium users</a> don\'t see these!';
+      echo '
+      <!--Ad-->
+      <div class="sidewidt text-center">
+        <h1 class="text-left" style="margin-bottom:10px;"><span class="maintext"><i class="fa fa-money"></i> Ad</span></h1>
+        '.$ad.'
+      </div>
+      <!--/Ad-->';
+      
+      echo '
+      </div>
+      <div class="col-xs-12 col-sm-10">
+      ';
+    }
+    ?>

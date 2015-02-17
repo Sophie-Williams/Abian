@@ -1,3 +1,11 @@
+    <?php
+    if ($sidebar) {
+      echo '
+      </div>
+      ';
+    }
+    ?>
+
     </div><!-- /.row -->
 
   </div><!-- /.container -->
@@ -10,6 +18,7 @@
         <div class="row">
           <div class="col-xs-6 col-sm-3">
             <ul>
+              <li class="lin"><b><i class="fa fa-info-circle"></i> About</b></li>
               <li><a href="#">About the Bot Network</a> </li>
               <li><a href="#">Developer Blog</a> </li>
               <li><a href="//beta.zbee.me/abian/about/faq">FAQ</a> </li>
@@ -19,9 +28,10 @@
           </div>
           <div class="col-xs-6 col-sm-3">
             <ul>
-              <li class="email"><a href="mailto:support@abianbot.net">Support</a></li>
-              <li class="email"><a href="mailto:suggestions@abianbot.net">Suggestions</a></li>
-              <li class="email"><a href="mailto:legal@abianbot.net">Legal</a></li>
+              <li class="lin"><b><i class="fa fa-envelope"></i> Contact</b></li>
+              <li><a href="mailto:support@abianbot.net">Support</a></li>
+              <li><a href="mailto:suggestions@abianbot.net">Suggestions</a></li>
+              <li><a href="mailto:legal@abianbot.net">Legal</a></li>
             </ul>
           </div>
           <div class="col-xs-6 col-sm-3">
@@ -33,6 +43,7 @@
           </div>
           <div class="col-xs-6 col-sm-3">
             <ul>
+              <li class="lin"><b><i class="fa fa-gavel"></i> Legal</b></li>
               <li><a href="#"><b>Basic Legal Run-down</b></a></li>
               <li><a href="#">Privacy Policy</a></li>
               <li><a href="#">Terms & Conditions</a></li>
