@@ -30,6 +30,13 @@ date_default_timezone_set($user["timeZone"]);
 $theirTime = date("Y-m-d\TH:i", time()) . " (" . $user["timeZone"] . ")";
 is_array($session) ? date_default_timezone_set($session["timeZone"]) : date_default_timezone_set("America/Denver");
 
+$xp = $Abian->calcXP($user["id"]);
+$lvl = $Abian->calcLevel($xp);
+$percent = number_format(($xp - $lvl[1]) / ($lvl[2] - $lvl[1]) * 100, 0);
+$xp = number_format($xp, 0);
+$level = number_format($lvl[0], 0);
+$maxXP = number_format($lvl[2], 0);
+
 echo <<<EOT
     </div>
   </div>
@@ -43,11 +50,11 @@ echo <<<EOT
       Joined $dateR
     </div>
     <div class="col-xs-12 col-sm-3 text-center">
-      <h2>Level 10</h2>
-      <h3>36,150 / 75,000</h3>
+      <h2>Level $level</h2>
+      <h3>$xp / $maxXP</h3>
       <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100" style="width: 48%;">
-          48%
+        <div class="progress-bar" role="progressbar" aria-valuenow="$percent" aria-valuemin="0" aria-valuemax="100" style="width: $percent%;">
+          $percent%
         </div>
       </div>
     </div>

@@ -138,6 +138,61 @@ class Abian extends UserSystem {
   }
 
   /**
+  * Returns the amount of xp a user has from badges, votes, and downloads
+  * Example: $Abian->calcXP($session["id"])
+  *
+  * @access public
+  * @param integer $user
+  * @return integer
+  */
+  public function calcXP ($user) {
+    $user = $this->sanitize($user, "n");
+
+    #Check XP from badges
+    $xFB = 0;
+    $badges = $this->dbSel(["badges", ["value" => [">", 0]]]); #all badges with value
+    unset($badges[0]);
+    $badging = $this->dbSel(["badging", ["user" => $user]]); #all badges user has
+    unset($badging[0]);
+    foreach ($badging as $badge) { #each badge user has
+      foreach ($badges as $b) { #check if it's one of the valued badges
+        if ($b["id"] == $badge["badge"]) $xFB += intval($b["value"]); #if yes, add value
+      }
+    }
+    return $xFB;
+  }
+
+  /**
+  * Returns the array of te level of a user based off of their xp ([level, min xp, max xp])
+  * Example: $Abian->calcLevel(0)
+  *
+  * @access public
+  * @param integer $xp
+  * @return array
+  */
+  public function calcLeveL ($xp) {
+    $xp = $this->sanitize($xp, "n");
+    switch ($xp) {
+      case $xp >= 2000000: return [14, 2000000, 10000000];
+      case $xp >= 675000: return [13, 675000, 2000000];
+      case $xp >= 225000: return [12, 225000, 675000];
+      case $xp >= 75000: return [11, 75000, 225000];
+      case $xp >= 25000: return [10, 25000, 75000];
+      case $xp >= 10000: return [9, 10000, 25000];
+      case $xp >= 3500: return [8, 3500, 10000];
+      case $xp >= 1250: return [7, 1250, 3500];
+      case $xp >= 500: return [6, 500, 1250];
+      case $xp >= 200: return [5, 200, 500];
+      case $xp >= 75: return [4, 75, 200];
+      case $xp >= 30: return [3, 30, 75];
+      case $xp >= 12: return [2, 12, 30];
+      case $xp >= 5: return [1, 5, 12];
+      case $xp >= 0: return [0, 0, 5];
+    }
+    return 0;
+  }
+
+  /**
   * Returns the full name of the country given the country's ISO 3166 ALPHA-2 code
   * Example: $Abian->codeToCountry("AF")
   *
