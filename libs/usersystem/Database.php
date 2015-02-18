@@ -168,6 +168,7 @@ class Database extends Utils {
     } else {
       $order = "";
     }
+    #print($this->str_replace_arr("?", $qmark, "select * from ".$this->quoteIdent(DB_PREFACE.ucfirst($data[0]))." where $equals ".$order));
     $stmt = $this->DATABASE->prepare("
       select * from ".$this->quoteIdent(DB_PREFACE.ucfirst($data[0]))." where $equals ".$order."
     ");

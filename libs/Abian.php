@@ -173,24 +173,22 @@ class Abian extends UserSystem {
   * @return array
   */
   public function calcLeveL ($xp) {
-    $xp = $this->sanitize($xp, "n");
-    switch ($xp) {
-      case $xp >= 2000000: return [14, 2000000, 1000000000];
-      case $xp >= 675000: return [13, 675000, 2000000];
-      case $xp >= 225000: return [12, 225000, 675000];
-      case $xp >= 75000: return [11, 75000, 225000];
-      case $xp >= 25000: return [10, 25000, 75000];
-      case $xp >= 10000: return [9, 10000, 25000];
-      case $xp >= 3500: return [8, 3500, 10000];
-      case $xp >= 1250: return [7, 1250, 3500];
-      case $xp >= 500: return [6, 500, 1250];
-      case $xp >= 200: return [5, 200, 500];
-      case $xp >= 75: return [4, 75, 200];
-      case $xp >= 30: return [3, 30, 75];
-      case $xp >= 12: return [2, 12, 30];
-      case $xp >= 5: return [1, 5, 12];
-      case $xp >= 0: return [0, 0, 5];
-    }
+    $xp = $this->sanitize($xp, "n"); #Twitch @Baronvongameplaydk "0 > 2m"
+    if ($xp >= 2000000) return [14, 2000000, 1000000000, $xp];
+    if ($xp >= 675000) return [13, 675000, 2000000, $xp];
+    if ($xp >= 225000) return [12, 225000, 675000, $xp];
+    if ($xp >= 75000) return [11, 75000, 225000, $xp];
+    if ($xp >= 25000) return [10, 25000, 75000, $xp];
+    if ($xp >= 10000) return [9, 10000, 25000, $xp];
+    if ($xp >= 3500) return [8, 3500, 10000, $xp];
+    if ($xp >= 1250) return [7, 1250, 3500, $xp];
+    if ($xp >= 500) return [6, 500, 1250, $xp];
+    if ($xp >= 200) return [5, 200, 500, $xp];
+    if ($xp >= 75) return [4, 75, 200, $xp];
+    if ($xp >= 30) return [3, 30, 75, $xp];
+    if ($xp >= 12) return [2, 12, 30, $xp];
+    if ($xp >= 5) return [1, 5, 12, $xp];
+    if ($xp >= 0) return [0, 0, 5, $xp];
     return [-1, 0, 0];
   }
 
