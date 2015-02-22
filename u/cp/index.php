@@ -374,8 +374,8 @@ foreach ($badges as $key => $badge) {
   if ($key === 0) continue;
   $desc = $badge["description"];
   $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
-  $desc = str_replace("%twitch", substr(sha1($session["id"].$session["username"]), 0, 7), $desc);
-  $desc = str_replace("%github", substr(sha1($session["id"].$session["username"]), 0, 7), $desc);
+  $desc = str_replace("%twitch", substr(sha1($session["id"].$session["username"].$session["twitchName"]), 0, 7), $desc);
+  $desc = str_replace("%github", substr(sha1($session["id"].$session["username"].$session["githubName"]), 0, 7), $desc);
   echo '<span class="label label-'.$badge["type"].'" data-toggle="popover" data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
 }
 
@@ -428,7 +428,7 @@ foreach ($timezones as $timezone) {
 $passChanged = $session["passwordChanged"] > 0 ? date("Y-m-d\TH:i", $session["passwordChanged"]) : "Never";
 $twoStep = $session["twoStep"] == 0 ? 1 : 0;
 $twoStepH = $session["twoStep"] == 0 ? "Off" : "On";
- 
+
 echo <<<EOT
             </select>
             <br>
@@ -526,7 +526,7 @@ echo <<<EOT
         <div class="panel-body">
           Two Step Authentication is currently <b>$twoStepH</b>.
           <br><br>
-          If Two Step Authentication is activated then when you attempt to 
+          If Two Step Authentication is activated then when you attempt to
           login, you will be stopped after entering the correct password, and
           will need to follow a link that gets emailed to you.
           <br>

@@ -3,6 +3,15 @@ require_once("/var/www/abian/header.php");
 if ($session === false) $UserSystem->redirect301("/u/login");
 $recaptcha = recaptcha_get_html($re["site"]);
 
+if (isset($_POST["n"])) {
+  $resp = recaptcha_check_answer ($re["secret"], $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
+  if (!$resp->is_valid) {
+    echo "The reCAPTCHA was incorrect: ".$resp->error.".";
+  } else {
+    
+  }
+}
+
 echo <<<EOT
 <div class="col-xs-12">
   <div class="well well-md">
