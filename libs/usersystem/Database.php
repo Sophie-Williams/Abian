@@ -32,9 +32,8 @@ class Database extends Utils {
   */
   public function dbIns ($data) {
     $dataArr = [];
-    foreach ($data[1] as $item) {
-      $col = array_search($item, $data[1]);
-      array_push($dataArr, [$col, $item]);
+    foreach ($data[1] as $col => $val) {
+      array_push($dataArr, [$col, $val]);
     }
     $data[0] = $this->quoteIdent(DB_PREFACE.ucfirst($data[0]));
     $cols = "";
@@ -47,6 +46,7 @@ class Database extends Utils {
     }
     $cols = substr($cols, 0, -2);
     $entries = substr($entries, 0, -2);
+    #print($this->str_replace_arr("?", $enArr, "INSERT INTO $data[0] ($cols) VALUES ($entries)"));
     $stmt = $this->DATABASE->prepare("
       INSERT INTO $data[0] ($cols) VALUES ($entries)
     "); #Twitch @Sniperzeelite I love u 5 ever!!!

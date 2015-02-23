@@ -3,27 +3,84 @@ require_once("/var/www/abian/header.php");
 if ($session === false) $UserSystem->redirect301("/u/login");
 $recaptcha = recaptcha_get_html($re["site"]);
 
+$error = "";
 if (isset($_POST["n"])) {
   $resp = recaptcha_check_answer ($re["secret"], $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
   if (!$resp->is_valid) {
-    echo "The reCAPTCHA was incorrect: ".$resp->error.".";
+    $error = '
+      <div class="alert alert-danger">
+        ReCAPTCHA was incorrect.
+      </div>
+    ';
   } else {
-    
+    $type = $_FILES["f"]["type"];
+    if ($Abian->endsWith($_POST["fn"], ".zip") && ($type == "application/zip" || $type == "application/x-zip-compressed")) {
+      $slug = preg_replace('/\PL/u', '', $_POST["n"]);
+      $dir = "/var/www/abian/dl/";
+      $file = $dir . basename($UserSystem->sanitize($slug) . ".zip");
+      $search = $UserSystem->dbSel(["bots", ["slug" => $slug]])[0];
+      if (!file_exists($slug . ".zip") || $search != 0) {
+        if ($_FILES["f"]["size"] < 5000000) {
+          if (move_uploaded_file($_FILES["f"]["tmp_name"], $file)) {
+            $UserSystem->dbIns(
+              [
+                "bots",
+                [
+                  "body" => $UserSystem->sanitize($_POST["b"]),
+                  "slug" => $slug,
+                  "name" => $UserSystem->sanitize($_POST["n"]),
+                  "description" => $UserSystem->sanitize($_POST["d"]),
+                  "dateCreate" => time(),
+                  "user" => $session["id"]
+                ]
+              ]
+            );
+            $Abian->historify("bot.create", $UserSystem->sanitize($_POST["n"]));
+            $UserSystem->redirect301("/b?created");
+          } else {
+            $error = '
+              <div class="alert alert-danger">
+                Unknown error whilst uploading file.
+              </div>
+            ';
+          }
+        } else {
+          $error = '
+            <div class="alert alert-danger">
+              File is bigger than 5mb.
+            </div>
+          ';
+        }
+      } else {
+        $error = '
+          <div class="alert alert-danger">
+            Name is already in use.
+          </div>
+        ';
+      }
+    } else {
+      $error = '
+        <div class="alert alert-danger">
+          File selected is not .zip
+        </div>
+      ';
+    }
   }
 }
 
 echo <<<EOT
 <div class="col-xs-12">
+  $error
   <div class="well well-md">
     <h1>Upload your bot</h1>
-    <form class="form form-vertical" method="post" action="">
+    <form class="form form-vertical" method="post" action="" enctype="multipart/form-data">
       <div class="form-group">
         <label for="n">Bot name</label>
         <input type="text" class="form-control" id="n" name="n">
       </div>
       <div class="form-group">
         <label for="d">Description</label>
-        <input type="text" class="form-control" id="d" name="nd>
+        <input type="text" class="form-control" id="d" name="d">
         <span id="helpBlock" class="help-block">This will appear with your bot in search results.</span>
       </div>
       <div class="form-group">
@@ -32,22 +89,22 @@ echo <<<EOT
         <span id="helpBlock" class="help-block">Uses <a href="https://help.github.com/articles/github-flavored-markdown/" target="_blank">Github Flavored Markdown</a>.</span>
       </div>
       <div class="form-group">
-        <label for="f">File</label>
-        <input id="bf" type="file" style="display:none">
+        <label for="bf">File</label>
+        <input id="bf" type="file" style="display:none" name="f">
         <div class="input-group">
-          <input id="f" class="form-control input-sm" type="text">
+          <input id="f" class="form-control input-sm" type="text" name="fn">
           <span class="input-group-btn">
             <a class="btn btn-sm btn-default" id="ff">Browse</a>
           </span>
         </div>
-        <span id="helpBlock" class="help-block">Must be a .zip file. Name of file will be changed.</span>
+        <span id="helpBlock" class="help-block">Must be a .zip file.</span>
         <script>
         $("#ff").click(function () {
           $("#bf").click();
           $("input[type='file']").change(function(e) {
             fname = $(this).val().split("fakepath").pop();
             fname = fname.substring(1,fname.length);
-            $('#b').val(fname);
+            $('#f').val(fname);
           });
         });
         </script>

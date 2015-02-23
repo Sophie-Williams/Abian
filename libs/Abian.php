@@ -69,7 +69,7 @@ class Abian extends UserSystem {
   * @access public
   * @return string
   */
-  public function getOS () { 
+  public function getOS () {
     $user_agent = $_SERVER['HTTP_USER_AGENT'];
 
     $os_platform = "Unknown OS Platform";
@@ -98,7 +98,7 @@ class Abian extends UserSystem {
       '/webos/i'              =>  'Mobile'
     ];
 
-    foreach ($os_array as $regex => $value) { 
+    foreach ($os_array as $regex => $value) {
       if (preg_match($regex, $user_agent)) {
         $os_platform = $value;
       }
@@ -162,6 +162,35 @@ class Abian extends UserSystem {
     $xp += $xFB;
 
     return $xp;
+  }
+
+  /**
+  * If the given haystack starts with the given needle
+  * Example: $Abian->startsWith("cake", "e")
+  *
+  * @access public
+  * @param string $haystack
+  * @param string $needle
+  * @return boolean
+  */
+  public function startsWith($haystack, $needle) {
+    $length = strlen($needle);
+    return (substr($haystack, 0, $length) === $needle);
+  }
+
+  /**
+  * If the given haystack ends with the given needle
+  * Example: $Abian->endsWith("cake", "e")
+  *
+  * @access public
+  * @param string $haystack
+  * @param string $needle
+  * @return boolean
+  */
+  public function endsWith($haystack, $needle) {
+    $length = strlen($needle);
+    $start = $length * -1; //negative
+    return (substr($haystack, $start) === $needle);
   }
 
   /**

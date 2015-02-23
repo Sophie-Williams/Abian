@@ -42,3 +42,9 @@ Utilizes [Bootstrap](https://github.com/twbs/bootstrap).
 > Authors: [mdo](http://github.com/mdo) and [fat](http://github.com/fat)
 
 > MIT License
+
+Utilizes [Parsedown](https://github.com/erusev/parsedown).
+
+> Copyright (c) 2013 Emanuil Rusev, erusev.com
+
+> MIT License

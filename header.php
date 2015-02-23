@@ -2,6 +2,7 @@
 if (!isset($sidebar)) $sidebar = true;
 require_once("/var/www/abian/_secret_keys.php");
 require_once("/var/www/abian/libs/usersystem/config.php");
+require_once("/var/www/abian/libs/Parsedown.php");
 require_once("/var/www/abian/libs/Abian.php");
 require_once("/var/www/abian/libs/recaptcha.php");
 $Abian = new Abian;
@@ -73,7 +74,7 @@ $xp = $Abian->calcXP($session["id"]);
               <?=$session["username"]?>
               <span class="badge"><?=$Abian->calcLevel($xp)[0]?></span>
             </a></li>
-            <li><a href="/b/a"><i class="fa fa-plus"></i></a></li>
+            <li><a href="/b"><i class="fa fa-folder-open"></i></a></li>
             <li><a href="/u/cp"><i class="fa fa-cog"></i></a></li>
             <li><a href="/a"><i class="fa fa-database"></i></a></li>
             <li><a href="/u/logout"><i class="fa fa-sign-out"></i></a></li>
