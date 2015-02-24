@@ -86,6 +86,34 @@ echo <<<EOT
   </div>
   <br>
   <div class="row">
+    <div class="col-xs-12">
+EOT;
+
+$bots = $UserSystem->dbSel(["bots", ["user" => $user["id"]]]);
+if ($bots > 0) {
+  foreach ($bots as $key => $bot) {
+    if ($key === 0) continue;
+    echo '
+      <div class="panel panel-default" id="'.$bot["slug"].'" style="cursor:pointer">
+        <div class="panel-heading">'.$bot["name"].'</div>
+        <div class="panel-body">
+          '.$bot["description"].'
+        </div>
+      </div>
+      <script>
+        $("#'.$bot["slug"].'").click(function(e) {
+          e.preventDefault();
+          window.location = "/b?'.$bot["slug"].'";
+        });
+      </script>
+    ';
+  }
+} else {
+
+}
+
+echo <<<EOT
+    </div>
   </div>
 </div>
 EOT;

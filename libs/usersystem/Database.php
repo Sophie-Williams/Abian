@@ -31,11 +31,11 @@ class Database extends Utils {
   * @return boolean
   */
   public function dbIns ($data) {
+    $data[0] = $this->quoteIdent(DB_PREFACE.ucfirst($data[0]));
     $dataArr = [];
     foreach ($data[1] as $col => $val) {
       array_push($dataArr, [$col, $val]);
     }
-    $data[0] = $this->quoteIdent(DB_PREFACE.ucfirst($data[0]));
     $cols = "";
     $entries = "";
     $enArr = [];
@@ -50,8 +50,7 @@ class Database extends Utils {
     $stmt = $this->DATABASE->prepare("
       INSERT INTO $data[0] ($cols) VALUES ($entries)
     "); #Twitch @Sniperzeelite I love u 5 ever!!!
-    $stmt->execute($enArr);
-    return true;
+    return $stmt->execute($enArr);
   }
 
 
@@ -64,12 +63,11 @@ class Database extends Utils {
   * @return boolean
   */
   public function dbUpd ($data) {
+    $data[0] = $this->quoteIdent(DB_PREFACE.ucfirst($data[0]));
     $dataArr = [];
-    foreach ($data[1] as $item) {
-      $col = array_search($item, $data[1]);
+    foreach ($data[1] as $col => $item) {
       array_push($dataArr, [$col, $item]);
     }
-    $data[0] = $this->quoteIdent(DB_PREFACE.ucfirst($data[0]));
     $update = "";
     $qArr = [];
     foreach ($dataArr as $item) {
@@ -77,19 +75,18 @@ class Database extends Utils {
       array_push($qArr, $item[1]);
     }
     $equalsArr = [];
-    foreach ($data[2] as $item) {
-      $col = array_search($item, $data[2]);
+    foreach ($data[2] as $col => $item) {
       array_push(
         $equalsArr,
         [
           $this->sanitize($col, "q"),
           $this->sanitize($item, "q")
-          ]
+        ]
       );
     }
     $equals = "";
     foreach ($equalsArr as $item) {
-      $equals .= $item[0]."=? AND ";
+      $equals .= $this->quoteIdent($item[0])."=? AND ";
       array_push($qArr, $item[1]);
     }
     $equals = substr($equals, 0, -5);
@@ -97,8 +94,7 @@ class Database extends Utils {
     $stmt = $this->DATABASE->prepare("
       UPDATE $data[0] SET $update WHERE $equals
     ");
-    $stmt->execute($qArr);
-    return true;
+    return $stmt->execute($qArr);
   }
 
 
@@ -111,9 +107,9 @@ class Database extends Utils {
   * @return boolean
   */
   public function dbDel ($data) {
+    $data[0] = $this->quoteIdent(DB_PREFACE.ucfirst($data[0]));
     $dataArr = [];
-    foreach ($data[1] as $item) {
-      $col = array_search($item, $data[1]);
+    foreach ($data[1] as $col => $item) {
       array_push($dataArr, [$col, $item]);
     }
     $equals = "";
@@ -124,10 +120,9 @@ class Database extends Utils {
     }
     $equals = substr($equals, 0, -5);
     $stmt = $this->DATABASE->prepare("
-      DELETE FROM ".$this->quoteIdent(DB_PREFACE.ucfirst($data[0]))." WHERE $equals
+      DELETE FROM ".$data[0]." WHERE $equals
     ");
-    $stmt->execute($eqArr);
-    return true;
+    return $stmt->execute($eqArr);
   }
 
   /**
@@ -140,9 +135,9 @@ class Database extends Utils {
   * @return array
   */
   public function dbSel ($data) {
+    $data[0] = $this->quoteIdent(DB_PREFACE.ucfirst($data[0]));
     $dataArr = [];
-    foreach ($data[1] as $item) {
-      $col = array_search($item, $data[1]);
+    foreach ($data[1] as $col => $item) {
       array_push(
         $dataArr,
         [
@@ -168,9 +163,9 @@ class Database extends Utils {
     } else {
       $order = "";
     }
-    #print($this->str_replace_arr("?", $qmark, "select * from ".$this->quoteIdent(DB_PREFACE.ucfirst($data[0]))." where $equals ".$order));
+    #print($this->str_replace_arr("?", $qmark, "select * from ".$data[0]." where $equals ".$order));
     $stmt = $this->DATABASE->prepare("
-      select * from ".$this->quoteIdent(DB_PREFACE.ucfirst($data[0]))." where $equals ".$order."
+      select * from ".$data[0]." where $equals ".$order."
     ");
     $stmt->execute($qmark);
     $arr = [(is_object($stmt) ? $stmt->rowCount() : 0)];
@@ -180,31 +175,5 @@ class Database extends Utils {
       }
     }
     return $arr;
-  }
-
-  /**
-  * Returns the number of rows for a given search.
-  * Example: $UserSystem->numberOfRows("users", "username", $enteredUsername)
-  * Should follow pattern of dbMod() so as to support more $thing/$answer
-  * combos.
-  *
-  * @access public
-  * @param string $table
-  * @param mixed $thing
-  * @param mixed $answer
-  * @return integer
-  */
-  public function numRows ($table, $thing = false, $answer = false) {
-    $table = "`".DB_PREFACE.$this->quoteIdent($table)."`";
-    if (!$thing && !$answer) {
-      $stmt = $this->DATABASE->query("SELECT * FROM $table");
-    } else {
-      $thing = $this->sanitize($thing, "q");
-      $answer = $this->sanitize($answer, "q");
-      $stmt = $this->DATABASE->prepare("SELECT * FROM $table WHERE $thing=?");
-      $stmt->exectue([$answer]);
-    }
-    $rows =  (is_object($stmt)) ? $stmt->rowCount(): 0;
-    return $rows;
   }
 }

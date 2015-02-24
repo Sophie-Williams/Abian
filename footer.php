@@ -15,9 +15,13 @@
         $ad = '<a href="'.$stmt[1]['link'].'"><img src="'.$stmt[1]['content'].'" style="max-width:95%;max-height:100%;" /></a>';
         $UserSystem->dbUpd(["ads", ["shown" => $stmt[1]["shown"]+1], ["id" => $stmt[1]["id"]]]);
         $ad .= '<br><br>Good ad?
-          <div class="btn-group" role="group" aria-label="Up or down vote this ad">
-            <button class="btn btn-small"><i class="fa fa-thumbs-o-up"></i></button>
-            <button class="btn btn-small"><i class="fa fa-thumbs-o-down"></i></button>
+          <div class="btn-group btn-group-xs" role="group" aria-label="Up or down vote this ad">
+            <button class="btn btn-default">
+              <i class="fa fa-arrow-up"></i>
+            </button>
+            <button class="btn btn-default">
+              <i class="fa fa-arrow-down"></i>
+            </button>
           </div>
           <br>Pst! <a href="/a/premium">Premium users</a> don\'t see these!';
         echo '
@@ -28,8 +32,9 @@
         </div>
         <!--/Ad-->';
       } else {
-        echo "Can't find ad: ";
-        var_dump([$weight, $da, $stmt]);
+        echo "Can't find ad:<br><pre>";
+        var_dump(["weight" => $weight, "sort" => $da, "query" => $stmt]);
+        echo "</pre>";
       }
 
       echo '
@@ -53,7 +58,7 @@
               <li class="lin"><b><i class="fa fa-info-circle"></i> About</b></li>
               <li><a href="#">About the Bot Network</a> </li>
               <li><a href="#">Developer Blog</a> </li>
-              <li><a href="//beta.zbee.me/abian/about/faq">FAQ</a> </li>
+              <li><a href="#">FAQ</a> </li>
               <li><a href="#">Affiliates</a> </li>
               <li><a href="#">Ads</a> </li>
             </ul>
@@ -73,9 +78,15 @@
             <br>
             Abian was created by <a href="https://github.com/zbee">Zbee</a>.
             <br>
-            <a href="http://opensource.org/" target="_blank"><img src="/libs/img/OSI.png" style="width:30%"></a>
-            <a href="http://github.com/zbee/abian" target="_blank"><img src="/libs/img/GitHub.png" style="width:30%"></a>
-            <a href="http://www.gnu.org/copyleft/gpl.html" target="_blank"><img src="/libs/img/GPL.png" style="width:30%"></a>
+            <a href="http://opensource.org/" target="_blank">
+              <img src="/libs/img/OSI.png" style="width:30%">
+            </a>
+            <a href="http://github.com/zbee/abian" target="_blank">
+              <img src="/libs/img/GitHub.png" style="width:30%">
+            </a>
+            <a href="http://www.gnu.org/copyleft/gpl.html" target="_blank">
+              <img src="/libs/img/GPL.png" style="width:30%">
+            </a>
           </div>
           <div class="col-xs-6 col-sm-3">
             <ul>

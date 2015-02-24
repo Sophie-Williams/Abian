@@ -36,6 +36,9 @@ $xp = $Abian->calcXP($session["id"]);
     .lin {
       list-style: none;
     }
+    @-moz-document url-prefix() {
+      fieldset { display: table-cell; }
+    }
   </style>
 
   <title>Abian</title>

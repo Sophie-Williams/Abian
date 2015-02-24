@@ -11,9 +11,9 @@ See the [`LICENSE`](https://github.com/Zbee/Abian/blob/master/LICENSE) file for 
 
 Utilizes [UserSystem](https://github.com/zbee/usersystem).
 
-> Licensed under AOL http://aol.nexua.org
+> Copyright (c) 2014-2015 Ethan Henderson
 
-> Author: Ethan Henderson ethan@zbee.me twitter.com/zbee_
+> GPLv3 License
 
 Utilizes [reCAPTCHA](http://recaptcha.net).
 

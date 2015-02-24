@@ -198,17 +198,15 @@ class UserSystem extends Database {
     $rows = $this->dbSel(["userblobs", ["code"=>$code, "action"=>"activate"]]);
     if ($rows[0] == 1) {
       $user = $rows[1]["user"];
-      $this->dbUpd(["users", ["activated"=>1], ["id"=>$user]]);
-      $activated = $this->dbSel(["users", ["id"=>$user,"activated"=>1]])[0];
+      $update = $this->dbUpd(["users", ["activated"=>1], ["id"=>$user]]);
+      $noActiv = $this->dbSel(["users", ["id"=>$user,"activated"=>0]])[0];
       $this->dbDel(["userblobs", ["code"=>$code, "action"=>"activate"]]);
       $blob=$this->dbSel(["userblobs",["code"=>$code,"action"=>"activate"]])[0];
-      if ($activated == 1 && $blob == 0) {
-        return true;
-      } else {
-        return false;
-      }
+      if ($noActiv !== 0) return "NotActivated";
+      if ($blob !== 0) return "BlobNotRemoved";
+      return true;
     } else {
-      return false;
+      return "InvalidBlob";
     }
   }
 
