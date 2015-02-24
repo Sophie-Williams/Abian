@@ -5,7 +5,16 @@ $recaptcha = recaptcha_get_html($re["site"]);
 
 $error = "";
 if (isset($_POST["n"])) {
-  $resp = recaptcha_check_answer ($re["secret"], $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
+  $ipAddress = filter_var(
+    $_SERVER["REMOTE_ADDR"],
+    FILTER_SANITIZE_FULL_SPECIAL_CHARS
+  );
+  $resp = recaptcha_check_answer(
+    $re["secret"],
+    $ipAddress,
+    $_POST["recaptcha_challenge_field"],
+    $_POST["recaptcha_response_field"]
+  );
   if (!$resp->is_valid) {
     $error = '
       <div class="alert alert-danger">
@@ -14,19 +23,22 @@ if (isset($_POST["n"])) {
     ';
   } else {
     $type = $_FILES["f"]["type"];
-    if ($Abian->endsWith($_POST["fn"], ".zip") && ($type == "application/zip" || $type == "application/x-zip-compressed")) {
+    if (
+      $Abian->endsWith($_POST["fn"], ".zip") &&
+      ($type == "application/zip" || $type == "application/x-zip-compressed")
+    ) {
       $slug = preg_replace('/\PL/u', '', $_POST["n"]);
       $dir = "/var/www/abian/dl/";
       $file = $dir . basename($UserSystem->sanitize($slug) . ".zip");
       $search = $UserSystem->dbSel(["bots", ["slug" => $slug]])[0];
-      if (!file_exists($slug . ".zip") || $search != 0) {
+      if (!file_exists("/var/www/abian/dl/" . $slug . ".zip") || $search != 0) {
         if ($_FILES["f"]["size"] < 5000000) {
           if (move_uploaded_file($_FILES["f"]["tmp_name"], $file)) {
             $UserSystem->dbIns(
               [
                 "bots",
                 [
-                  "body" => $UserSystem->sanitize($_POST["b"]),
+                  "body" => $UserSystem->sanitize($_POST["b"], "h"),
                   "slug" => $slug,
                   "name" => $UserSystem->sanitize($_POST["n"]),
                   "description" => $UserSystem->sanitize($_POST["d"]),
@@ -61,7 +73,8 @@ if (isset($_POST["n"])) {
     } else {
       $error = '
         <div class="alert alert-danger">
-          File selected is not .zip
+          File selected is not .zip file
+          (application/zip or application/x-zip-compressed).
         </div>
       ';
     }
@@ -73,7 +86,7 @@ echo <<<EOT
   $error
   <div class="well well-md">
     <h1>Upload your bot</h1>
-    <form class="form form-vertical" method="post" action="" enctype="multipart/form-data">
+    <form class="form form-vertical" method="post" action="">
       <div class="form-group">
         <label for="n">Bot name</label>
         <input type="text" class="form-control" id="n" name="n">
@@ -81,12 +94,19 @@ echo <<<EOT
       <div class="form-group">
         <label for="d">Description</label>
         <input type="text" class="form-control" id="d" name="d">
-        <span id="helpBlock" class="help-block">This will appear with your bot in search results.</span>
+        <span id="helpBlock" class="help-block">
+          This will appear with your bot in search results.
+        </span>
       </div>
       <div class="form-group">
         <label for="b">Page</label>
         <textarea name="b" class="form-control" rows="15"></textarea>
-        <span id="helpBlock" class="help-block">Uses <a href="https://help.github.com/articles/github-flavored-markdown/" target="_blank">Github Flavored Markdown</a>.</span>
+        <span id="helpBlock" class="help-block">
+          Uses
+          <a href="https://s.zbee.me/bsz" target="_blank">
+            Github Flavored Markdown
+          </a>.
+        </span>
       </div>
       <div class="form-group">
         <label for="bf">File</label>
@@ -97,7 +117,10 @@ echo <<<EOT
             <a class="btn btn-sm btn-default" id="ff">Browse</a>
           </span>
         </div>
-        <span id="helpBlock" class="help-block">Must be a .zip file.</span>
+        <span id="helpBlock" class="help-block">
+          Must be a .zip file (application/zip or 
+          application/x-zip-compressed).
+        </span>
         <script>
         $("#ff").click(function () {
           $("#bf").click();
@@ -112,12 +135,16 @@ echo <<<EOT
       <div class="form-group">
         <label for="t">Tags</label>
         <input type="text" class="form-control" id="t" name="t">
-        <span id="helpBlock" class="help-block">Separate with commas, spaces are removed</span>
+        <span id="helpBlock" class="help-block">
+          Separate with commas, spaces are removed
+        </span>
       </div>
       <div class="form-group">
         $recaptcha
       </div>
-      <button type="submit" class="btn btn-primary btn-block">Submit Bot for Approval</button>
+      <button type="submit" class="btn btn-primary btn-block">
+        Submit Bot for Approval
+      </button>
     </form>
   </div>
 </div>

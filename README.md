@@ -43,6 +43,12 @@ Utilizes [Bootstrap](https://github.com/twbs/bootstrap).
 
 > MIT License
 
+Utilizes [Font Awesome](https://github.com/FortAwesome/Font-Awesome).
+
+> Copyright (c) 2012-2015 [Dave Grandy](https://github.com/davegandy)
+
+> MIT License
+
 Utilizes [Parsedown](https://github.com/erusev/parsedown).
 
 > Copyright (c) 2013 Emanuil Rusev, erusev.com

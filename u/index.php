@@ -1,7 +1,10 @@
 <?php
 $sidebar = false;
 require_once("/var/www/abian/header.php");
-$user = isset($_GET) && count($_GET) > 0 ? array_search(array_values($_GET)[0], $_GET) : null;
+$user = null;
+if (isset($_GET) && count($_GET) > 0) {
+  $user = array_search(array_values($_GET)[0], $_GET);
+}
 if (is_array($session) && $user === null) $UserSystem->redirect301("/u/cp");
 if ($session === false && $user === null) $UserSystem->redirect301("/");
 $user = $UserSystem->session($user);

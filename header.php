@@ -24,6 +24,7 @@ $xp = $Abian->calcXP($session["id"]);
 <head>
   <link href="/libs/css/bootstrap.css" rel="stylesheet" media="screen">
   <link href="/libs/css/flags.css" rel="stylesheet" media="screen">
+  <link href="/libs/css/emojify.css" rel="stylesheet" media="screen">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" media="screen">
   <style>
     body {
@@ -39,6 +40,10 @@ $xp = $Abian->calcXP($session["id"]);
     @-moz-document url-prefix() {
       fieldset { display: table-cell; }
     }
+    .emoji {
+      height: 32px;
+      width: 32px;
+    }
   </style>
 
   <title>Abian</title>
@@ -50,6 +55,7 @@ $xp = $Abian->calcXP($session["id"]);
   <![endif]-->
 
   <script src="/libs/js/jquery.js"></script>
+  <script src="/libs/js/emojify.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-inverse navbar-fixed-top">
