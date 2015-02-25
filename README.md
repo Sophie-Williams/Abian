@@ -51,6 +51,9 @@ Copyright 2015 Ethan Henderson.
 [![GPLv3](https://www.gnu.org/graphics/gplv3-127x51.png)](http://www.gnu.org/copyleft/gpl.html)
 See the [`COPYING`](https://github.com/Zbee/Abian/blob/master/COPYING) file for the text of this license.
 
+![Attribution 4.0 International](http://i.imgur.com/0PW0UMm.png)
+[Abian Documentation](https://github.com/Zbee/Abian/wiki) by Ethan Henderson is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+
 Utilizes [UserSystem](https://github.com/zbee/usersystem).
 
 > Copyright (c) 2014-2015 Ethan Henderson

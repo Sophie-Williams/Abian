@@ -49,7 +49,7 @@
           <br>Pst! <a href="/a/premium">Premium users</a> don\'t see these!';
         echo '
         <!--Ad-->
-        <div class="sidewidt text-center">
+        <div class="text-center" id="adMain">
           <h1 class="text-left" style="margin-bottom:10px;">
             <span class="maintext"><i class="fa fa-money"></i> Ad</span>
           </h1>
@@ -81,9 +81,9 @@
           <div class="col-xs-6 col-sm-3">
             <ul>
               <li class="lin"><i class="fa fa-info-circle"></i> About</li>
-              <li><a href="#">About the Bot Network</a> </li>
+              <li><a href="/q">About the Bot Network</a> </li>
               <li><a href="#">Developer Blog</a> </li>
-              <li><a href="#">FAQ</a> </li>
+              <li><a href="/q/q">FAQ</a> </li>
               <li><a href="#">Affiliates</a> </li>
               <li><a href="#">Ads</a> </li>
             </ul>
@@ -149,26 +149,13 @@
               ';
             }
           }
-          $l1 = file_get_contents("/var/www/abian/footer.php");
-          $r1 = file_get_contents(
-            "https://raw.githubusercontent.com/Zbee/Abian/master/footer.php"
-          );
-          $l2 = file_get_contents("/var/www/abian/header.php");
-          $r2 = file_get_contents(
-            "https://raw.githubusercontent.com/Zbee/Abian/master/header.php"
-          );
-          $l3 = file_get_contents("/var/www/abian//libs/Abian.php");
-          $r3 = file_get_contents(
-            "https://raw.githubusercontent.com/Zbee/Abian/master/libs/Abian.php"
-          );
-          $diff = "(modified)";
-          if ($l1 === $r1 && $l2 === $r2 && $l3 === $r3) $diff = "";
-          $c = $Abian->getCommit();
-          $sc = substr($c, 0, 10);
+          $c = $Abian->getCommit(__FILE__);
+          $sc = substr($c[0], 0, 10);
+          $diff = $c[1] === true ? "(modified)" : "";
           echo '
             <div class="col-xs-12 col-sm-6">
               Running
-              <a href="https://GitHub.com/Zbee/Abian/commit/' . $c . '"
+              <a href="https://GitHub.com/Zbee/Abian/commit/' . $c[0] . '"
               target="_blank">
                 Abian/' . $sc . '
               </a> '.$diff.'
@@ -177,6 +164,70 @@
           ?>
         </div>
       </div>
+      <!--Ad-->
+      <div class="well well-sm" id="adText">
+        <div class="row">
+          <div class="col-xs-12 col-sm-1">
+            <b><i class="fa fa-money"></i> Ad</b>
+          </div>
+          <div class="col-xs-12 col-sm-8">
+            <?php
+            $ad = $rate = '';
+            $weights = [0, 1, 1, 2, 2, 2, 3, 3, 3, 3];
+            shuffle($weights);
+            $weight = $weights[rand(0,9)];
+            $stmt = $UserSystem->dbSel(
+              [
+                "ads",
+                [
+                  "flavor" => "text",
+                  "weight" => $weight,
+                  "expiration" => [">", time()],
+                  "approved" => 1
+                ]
+              ]
+            );
+            if ($stmt[0] > 0) {
+              unset($stmt[0]);
+              shuffle($stmt);
+              $ad = '
+                <a href="'.$stmt[0]['link'].'" target="_blank">
+                  '.$stmt[0]["content"].'
+                </a>
+              ';
+              $UserSystem->dbUpd(
+                [
+                  "ads",
+                  ["shown" => $stmt[0]["shown"]+1],
+                  ["id" => $stmt[0]["id"]]
+                ]
+              );
+              echo $ad;
+              $rate = '
+                Good ad?
+                <div class="btn-group btn-group-xs" role="group"
+                  aria-label="Up or down vote this ad">
+                  <button class="btn btn-default">
+                    <i class="fa fa-arrow-up"></i>
+                  </button>
+                  <button class="btn btn-default">
+                    <i class="fa fa-arrow-down"></i>
+                  </button>
+                </div>
+              ';
+            } else {
+              echo "Can't find ad:<br><pre>";
+              var_dump(["weight" => $weight, "query" => $stmt]);
+              echo "</pre>";
+            }
+            ?>
+          </div>
+          <div class="col-xs-12 col-sm-3 text-right">
+            <?=$rate?>
+          </div>
+        </div>
+      </div>
+      <!--/Ad-->
     </div>
   </footer>
 
