@@ -69,27 +69,12 @@ class Abian extends UserSystem {
   * @access public
   * @return string
   */
-  public function getCommit($file) {
-    $file = explode("/abian/", $file)[1];
-    $update = false;
-
-    #See if file was edited
-    $ldir = "/var/www/abian/";
-    $rdir = "https://raw.githubusercontent.com/Zbee/Abian/master/";
-    $f = "header.php";
-    if ($ldir.$f !== $rdir.$f) $update = $edited = true;
-    $f = "footer.php";
-    if ($ldir.$f !== $rdir.$f) $update = $edited = true;
-    $f = "libs/Abian.php";
-    if ($ldir.$f !== $rdir.$f) $update = $edited = true;
-    if ($ldir.$file !== $rdir.$file) $update = $edited = true;
-
+  public function getCommit() {
     #Check if cache is reliable, if not fetch it again
     $cached = explode(":", file_get_contents("/var/www/abian/libs/commit.txt"));
     $date = $cached[0]; $commit = $cached[1];
-    $edited = $cached[2] == false && $edited === false ? false : true;
     if ($date === date("YmdHi", time())) {
-      $return = $commit;
+      return $commit;
     } else {
       $ch = curl_init("https://api.github.com/repos/Zbee/Abian/commits");
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -99,16 +84,12 @@ class Abian extends UserSystem {
       curl_close($ch);
       $data = json_decode($data, true);
       $return = $data[0]["sha"];
-      if ($return !== $commit) $edited = false;
-      $update = true;
-    }
-    if ($update) {
       file_put_contents(
-        $ldir . "libs/commit.txt",
-        date("YmdHi", time()) . ":" . $return . ":" . $edited
+        "/var/www/abian/libs/commit.txt",
+        date("YmdHi", time()) . ":" . $return
       );
+      return $return;
     }
-    return [$return, $edited];
   }
 
   /**

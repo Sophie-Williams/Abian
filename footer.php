@@ -148,17 +148,22 @@
                 </div>
               ';
             }
+          } else {
+            echo '
+              <div class="col-xs-12 col-sm-6">
+                Server time is ' . date("Y-m-d\TH:i", time()) . '
+              </div>
+            ';
           }
-          $c = $Abian->getCommit(__FILE__);
-          $sc = substr($c[0], 0, 10);
-          $diff = $c[1] === true ? "(modified)" : "";
+          $c = $Abian->getCommit();
+          $sc = substr($c, 0, 10);
           echo '
             <div class="col-xs-12 col-sm-6">
               Running
-              <a href="https://GitHub.com/Zbee/Abian/commit/' . $c[0] . '"
+              <a href="https://GitHub.com/Zbee/Abian/commit/' . $c . '"
               target="_blank">
                 Abian/' . $sc . '
-              </a> '.$diff.'
+              </a>
             </div>
           ';
           ?>
