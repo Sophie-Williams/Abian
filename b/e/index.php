@@ -46,7 +46,7 @@ if (is_array($session) && $bot !== null) {
                 ]
               ]
             );
-            $Abian->historify("bot.create", $UserSystem->sanitize($_POST["n"]));
+            $Abian->historify("bot.edit", $UserSystem->sanitize($_POST["n"]));
             $UserSystem->redirect301("/b?updated");
           } else {
             $error = '

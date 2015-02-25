@@ -63,6 +63,33 @@ class Abian extends UserSystem {
   }
 
   /**
+  * Gets the latest commit to Abian
+  * Example: $Abian->getCommit()
+  *
+  * @access public
+  * @return string
+  */
+  public function getCommit() {
+    #Limit to 1 api request per hour by caching commit info.
+    $cached = explode(":", file_get_contents("/var/www/abian/libs/commit.txt"));
+    $date = $cached[0]; $commit = $cached[1];
+    if ($date === date("YmdH", time())) return $commit;
+
+    $ch = curl_init("https://api.github.com/repos/Zbee/Abian/commits");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch,CURLOPT_USERAGENT, "GitHub.com/Zbee/Abian");
+    $data = curl_exec($ch);
+    curl_close($ch);
+    $data = json_decode($data, true);
+    file_put_contents(
+      "/var/www/abian/libs/commit.txt",
+      date("YmdH", time()) . ":" . $data[0]["sha"]
+    );
+    return $data[0]["sha"];
+  }
+
+  /**
   * Returns the operating system a user is using
   * Example: $Abian->getOS()
   *
