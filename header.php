@@ -36,13 +36,14 @@ $xp = $Abian->calcXP($session["id"]);
     }
     .lin {
       list-style: none;
+      font-weight: bold;
     }
     @-moz-document url-prefix() {
       fieldset { display: table-cell; }
     }
     .emoji {
-      height: 32px;
-      width: 32px;
+      height: 20px;
+      width: 20px;
     }
   </style>
 

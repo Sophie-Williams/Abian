@@ -99,7 +99,7 @@ if ($bots > 0) {
     echo '
       <div class="panel panel-default" id="'.$bot["slug"].'" style="cursor:pointer">
         <div class="panel-heading">'.$bot["name"].'</div>
-        <div class="panel-body">
+        <div class="panel-body" id="emoji">
           '.$bot["description"].'
         </div>
       </div>
@@ -108,6 +108,7 @@ if ($bots > 0) {
           e.preventDefault();
           window.location = "/b?'.$bot["slug"].'";
         });
+        emojify.run(document.getElementById("emoji"));
       </script>
     ';
   }
