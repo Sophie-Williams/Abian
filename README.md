@@ -48,7 +48,7 @@ Previously I have said that I would turn off ads after server costs and develope
 ## Licensing
 Copyright 2015 Ethan Henderson.
 
-[![GPLv3](https://www.gnu.org/graphics/gplv3-127x51.png)](http://www.gnu.org/copyleft/gpl.html)
+[![GPLv3](http://www.gnu.org/graphics/gplv3-88x31.png)](http://www.gnu.org/copyleft/gpl.html)
 See the [`COPYING`](https://github.com/Zbee/Abian/blob/master/COPYING) file for the text of this license.
 
 ![Attribution 4.0 International](http://i.imgur.com/0PW0UMm.png)
