@@ -14,19 +14,19 @@ The Abian network will be supported financially in 3 respects
 Ads will be the primary source of income for the network - or so I suspect - and will appear on most pages on the site in the sidebar.
 
 2. Premium Memberships
-Users will be able to purchase a premium membership to the website for $2/month which will allow them the following privileges.
+  Users will be able to purchase a premium membership to the website for $2/month which will allow them the following privileges.
+  
+  * No ads
+  
+  * Get a free text ad in the footer
+  
+  * A badge on the network
+  
+  * The ability to use bots in the Abian online botting client without downloading them
+  
+  * No reCAPTCHAs when submitting comments
 
-* No ads
-
-* Get a free text ad in the footer
-
-* A badge on the network
-
-* The ability to use bots in the Abian online botting client without downloading them
-
-* No reCAPTCHAs when submitting comments
-
-* Access to a forum especially for premium members
+  * Access to a forum especially for premium members
 
 3. Donations
 Any donations received by the developers will go towards server costs first.
