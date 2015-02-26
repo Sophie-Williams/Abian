@@ -12,6 +12,46 @@
 class Abian extends UserSystem {
 
   /**
+  * Returns bots according to a query
+  * Example: $Abian->getBots(["user" => 0, "sort" => ["date", "desc"]])
+  *
+  * @access public
+  * @param array $query
+  * @return mixed
+  */
+  public function getBots ($query) {
+    $data = ["bots"];
+    foreach ($query as $key => $item) {
+      if ($key == "sort") {
+        $data[2] = $item;
+      } else {
+        $data[1][$key] = $item;
+      }
+    }
+    $sel = $this->dbSel($data);
+    $formatted = "";
+    foreach ($sel as $key => $bot) {
+      if ($key === 0) continue;
+      $formatted .= '
+        <div class="panel panel-default" id="'.$bot["slug"].'" style="cursor:pointer">
+          <div class="panel-heading">'.$bot["name"].'</div>
+          <div class="panel-body" id="emoji">
+            '.$bot["description"].'
+          </div>
+        </div>
+        <script>
+          $("#'.$bot["slug"].'").click(function(e) {
+            e.preventDefault();
+            window.location = "/b?'.$bot["slug"].'";
+          });
+          emojify.run(document.getElementById("emoji"));
+        </script>
+      ';
+    }
+    return $formatted;
+  }
+
+  /**
   * Adds an item to history
   * Example: $Abian->historify("user.login", "user.19")
   *
@@ -32,13 +72,9 @@ class Abian extends UserSystem {
       $_SERVER["HTTP_CF_IPCOUNTRY"],
       FILTER_SANITIZE_FULL_SPECIAL_CHARS
     );
-    if (ENCRYPTION === true) {
-      $ipAddress = encrypt($ipAddress, $username);
-    }
+    if (ENCRYPTION === true) $ipAddress = encrypt($ipAddress, $username);
 
-    if ($target !== null && strpos($target, ".") === false) {
-      return false;
-    }
+    if ($target !== null && strpos($target, ".") === false) return false;
 
     $ins = $this->dbIns(
       [

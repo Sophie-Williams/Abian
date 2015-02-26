@@ -7,44 +7,6 @@ Abian seeks to solve this problem by running a website where people can freely c
 
 [Todo list](https://trello.com/b/deYLVjNm)
 
-## Financial
-The Abian network will be supported financially in 3 respects
-
-1. Ads
-Ads will be the primary source of income for the network - or so I suspect - and will appear on most pages on the site in the sidebar.
-
-2. Premium Memberships
-  Users will be able to purchase a premium membership to the website for $2/month which will allow them the following privileges.
-  
-  * No ads
-  
-  * Get a free text ad in the footer
-  
-  * A badge on the network
-  
-  * The ability to use bots in the Abian online botting client without downloading them
-  
-  * No reCAPTCHAs when submitting comments
-
-  * Access to a forum especially for premium members
-
-3. Donations
-Any donations received by the developers will go towards server costs first.
-
-<hr>
-
-And this is how the earnings from the 3 incomes will be split up and used.
-
-Currently Abian is running off of a single droplet from Digital Ocean for `$5`/month and is hosted on a subdomain of zbee.me which is `$12`/year. Once these costs (`$6`/month) are covered, the next $(`server costs` * `4` * `developers`) will be split up evenly to the developers, currently this figure is `$24`.
-
-The `$6` after `$30` will be saved for the next month's server costs.
-
-The `$20` after `$36` will be saved for any emergency situation that ever arises for the website.
-
-Anything after those `$56` will be saved until the end of the month, and at the end of the month all the money saved after `$30` will go to the creators of the bots with the most points that month.
-
-Previously I have said that I would turn off ads after server costs and developer pay have been met, the thing that changed is that I decided for sure that I wanted to award the creators of bots with the most points in the month.
-
 ## Licensing
 Copyright 2015 Ethan Henderson.
 

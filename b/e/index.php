@@ -19,7 +19,7 @@ if (is_array($session) && $bot !== null) {
         $Abian->endsWith($_POST["fn"], ".zip") && 
         ($type == "application/zip" || $type == "application/x-zip-compressed")
       ) {
-        $slug = preg_replace('/\PL/u', '', $_POST["n"]);
+        $slug = strtolower(preg_replace('/\PL/u', '', $_POST["n"]));
         if (file_exists("/var/www/abian/dl/" . $slug . ".zip")) {
           $search = $UserSystem->dbSel(
             [

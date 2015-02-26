@@ -27,7 +27,7 @@ if (isset($_POST["n"])) {
       $Abian->endsWith($_POST["fn"], ".zip") &&
       ($type == "application/zip" || $type == "application/x-zip-compressed")
     ) {
-      $slug = preg_replace('/\PL/u', '', $_POST["n"]);
+      $slug = strtolower(preg_replace('/\PL/u', '', $_POST["n"]));
       $dir = "/var/www/abian/dl/";
       $file = $dir . basename($UserSystem->sanitize($slug) . ".zip");
       $search = $UserSystem->dbSel(["bots", ["slug" => $slug]])[0];
