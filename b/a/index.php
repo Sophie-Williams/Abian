@@ -22,40 +22,41 @@ if (isset($_POST["n"])) {
       </div>
     ';
   } else {
-    $type = $_FILES["f"]["type"];
-    if (
-      $Abian->endsWith($_POST["fn"], ".zip") &&
-      ($type == "application/zip" || $type == "application/x-zip-compressed")
-    ) {
+    if ($Abian->endsWith($_POST["f"], ".zip")) {
       $slug = strtolower(preg_replace('/\PL/u', '', $_POST["n"]));
       $dir = "/var/www/abian/dl/";
       $file = $dir . basename($UserSystem->sanitize($slug) . ".zip");
       $search = $UserSystem->dbSel(["bots", ["slug" => $slug]])[0];
       if (!file_exists("/var/www/abian/dl/" . $slug . ".zip") || $search != 0) {
-        if ($_FILES["f"]["size"] < 5000000) {
-          if (move_uploaded_file($_FILES["f"]["tmp_name"], $file)) {
-            $UserSystem->dbIns(
+        $size = $UserSystem->sanitize(
+          array_change_key_case(
+            get_headers(
+              $_POST["f"],
+              TRUE
+            )
+          )['content-length'],
+          "n"
+        );
+        if ($size < 5500000) {
+          file_put_contents(
+            "/var/www/abian/dl/" . $slug . ".zip",
+            file_get_contents($_POST["f"])
+          );
+          $UserSystem->dbIns(
+            [
+              "bots",
               [
-                "bots",
-                [
-                  "body" => $UserSystem->sanitize($_POST["b"], "h"),
-                  "slug" => $slug,
-                  "name" => $UserSystem->sanitize($_POST["n"]),
-                  "description" => $UserSystem->sanitize($_POST["d"]),
-                  "dateCreate" => time(),
-                  "user" => $session["id"]
-                ]
+                "body" => $UserSystem->sanitize($_POST["b"], "h"),
+                "slug" => $slug,
+                "name" => $UserSystem->sanitize($_POST["n"]),
+                "description" => $UserSystem->sanitize($_POST["d"]),
+                "dateCreate" => time(),
+                "user" => $session["id"]
               ]
-            );
-            $Abian->historify("bot.create", $UserSystem->sanitize($_POST["n"]));
-            $UserSystem->redirect301("/b?created");
-          } else {
-            $error = '
-              <div class="alert alert-danger">
-                Unknown error whilst uploading file.
-              </div>
-            ';
-          }
+            ]
+          );
+          $Abian->historify("bot.create", $UserSystem->sanitize($_POST["n"]));
+          $UserSystem->redirect301("/b?created");
         } else {
           $error = '
             <div class="alert alert-danger">
@@ -102,35 +103,22 @@ echo <<<EOT
         <label for="b">Page</label>
         <textarea name="b" class="form-control" rows="15"></textarea>
         <span id="helpBlock" class="help-block">
-          Uses
-          <a href="https://s.zbee.me/bsz" target="_blank">
+          Uses 
+          <a href="http://s.zbee.me/bsz" target="_blank">
             Github Flavored Markdown
+          </a>
+          and 
+          <a href="https://s.zbee.me/nje" target="_blank">
+            emoji
           </a>.
         </span>
       </div>
       <div class="form-group">
-        <label for="bf">File</label>
-        <input id="bf" type="file" style="display:none" name="f">
-        <div class="input-group">
-          <input id="f" class="form-control input-sm" type="text" name="fn">
-          <span class="input-group-btn">
-            <a class="btn btn-sm btn-default" id="ff">Browse</a>
-          </span>
-        </div>
+        <label for="f">URL to File</label>
+        <input type="text" class="form-control" id="f" name="f">
         <span id="helpBlock" class="help-block">
-          Must be a .zip file (application/zip or 
-          application/x-zip-compressed).
+          Must be a .zip file.
         </span>
-        <script>
-        $("#ff").click(function () {
-          $("#bf").click();
-          $("input[type='file']").change(function(e) {
-            fname = $(this).val().split("fakepath").pop();
-            fname = fname.substring(1,fname.length);
-            $('#f').val(fname);
-          });
-        });
-        </script>
       </div>
       <div class="form-group">
         <label for="t">Tags</label>

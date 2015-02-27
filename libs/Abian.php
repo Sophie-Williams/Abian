@@ -33,7 +33,8 @@ class Abian extends UserSystem {
     foreach ($sel as $key => $bot) {
       if ($key === 0) continue;
       $formatted .= '
-        <div class="panel panel-default" id="'.$bot["slug"].'" style="cursor:pointer">
+        <div class="panel panel-default" id="'.$bot["slug"].'" 
+          style="cursor:pointer">
           <div class="panel-heading">'.$bot["name"].'</div>
           <div class="panel-body" id="emoji">
             '.$bot["description"].'

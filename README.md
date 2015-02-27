@@ -16,7 +16,7 @@ See the [`COPYING`](https://github.com/Zbee/Abian/blob/master/COPYING) file for 
 ![Attribution 4.0 International](http://i.imgur.com/0PW0UMm.png)
 [Abian Documentation](https://github.com/Zbee/Abian/wiki) by Ethan Henderson is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
 
-Utilizes [UserSystem](https://github.com/zbee/usersystem).
+Utilizes [UserSystem](https://github.com/Zbee/UserSystem/commit/e4c6facb55118638d1ae416da309756b35890fab).
 
 > Copyright (c) 2014-2015 Ethan Henderson
 
@@ -30,19 +30,19 @@ Utilizes [reCAPTCHA](http://recaptcha.net).
 
 > MIT License
 
-Utilizes [country-list](https://github.com/umpirsky/country-list).
+Utilizes [country-list](https://github.com/umpirsky/country-list/commit/6fbb672c820607af601f1e918cff540f79d9e6bd).
 
 > Copyright (c) Саша Стаменковић <umpirsky@gmail.com>
 
 > MIT License
 
-Utilizes [emojify.js](https://github.com/hassankhan/emojify.js/).
+Utilizes [emojify.js](https://github.com/hassankhan/emojify.js/commit/63b8b0528df85912ec43a2eaa3ac0678a414bd56).
 
 > Copyright (c) 2014 Hassan Khan, http://hassankhan.me contact@hassankhan.me
 
 > MIT License
 
-Utilizes [Bootstrap](https://github.com/twbs/bootstrap).
+Utilizes [Bootstrap](https://github.com/twbs/bootstrap/releases/tag/v3.3.2).
 
 > Code and documentation copyright 2011-2015 Twitter, Inc.
 
@@ -50,13 +50,13 @@ Utilizes [Bootstrap](https://github.com/twbs/bootstrap).
 
 > MIT License
 
-Utilizes [Font Awesome](https://github.com/FortAwesome/Font-Awesome).
+Utilizes [Font Awesome](https://github.com/FortAwesome/Font-Awesome/releases/tag/v4.3.0).
 
 > Copyright (c) 2012-2015 [Dave Grandy](https://github.com/davegandy)
 
 > MIT License
 
-Utilizes [Parsedown](https://github.com/erusev/parsedown).
+Utilizes [Parsedown](https://github.com/erusev/parsedown/releases/tag/1.5.1).
 
 > Copyright (c) 2013 Emanuil Rusev, erusev.com
 

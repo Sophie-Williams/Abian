@@ -13,52 +13,46 @@ if (is_array($session) && $bot !== null) {
     $b = $bot["body"];
     $error = "";
     if (isset($_POST["n"])) {
-      #$type = $_FILES["f"]["type"];
-      $type = "application/zip";
-      if (
-        $Abian->endsWith($_POST["fn"], ".zip") && 
-        ($type == "application/zip" || $type == "application/x-zip-compressed")
-      ) {
+      if ($Abian->endsWith($_POST["f"], ".zip")) {
         $slug = strtolower(preg_replace('/\PL/u', '', $_POST["n"]));
-        if (file_exists("/var/www/abian/dl/" . $slug . ".zip")) {
-          $search = $UserSystem->dbSel(
+        $search = $UserSystem->dbSel(
+          [
+            "bots",
+            [
+              "slug" => $slug,
+              "id" => ["!=", $bot["id"]]
+            ]
+          ]
+        )[0];
+        if ($search === 0) {
+          if (file_get_contents("/var/www/abian/dl/" . $slug . ".zip") != 
+            file_get_contents($_POST["f"])) {
+            $file = file_put_contents(
+              "/var/www/abian/dl/" . $slug . ".zip",
+              file_get_contents($_POST["f"])
+            );
+          }
+          $UserSystem->dbUpd(
             [
               "bots",
               [
+                "body" => $UserSystem->sanitize($_POST["b"], "h"),
                 "slug" => $slug,
-                "id" => ["!=", $bot["id"]]
+                "name" => $UserSystem->sanitize($_POST["n"]),
+                "description" => $UserSystem->sanitize($_POST["d"]),
+                "dateUpdate" => time()
+              ],
+              [
+                "id" => $bot["id"]
               ]
             ]
-          )[0];
-          if ($search === 0) {
-            $UserSystem->dbUpd(
-              [
-                "bots",
-                [
-                  "body" => $UserSystem->sanitize($_POST["b"], "h"),
-                  "slug" => $slug,
-                  "name" => $UserSystem->sanitize($_POST["n"]),
-                  "description" => $UserSystem->sanitize($_POST["d"]),
-                  "dateUpdate" => time()
-                ],
-                [
-                  "id" => $bot["id"]
-                ]
-              ]
-            );
-            $Abian->historify("bot.edit", $UserSystem->sanitize($_POST["n"]));
-            $UserSystem->redirect301("/b?updated");
-          } else {
-            $error = '
-              <div class="alert alert-danger">
-                Name is already in use.
-              </div>
-            ';
-          }
+          );
+          $Abian->historify("bot.edit", $UserSystem->sanitize($_POST["n"]));
+          $UserSystem->redirect301("/b?updated");
         } else {
           $error = '
             <div class="alert alert-danger">
-              File changed.
+              Name is already in use.
             </div>
           ';
         }
@@ -95,35 +89,22 @@ if (is_array($session) && $bot !== null) {
               <textarea name="b" class="form-control" rows="15">$b</textarea>
               <span id="helpBlock" class="help-block">
                 Uses 
-                <a href="https://s.zbee.me/bsz" target="_blank">
+                <a href="http://s.zbee.me/bsz" target="_blank">
                   Github Flavored Markdown
+                </a>
+                and 
+                <a href="https://s.zbee.me/nje" target="_blank">
+                  emoji
                 </a>.
               </span>
             </div>
             <div class="form-group">
-              <label for="bf">File</label>
-              <input id="bf" type="file" style="display:none" name="f">
-              <div class="input-group">
-                <input id="f" class="form-control input-sm" type="text" 
-                  name="fn" value="$bot[slug].zip">
-                <span class="input-group-btn">
-                  <a class="btn btn-sm btn-default" id="ff">Browse</a>
-                </span>
-              </div>
+              <label for="f">File</label>
+              <input type="text" class="form-control" id="f" name="f" 
+                value="http://abian.zbee.me/dl/$bot[slug].zip">
               <span id="helpBlock" class="help-block">
-                Must be a .zip file (application/zip or 
-                application/x-zip-compressed).
+                Must be a .zip file.
               </span>
-              <script>
-              $("#ff").click(function () {
-                $("#bf").click();
-                $("input[type='file']").change(function(e) {
-                  fname = $(this).val().split("fakepath").pop();
-                  fname = fname.substring(1,fname.length);
-                  $('#f').val(fname);
-                });
-              });
-              </script>
             </div>
             <div class="form-group">
               <label for="t">Tags</label>

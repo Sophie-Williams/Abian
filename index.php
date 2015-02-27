@@ -7,6 +7,6 @@ if (isset($_GET["loggedin"])) {
 }
 
 echo $Abian->getBots(["id" => ["!=", "a"]]);
-?>
 
-<?php require_once("footer.php"); ?>
+require_once("footer.php");
+?>
