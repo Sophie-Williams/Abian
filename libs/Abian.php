@@ -19,7 +19,29 @@ class Abian extends UserSystem {
   * @param array $query
   * @return mixed
   */
-  public function getBots ($query) {
+  public function lastActive ($user) {
+    return $this->dbUpd(
+      [
+        "users",
+        [
+          "lastActive" => time()
+        ],
+        [
+          "id" => $user
+        ]
+      ]
+    );
+  }
+
+  /**
+  * Returns bots according to a query
+  * Example: $Abian->getBots(["user" => 0, "sort" => ["date", "desc"]])
+  *
+  * @access public
+  * @param array $query
+  * @return mixed
+  */
+  public function getBots ($query, $num = false, $name = true) {
     $data = ["bots"];
     foreach ($query as $key => $item) {
       if ($key == "sort") {
@@ -32,12 +54,29 @@ class Abian extends UserSystem {
     $formatted = "";
     foreach ($sel as $key => $bot) {
       if ($key === 0) continue;
+      $user = $this->session(intval($bot["user"]))["username"];
+      $footer = 'Member: <i class="fa fa-';
+      if ($bot["member"] == 0) {
+        $footer .= "times";
+      } else {
+        $footer .= "check";
+      }
+      $footer .= '"></i> ';
+      $by = $name === true ? ' by '.$user : '';
       $formatted .= '
         <div class="panel panel-default" id="'.$bot["slug"].'" 
           style="cursor:pointer">
-          <div class="panel-heading">'.$bot["name"].'</div>
-          <div class="panel-body" id="emoji">
+          <div class="panel-heading">
+            '.$bot["name"].$by.' 
+            <span class="pull-right">
+              '.date("Y-m-d", $bot["dateCreate"]).'
+            </span>
+          </div>
+          <div class="panel-body">
             '.$bot["description"].'
+          </div>
+          <div class="panel-footer">
+            '.$footer.'
           </div>
         </div>
         <script>
@@ -45,10 +84,10 @@ class Abian extends UserSystem {
             e.preventDefault();
             window.location = "/b?'.$bot["slug"].'";
           });
-          emojify.run(document.getElementById("emoji"));
         </script>
       ';
     }
+    if ($num === true) return [$formatted, $sel[0]];
     return $formatted;
   }
 

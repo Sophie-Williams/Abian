@@ -30,9 +30,21 @@ if (!empty($user["githubName"])) echo '<a target="_blank" href="https://github.c
 if (!empty($user["aqName"])) echo '<a target="_blank" href="http://www.aq.com/aw-character.asp?id='.$user["aqName"].'" class="list-group-item">AQW: '.$user["aqName"].'</a>';
 
 $dateR = date("Y-m-d", $user["dateRegistered"]);
+$dateL = date("Y-m-d\TH:i", $user["lastActive"]);
 date_default_timezone_set($user["timeZone"]);
 $theirTime = date("Y-m-d\TH:i", time()) . " (" . $user["timeZone"] . ")";
-is_array($session) ? date_default_timezone_set($session["timeZone"]) : date_default_timezone_set("America/Denver");
+$tHour = date("g", time());
+$tMin = round(date("i", time())/30)*30;
+if ($tMin == 0) {
+  $tMin = "";
+} elseif ($tMin == "60") {
+  $tMin = "";
+  $tHour += 1;
+} else {
+  $tMin = "30";
+}
+$theirClock = ":clock" . $tHour . $tMin . ":";
+date_default_timezone_set(is_array($session) ? $session["timeZone"] : "America/Denver");
 
 if ($user["id"] != $session["id"]) $xp = $Abian->calcXP($user["id"]);
 $lvl = $Abian->calcLevel($xp);
@@ -45,13 +57,15 @@ echo <<<EOT
     </div>
   </div>
   <br>
-  Their time is $theirTime
+  Their time is $theirClock $theirTime
 </div>
 <div class="col-xs-12 col-sm-9">
   <div class="row">
     <div class="col-xs-12 col-sm-9">
       <h1><span class='f32'><i class='flag $user[a2]' title='$a2'>&nbsp;</i></span> $user[username]</h1>
       Joined $dateR
+      <br>
+      Last seen $dateL
     </div>
     <div class="col-xs-12 col-sm-3 text-center">
       <h2>Level $level</h2>
@@ -87,12 +101,21 @@ if ($badged[0] > 0) {
 echo <<<EOT
     </div>
   </div>
-  <br>
+  <hr>
   <div class="row">
     <div class="col-xs-12">
 EOT;
 
-echo $Abian->getBots(["user" => $user["id"]]);
+$bots = $Abian->getBots(
+  [
+    "user" => $user["id"],
+    "sort" => ["dateCreate", "desc"]
+  ],
+  true,
+  false
+);
+echo "This user has created $bots[1] bots.<br><br>";
+echo $bots[0];
 
 echo <<<EOT
     </div>

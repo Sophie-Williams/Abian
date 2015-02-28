@@ -11,6 +11,7 @@ if (is_array($session) && $bot !== null) {
   if ($bot[0] == 1) {
     $bot = $bot[1];
     $b = $bot["body"];
+    $d = $bot["description"];
     $error = "";
     if (isset($_POST["n"])) {
       if ($Abian->endsWith($_POST["f"], ".zip")) {
@@ -78,8 +79,7 @@ if (is_array($session) && $bot !== null) {
             </div>
             <div class="form-group">
               <label for="d">Description</label>
-              <input type="text" class="form-control" id="d" name="d" 
-                value="$bot[description]">
+              <textarea name="d" class="form-control" rows="5">$d</textarea>
               <span id="helpBlock" class="help-block">
                 This will appear with your bot in search results.
               </span>

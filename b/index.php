@@ -65,6 +65,8 @@ EOT;
     $bot = $bot[1];
     $Parsedown = new Parsedown();
     $bot["name"] = ucfirst($bot["name"]);
+    $bot["user"] = intval($bot["user"]);
+    $user = $UserSystem->session($bot["user"]);
     echo <<<EOT
     <div class="col-xs-12">
       <div class="row">
@@ -86,16 +88,22 @@ EOT;
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12 col-sm-8" id="emoji">
+        <div class="col-xs-12 col-sm-9">
 EOT;
 
 echo $Parsedown->text($bot["body"]);
 
+$email = md5(strtolower(trim($user["email"])));
+$date = date("Y-m-d\TH:i", $bot["dateCreate"]);
 echo <<<EOT
         </div>
         <script>emojify.run(document.getElementById("emoji"))</script>
-        <div class="col-xs-12 col-sm-4">
-
+        <div class="col-xs-12 col-sm-3 text-center">
+            <img src="https://www.gravatar.com/avatar/$email?s=512" class="img-thumbnail" style="width:75%" />
+            <br>
+            Created by <a href="/u?$user[username]">$user[username]</a>
+          <br>
+          On $date
         </div>
       </div>
     </div>

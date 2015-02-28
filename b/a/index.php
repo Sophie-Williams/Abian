@@ -94,14 +94,14 @@ echo <<<EOT
       </div>
       <div class="form-group">
         <label for="d">Description</label>
-        <input type="text" class="form-control" id="d" name="d">
+        <textarea name="d" id="d" class="form-control" rows="5"></textarea>
         <span id="helpBlock" class="help-block">
           This will appear with your bot in search results.
         </span>
       </div>
       <div class="form-group">
         <label for="b">Page</label>
-        <textarea name="b" class="form-control" rows="15"></textarea>
+        <textarea name="b" id="b" class="form-control" rows="15"></textarea>
         <span id="helpBlock" class="help-block">
           Uses 
           <a href="http://s.zbee.me/bsz" target="_blank">

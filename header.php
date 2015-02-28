@@ -10,6 +10,7 @@ $session = $UserSystem->verifySession();
 if ($session === true) {
   $session = $UserSystem->session();
   date_default_timezone_set($session["timeZone"]);
+  $Abian->lastActive($session["id"]);
 } elseif ($session === "ban") {
   echo "You are banned from using Abian. If you are unsure why, please open an issue on github.com/zbee/abian.";
   exit;
