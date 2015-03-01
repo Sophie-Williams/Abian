@@ -2,7 +2,9 @@
 require_once("/var/www/abian/header.php");
 ?>
 
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#1"><i class="fa fa-question-circle"></i> How do I download / report / upvote / downvote / comment on a bot?</a>
+<h1>Frequently Asked Questions</h1>
+
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#1"></i> How do I download / report / upvote / downvote / comment on a bot?</a>
 <div class="collapse well" id="1">
   <p>
     <i class="fa fa-share-square"></i>
@@ -10,7 +12,7 @@ require_once("/var/www/abian/header.php");
   </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#2"><i class="fa fa-question-circle"></i> Will this get me banned from AQW?</a>
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#2"></i> Will this get me banned from AQW?</a>
 <div class="collapse well" id="2">
   <p>
     <i class="fa fa-share-square"></i>
@@ -31,7 +33,7 @@ require_once("/var/www/abian/header.php");
   </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#3"><i class="fa fa-question-circle"></i> Is botting legal?</a>
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#3"></i> Is botting legal?</a>
 <div class="collapse well" id="3">
     <p>
       <i class="fa fa-share-square"></i>
@@ -47,7 +49,7 @@ require_once("/var/www/abian/header.php");
     </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#4"><i class="fa fa-question-circle"></i> Is the Bot Net legal?</a>
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#4"></i> Is the Bot Net legal?</a>
 <div class="collapse well" id="4">
     <p>
       <i class="fa fa-share-square"></i>
@@ -66,7 +68,7 @@ require_once("/var/www/abian/header.php");
     </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#5"><i class="fa fa-question-circle"></i> I'm banned! What now?</a>
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#5"></i> I'm banned! What now?</a>
 <div class="collapse well" id="5">
     <p>
       <i class="fa fa-share-square"></i>
@@ -78,7 +80,7 @@ require_once("/var/www/abian/header.php");
     </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#6"><i class="fa fa-question-circle"></i> Why the ads on the network?</a>
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#6"></i> Why the ads on the network?</a>
 <div class="collapse well" id="6">
     <p>
       <i class="fa fa-share-square"></i>
@@ -92,7 +94,7 @@ require_once("/var/www/abian/header.php");
     </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#7"><i class="fa fa-question-circle"></i> Who built the Abian Bot Network?</a>
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#7"></i> Who built the Abian Bot Network?</a>
 <div class="collapse well" id="7">
     <p>
       <i class="fa fa-share-square"></i>
@@ -102,7 +104,7 @@ require_once("/var/www/abian/header.php");
     </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#8"><i class="fa fa-question-circle"></i> What is a premium user?</a>
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#8"></i> What is a premium user?</a>
 <div class="collapse well" id="8">
     <p>
       <i class="fa fa-share-square"></i>
@@ -120,7 +122,7 @@ require_once("/var/www/abian/header.php");
     </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#9"><i class="fa fa-question-circle"></i> What happens if there is a DMCA/C&D registered against my bot?</a>
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#9"></i> What happens if there is a DMCA/C&D registered against my bot?</a>
 <div class="collapse well" id="9">
     <p>
       <i class="fa fa-share-square"></i>
@@ -134,7 +136,7 @@ require_once("/var/www/abian/header.php");
     </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#10"><i class="fa fa-question-circle"></i> What is the team's response to DMCA's/C&D's in general?</a>
+<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#10"></i> What is the team's response to DMCA's/C&D's in general?</a>
 <div class="collapse well" id="10">
     <p>
       <i class="fa fa-share-square"></i>

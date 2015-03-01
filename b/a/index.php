@@ -42,6 +42,7 @@ if (isset($_POST["n"])) {
             "/var/www/abian/dl/" . $slug . ".zip",
             file_get_contents($_POST["f"])
           );
+          $m = $_POST["m"] == 1 ? 1 : 0;
           $UserSystem->dbIns(
             [
               "bots",
@@ -51,6 +52,7 @@ if (isset($_POST["n"])) {
                 "name" => $UserSystem->sanitize($_POST["n"]),
                 "description" => $UserSystem->sanitize($_POST["d"]),
                 "dateCreate" => time(),
+                "member" => $m,
                 "user" => $session["id"]
               ]
             ]
@@ -105,12 +107,10 @@ echo <<<EOT
         <span id="helpBlock" class="help-block">
           Uses 
           <a href="http://s.zbee.me/bsz" target="_blank">
-            Github Flavored Markdown
-          </a>
+            Github Flavored Markdown</a>
           and 
           <a href="https://s.zbee.me/nje" target="_blank">
-            emoji
-          </a>.
+            emoji</a>.
         </span>
       </div>
       <div class="form-group">
@@ -127,6 +127,24 @@ echo <<<EOT
           Separate with commas, spaces are removed
         </span>
       </div>
+      <fieldset> <!--http://s.zbee.me/fzb-->
+        <div class="form-group">
+          <label class="control-label">Membership required</label>
+          <br>
+          <div class="radio">
+            <label>
+              <input name="m" value="0" type="radio" checked>
+              Anyone can use
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input name="m" value="1" type="radio">
+              Members only
+            </label>
+          </div>
+        </div>
+      </fieldset>
       <div class="form-group">
         $recaptcha
       </div>

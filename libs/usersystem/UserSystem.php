@@ -22,12 +22,10 @@ class UserSystem extends Database {
    */
   public function checkBan ($ipAddress, $username = false) {
     $ipAddress = filter_var(
-      $ipAddress,
+      $_SERVER["REMOTE_ADDR"],
       FILTER_SANITIZE_FULL_SPECIAL_CHARS
     );
-    if (ENCRYPTION === true) {
-      $ipAddress = encrypt($ipAddress, $username);
-    }
+    if (ENCRYPTION === true) $ipAddress = encrypt($ipAddress, $username);
     $stmt = $this->dbSel(["ban", ["ip" => $ipAddress]]);
     $rows = $stmt[0];
     if ($rows > 0) {

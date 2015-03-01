@@ -20,11 +20,17 @@ class Abian extends UserSystem {
   * @return mixed
   */
   public function lastActive ($user) {
+    $ipAddress = filter_var(
+      $_SERVER["REMOTE_ADDR"],
+      FILTER_SANITIZE_FULL_SPECIAL_CHARS
+    );
+    if (ENCRYPTION === true) $ipAddress = encrypt($ipAddress, $username);
     return $this->dbUpd(
       [
         "users",
         [
-          "lastActive" => time()
+          "lastActive" => time(),
+          "ip" => $ipAddress
         ],
         [
           "id" => $user
@@ -56,20 +62,19 @@ class Abian extends UserSystem {
       if ($key === 0) continue;
       $user = $this->session(intval($bot["user"]))["username"];
       $footer = 'Member: <i class="fa fa-';
-      if ($bot["member"] == 0) {
-        $footer .= "times";
-      } else {
-        $footer .= "check";
-      }
+      $footer .= $bot["member"] == 1 ? "check" : "times";
       $footer .= '"></i> ';
       $by = $name === true ? ' by '.$user : '';
+      $updated = "";
+      $upDate = date("Y-m-d", $bot["dateUpdate"]);
+      if ($bot["dateUpdate"] != 0) $updated = " (Updated $upDate)";
       $formatted .= '
         <div class="panel panel-default" id="'.$bot["slug"].'" 
           style="cursor:pointer">
           <div class="panel-heading">
             '.$bot["name"].$by.' 
             <span class="pull-right">
-              '.date("Y-m-d", $bot["dateCreate"]).'
+              '.date("Y-m-d", $bot["dateCreate"]).$updated.'
             </span>
           </div>
           <div class="panel-body">
@@ -89,6 +94,31 @@ class Abian extends UserSystem {
     }
     if ($num === true) return [$formatted, $sel[0]];
     return $formatted;
+  }
+
+  /**
+  * Returns comments according to a query
+  * Example: $Abian->getComments(["for" => "bot.2", "sort" => ["date", "desc"]])
+  *
+  * @access public
+  * @param array $query
+  * @return boolean
+  */
+  public function getComments ($query, $num = false) {
+    $data = ["comments"];
+    foreach ($query as $key => $item) {
+      if ($key == "sort") {
+        $data[2] = $item;
+      } else {
+        $data[1][$key] = $item;
+      }
+    }
+    $sel = $this->dbSel($data);
+    if ($num === true) echo "";
+    foreach ($sel as $key => $comment) {
+      if ($key === 0) continue;
+    }
+    return true;
   }
 
   /**

@@ -67,6 +67,13 @@ EOT;
     $bot["name"] = ucfirst($bot["name"]);
     $bot["user"] = intval($bot["user"]);
     $user = $UserSystem->session($bot["user"]);
+    if ($bot["user"] == $session["id"]) {
+      $mine = '
+        <a href="/b/e/?'.$bot["slug"].'" class="btn btn-default">
+          <i class="fa fa-pencil"></i>
+        </a>
+      ';
+    }
     echo <<<EOT
     <div class="col-xs-12">
       <div class="row">
@@ -85,6 +92,7 @@ EOT;
           <a href="#" class="btn btn-default text-danger">
             <i class="fa fa-heart-o"></i>
           </a>
+          $mine
         </div>
       </div>
       <div class="row">
@@ -95,15 +103,17 @@ echo $Parsedown->text($bot["body"]);
 
 $email = md5(strtolower(trim($user["email"])));
 $date = date("Y-m-d\TH:i", $bot["dateCreate"]);
+$upDate = date("Y-m-d\TH:i", $bot["dateUpdate"]);
+$updated = $bot["dateUpdate"] != 0 ? "<br><br>Updated $upDate" : "";
 echo <<<EOT
         </div>
-        <script>emojify.run(document.getElementById("emoji"))</script>
         <div class="col-xs-12 col-sm-3 text-center">
-            <img src="https://www.gravatar.com/avatar/$email?s=512" class="img-thumbnail" style="width:75%" />
+            <img src="https://www.gravatar.com/avatar/$email?s=512" 
+              class="img-thumbnail" style="width:75%" />
             <br>
             Created by <a href="/u?$user[username]">$user[username]</a>
           <br>
-          On $date
+          On $date$updated
         </div>
       </div>
     </div>

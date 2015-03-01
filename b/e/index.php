@@ -12,6 +12,8 @@ if (is_array($session) && $bot !== null) {
     $bot = $bot[1];
     $b = $bot["body"];
     $d = $bot["description"];
+    $ch1 = $bot["member"] == 0 ? "checked" : "";
+    $ch2 = $bot["member"] == 1 ? "checked" : "";
     $error = "";
     if (isset($_POST["n"])) {
       if ($Abian->endsWith($_POST["f"], ".zip")) {
@@ -33,6 +35,7 @@ if (is_array($session) && $bot !== null) {
               file_get_contents($_POST["f"])
             );
           }
+          $m = $_POST["m"] == 1 ? 1 : 0;
           $UserSystem->dbUpd(
             [
               "bots",
@@ -41,6 +44,7 @@ if (is_array($session) && $bot !== null) {
                 "slug" => $slug,
                 "name" => $UserSystem->sanitize($_POST["n"]),
                 "description" => $UserSystem->sanitize($_POST["d"]),
+                "member" => $m,
                 "dateUpdate" => time()
               ],
               [
@@ -90,12 +94,10 @@ if (is_array($session) && $bot !== null) {
               <span id="helpBlock" class="help-block">
                 Uses 
                 <a href="http://s.zbee.me/bsz" target="_blank">
-                  Github Flavored Markdown
-                </a>
+                  Github Flavored Markdown</a>
                 and 
                 <a href="https://s.zbee.me/nje" target="_blank">
-                  emoji
-                </a>.
+                  emoji</a>.
               </span>
             </div>
             <div class="form-group">
@@ -113,6 +115,24 @@ if (is_array($session) && $bot !== null) {
                 Separate with commas, spaces are removed.
               </span>
             </div>
+            <fieldset> <!--http://s.zbee.me/fzb-->
+              <div class="form-group">
+                <label class="control-label">Membership required</label>
+                <br>
+                <div class="radio">
+                  <label>
+                    <input name="m" value="0" type="radio" $ch1>
+                    Anyone can use
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input name="m" value="1" type="radio" $ch2>
+                    Members only
+                  </label>
+                </div>
+              </div>
+            </fieldset>
             <button type="submit" class="btn btn-primary btn-block">
               Submit Bot for Reapproval
             </button>
