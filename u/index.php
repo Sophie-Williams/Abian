@@ -90,8 +90,6 @@ if ($badged[0] > 0) {
       if ($badge["id"] == $badgeb["badge"]) {
         $desc = $badge["description"];
         $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
-        $desc = str_replace("%twitch", substr(sha1($session["id"].$session["username"].$session["twitchName"]), 0, 7), $desc);
-        $desc = str_replace("%github", substr(sha1($session["id"].$session["username"].$session["githubName"]), 0, 7), $desc);
         echo '<span class="label label-'.$badge["type"].'" data-toggle="popover" data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
       }
     }

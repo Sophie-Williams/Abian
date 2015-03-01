@@ -1,4 +1,11 @@
 <?php
+if ($_SERVER["HTTP_X_FORWARDED_PROTO"] != "https"
+  && json_decode($_SERVER["HTTP_CF_VISITOR"])->scheme != "https"
+  && !isset($chillS)) {
+  $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+  header("HTTP/1.1 301 Moved Permanently");
+  header("Location: $redirect");
+}
 if (!isset($sidebar)) $sidebar = true;
 require_once("/var/www/abian/_secret_keys.php");
 require_once("/var/www/abian/libs/usersystem/config.php");

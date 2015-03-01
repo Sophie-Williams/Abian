@@ -1,9 +1,157 @@
 <?php
 $sidebar = false;
+if (isset($_GET["code"])) $chillS = true;
 require_once("/var/www/abian/header.php");
 if ($session === false) $UserSystem->redirect301("/u/login");
 
 $error = "";
+
+if (isset($_GET["code"]) && !isset($_GET["tw"])) {
+  $url = "https://github.com/login/oauth/access_token";
+  $myvars = http_build_query(
+    [
+      "client_id" => $gh["client"],
+      "client_secret" => $gh["secret"],
+      "code" => $_GET["code"]
+    ],
+    "",
+    "&"
+  );
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $myvars);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+  curl_setopt($ch, CURLOPT_HEADER, 0);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  $response = curl_exec($ch);
+
+  $authToken = explode("&", $response)[0];
+  $authToken = explode("=", $authToken)[1];
+
+  $url = "https://api.github.com/user?access_token=".$authToken;
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+  curl_setopt($ch, CURLOPT_HEADER, 0);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
+  $response = json_decode(curl_exec($ch));
+  $ghName = $response->login;
+  if ($session["githubName"] !== $ghName) {
+    if (empty($session["githubName"])) {
+      $hist = $Abian->historify("githubName.added", $ghName);
+    } else {
+      $hist = $Abian->historify("githubName.updated", "To: " . $ghName);
+    }
+    $UserSystem->dbUpd(
+      [
+        "users",
+        [
+          "githubName" => $ghName
+        ],
+        [
+          "id" => $session["id"]
+        ]
+      ]
+    );
+    $session["githubName"] = $ghName;
+  }
+  $UserSystem->redirect301("/u/cp?gh=".$ghName);
+}
+
+if (isset($_GET["code"]) && isset($_GET["tw"])) {
+  function get_url_contents($url){
+    $crl = curl_init();
+    $timeout = 5;
+    curl_setopt ($crl, CURLOPT_URL,$url);
+    curl_setopt ($crl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt ($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
+    $ret = curl_exec($crl);
+    curl_close($crl);
+    return $ret;
+  }
+
+  function post_url_contents($url, $fields) {
+    $fields_string = "";
+    foreach($fields as $key=>$value) { $fields_string .= $key.'='.
+      urlencode($value).'&'; }
+    rtrim($fields_string, '&');
+
+    $crl = curl_init();
+    $timeout = 5;
+
+    curl_setopt($crl, CURLOPT_URL,$url);
+    curl_setopt($crl,CURLOPT_POST, count($fields));
+    curl_setopt($crl,CURLOPT_POSTFIELDS, $fields_string);
+
+    curl_setopt ($crl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt ($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
+    $ret = curl_exec($crl);
+    curl_close($crl);
+    return $ret;
+  }
+
+  $login_params = array(
+    'client_id'=> $tw["client"],
+    'client_secret' => $tw["secret"],
+    'scope' => 'user_read',
+    'grant_type' => 'authorization_code',
+    'code' => $_GET["code"],
+    'redirect_uri' => 'https://abian.zbee.me/u/cp?tw'
+  );
+
+  $result = json_decode(
+    post_url_contents(
+      "https://api.twitch.tv/kraken/oauth2/token",
+      $login_params
+    )
+  );
+
+  $user = json_decode(
+    get_url_contents("https://api.twitch.tv/kraken/user?oauth_token="
+      .$result->access_token)
+  );
+  $twName = $user->display_name;
+  if ($session["twitchName"] !== $twName) {
+    if (empty($session["twitchName"])) {
+      $hist = $Abian->historify("twitchName.added", $twName);
+    } else {
+      $hist = $Abian->historify("twitchName.updated", "To: " . $twName);
+    }
+    $UserSystem->dbUpd(
+      [
+        "users",
+        [
+          "twitchName" => $twName
+        ],
+        [
+          "id" => $session["id"]
+        ]
+      ]
+    );
+    $session["twitchName"] = $twName;
+  }
+  $UserSystem->redirect301("/u/cp?tw=".$twName);
+}
+
+if (isset($_GET["tw"])) {
+  $_GET["tw"] = $UserSystem->sanitize($_GET["tw"]);
+  $error = "<div class='col-xs-12'>
+    <div class='alert alert-success'>
+      Twitch username updated to ".$_GET["tw"].". This will
+      now be displayed publicly on your profile.
+    </div>
+  </div>";
+}
+
+if (isset($_GET["gh"])) {
+  $_GET["gh"] = $UserSystem->sanitize($_GET["gh"]);
+  $error = "<div class='col-xs-12'>
+    <div class='alert alert-success'>
+      Github username updated to ".$_GET["gh"].". This will
+      now be displayed publicly on your profile.
+    </div>
+  </div>";
+}
 
 if (isset($_POST["c"])) {
   $_POST["c"] = $UserSystem->sanitize($_POST["c"]);
@@ -57,64 +205,6 @@ if (isset($_POST["a"])) {
   $error = "<div class='col-xs-12'>
     <div class='alert alert-success'>
       Adventure Quest Worlds username updated to ".$_POST["a"].". This will
-      now be displayed publicly on your profile.
-    </div>
-  </div>";
-}
-
-if (isset($_POST["t"])) {
-  $_POST["t"] = $UserSystem->sanitize($_POST["t"]);
-  if ($session["twitchName"] !== $_POST["t"]) {
-    if (empty($session["twitchName"])) {
-      $hist = $Abian->historify("twitchName.added", $_POST["t"]);
-    } else {
-      $hist = $Abian->historify("twitchName.updated", "To: " . $_POST["t"]);
-    }
-    $UserSystem->dbUpd(
-      [
-        "users",
-        [
-          "twitchName" => $_POST["t"]
-        ],
-        [
-          "id" => $session["id"]
-        ]
-      ]
-    );
-    $session["twitchName"] = $_POST["t"];
-  }
-  $error = "<div class='col-xs-12'>
-    <div class='alert alert-success'>
-      Twitch username updated to ".$_POST["t"].". This will
-      now be displayed publicly on your profile.
-    </div>
-  </div>";
-}
-
-if (isset($_POST["g"])) {
-  $_POST["g"] = $UserSystem->sanitize($_POST["g"]);
-  if ($session["githubName"] !== $_POST["g"]) {
-    if (empty($session["githubName"])) {
-      $hist = $Abian->historify("githubName.added", "To: " . $_POST["g"]);
-    } else {
-      $hist = $Abian->historify("githubName.updated", "To: " . $_POST["g"]);
-    }
-    $UserSystem->dbUpd(
-      [
-        "users",
-        [
-          "githubName" => $_POST["g"]
-        ],
-        [
-          "id" => $session["id"]
-        ]
-      ]
-    );
-    $session["githubName"] = $_POST["g"];
-  }
-  $error = "<div class='col-xs-12'>
-    <div class='alert alert-success'>
-      Github username updated to ".$_POST["g"].". This will
       now be displayed publicly on your profile.
     </div>
   </div>";
@@ -287,6 +377,10 @@ echo <<<EOT
 </div>
 EOT;
 
+$twURL = "https://api.twitch.tv/kraken/oauth2/authorize";
+$twURL .= "?response_type=code&client_id=$tw[client]";
+$twURL .= "&redirect_uri=https://abian.zbee.me/u/cp?tw&scope=user_read";
+
 echo <<<EOT
 <div class="col-xs-12 col-sm-10">
   <div class="well well-sm" id="profile">
@@ -332,15 +426,14 @@ echo <<<EOT
       <div class="panel panel-default">
         <div class="panel-heading">Twitch Username</div>
         <div class="panel-body">
-          <form class="form form-vertical" method="post" action="">
-            <div class="form-group">
-              <label for="t">Currently: $session[twitchName]</label>
-              <input type="text" class="form-control" id="t" name="t">
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">
-              Update Twitch Username
-            </button>
-          </form>
+          Currently:
+          <a href="https://twitch.tv/$session[twitchName]" target="_blank">
+            $session[twitchName]</a>
+          <br>
+          <a class="btn btn-block btn-primary" href="$twURL">
+            <i class="fa fa-twitch"></i>
+            Verify Twitch
+          </a>
         </div>
       </div>
     </div>
@@ -349,15 +442,16 @@ echo <<<EOT
       <div class="panel panel-default">
         <div class="panel-heading">GitHub Username</div>
         <div class="panel-body">
-          <form class="form form-vertical" method="post" action="">
-            <div class="form-group">
-              <label for="g">Currently: $session[githubName]</label>
-              <input type="text" class="form-control" id="g" name="g">
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">
-              Update Github Username
-            </button>
-          </form>
+          Currently:
+          <a href="https://github.com/$session[githubName]" target="_blank">
+            $session[githubName]</a>
+          <br>
+          <a class="btn btn-block btn-primary" 
+            href="https://github.com/login/oauth/authorize?scope=
+            &client_id=$gh[client]">
+            <i class="fa fa-github"></i>
+            Verify GitHub
+          </a>
         </div>
       </div>
     </div>
@@ -374,8 +468,6 @@ foreach ($badges as $key => $badge) {
   if ($key === 0) continue;
   $desc = $badge["description"];
   $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
-  $desc = str_replace("%twitch", substr(sha1($session["id"].$session["username"].$session["twitchName"]), 0, 7), $desc);
-  $desc = str_replace("%github", substr(sha1($session["id"].$session["username"].$session["githubName"]), 0, 7), $desc);
   echo '<span class="label label-'.$badge["type"].'" data-toggle="popover" data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
 }
 
