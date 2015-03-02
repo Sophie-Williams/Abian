@@ -92,6 +92,9 @@ EOT;
           <a href="#" class="btn btn-default text-danger">
             <i class="fa fa-heart-o"></i>
           </a>
+          <a href="/dl/$bot[slug].zip" class="btn btn-default text-info">
+            <i class="fa fa-cloud-download"></i>
+          </a>
           $mine
         </div>
       </div>
@@ -115,6 +118,14 @@ echo <<<EOT
           <br>
           On $date$updated
         </div>
+      </div>
+      <hr>
+      <div class="row">
+EOT;
+
+$Abian->getComments(["on" => "bot.".$bot["id"]], true);
+
+echo <<<EOT
       </div>
     </div>
 EOT;

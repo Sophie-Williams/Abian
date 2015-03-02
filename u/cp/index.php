@@ -55,6 +55,7 @@ if (isset($_GET["code"]) && !isset($_GET["tw"])) {
     );
     $session["githubName"] = $ghName;
   }
+  $Abian->giveBadge(14, $session["id"]);
   $UserSystem->redirect301("/u/cp?gh=".$ghName);
 }
 
@@ -130,6 +131,7 @@ if (isset($_GET["code"]) && isset($_GET["tw"])) {
     );
     $session["twitchName"] = $twName;
   }
+  $Abian->giveBadge(2, $session["id"]);
   $UserSystem->redirect301("/u/cp?tw=".$twName);
 }
 
@@ -651,8 +653,20 @@ echo <<<EOT
     <table class="table table-responsive table-rounded table-bordered">
 EOT;
 
-$iBO = $UserSystem->dbSel(["history", ["actor" => $session["id"]], ["id", "desc"]]);
-$iBU = $UserSystem->dbSel(["history", ["targeted" => $session["id"]], ["id", "desc"]]);
+$iBO = $UserSystem->dbSel(
+  [
+    "history",
+    ["actor" => $session["id"]],
+    ["id", "desc"]
+  ]
+);
+$iBU = $UserSystem->dbSel(
+  [
+    "history",
+    ["targeted" => $session["id"]],
+    ["id", "desc"]
+  ]
+);
 unset($iBO[0]);
 unset($iBU[0]);
 $history = array_merge($iBO, $iBU);
@@ -661,7 +675,8 @@ foreach ($history as $hist) {
   echo "<tr".$ext.">
       <td>".date("Y-m-d\TH:i", $hist["date"])."</td>
       <td>
-        <span class='f32'><i class='flag ".strtolower($hist["actorA2"])."' title='".$hist["actorA2"]."'>&nbsp;</i></span>
+        <span class='f32'><i class='flag ".strtolower($hist["actorA2"])."' 
+          title='".$hist["actorA2"]."'>&nbsp;</i></span>
         ".$hist["actorIp"]."
       </td>
       <td>".$hist["action"]."</td>

@@ -12,6 +12,36 @@
 class Abian extends UserSystem {
 
   /**
+  * Adds a badge to a user
+  * Example: $Abian->giveBadge($badge, $user)
+  *
+  * @access public
+  * @param integer $badge
+  * @param integer $user
+  * @return boolean
+  */
+  public function giveBadge ($badge, $user) {
+    $allowedTo = true;
+    if ($allowedTo === true) {
+      $badge = $this->sanitize($badge, "n");
+      $user = $this->sanitize($user, "n");
+      $sel = $this->dbSel(["badging", ["badge" => $badge, "user" => $user]]);
+      if ($sel[0] != 0) {
+        $this->historify(
+          "badge.add",
+          "Added badge #$badge to user $user",
+          $user
+        );
+        return $this->dbIns(["badging", ["badge" => $badge, "user" => $user]]);
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  /**
   * Returns bots according to a query
   * Example: $Abian->getBots(["user" => 0, "sort" => ["date", "desc"]])
   *
@@ -98,14 +128,16 @@ class Abian extends UserSystem {
 
   /**
   * Returns comments according to a query
-  * Example: $Abian->getComments(["for" => "bot.2", "sort" => ["date", "desc"]])
+  * Example: $Abian->getComments(["on" => "bot.2", "sort" => ["date", "desc"]])
   *
   * @access public
   * @param array $query
   * @return boolean
   */
   public function getComments ($query, $num = false) {
-    $data = ["comments"];
+    $on = explode(".", $query["on"]);
+    $type = $on[0];
+    $data = ["comments", [], ["date", "desc"]];
     foreach ($query as $key => $item) {
       if ($key == "sort") {
         $data[2] = $item;
@@ -114,10 +146,34 @@ class Abian extends UserSystem {
       }
     }
     $sel = $this->dbSel($data);
-    if ($num === true) echo "";
+    if ($num === true) {
+      if ($sel[0] > 1) {
+        echo "There are $sel[0] comments on this $type<br><br>";
+      } elseif ($sel[0] == 1) {
+        echo "There is 1 comment on this $type<br><br>";
+      } else {
+        echo "There are no comments on this $type<br><br>";
+      }
+    }
+    echo '<ul class="media-list">';
     foreach ($sel as $key => $comment) {
       if ($key === 0) continue;
+      if ($comment["reply"] !== null) continue;
+      $user = $this->session(intval($comment["user"]));
+      $email = md5(strtolower(trim($user["email"])));
+      echo '
+        <li class="media">
+          <div class="media-left">
+            <img src="https://www.gravatar.com/avatar/'.$email.'?s=64" />
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">'.$user["username"].'</h4>
+            <p>'.$this->sanitize($comment["message"]).'</p>
+          </div>
+        </li>
+      ';
     }
+    echo '</ul>';
     return true;
   }
 
@@ -143,8 +199,6 @@ class Abian extends UserSystem {
       FILTER_SANITIZE_FULL_SPECIAL_CHARS
     );
     if (ENCRYPTION === true) $ipAddress = encrypt($ipAddress, $username);
-
-    if ($target !== null && strpos($target, ".") === false) return false;
 
     $ins = $this->dbIns(
       [

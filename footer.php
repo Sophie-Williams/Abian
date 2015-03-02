@@ -1,8 +1,29 @@
     <?php
     if ($sidebar) {
       echo '
-      </div>
-      <div class="col-xs-12 col-sm-2 col-sm-pull-10">
+        </div>
+        <div class="col-xs-12 col-sm-2 col-sm-pull-10">
+      ';
+
+      echo '
+        <h1 class="text-left" style="margin-bottom:10px;">
+          <span class="maintext"><i class="fa fa-newspaper-o"></i> News</span>
+        </h1>
+        <i class="fa fa-angle-right"></i> <a href="/n?2015-03-01">
+          Bests bots of February
+        </a>
+        <br>
+        <i class="fa fa-angle-right"></i> <a href="/n?2015-02-01">
+          Bests bots of January
+        </a>
+        <br>
+        <i class="fa fa-angle-right"></i> <a href="/n?2015-01-01=2">
+          Bests bots of 2014
+        </a>
+        <br>
+        <i class="fa fa-angle-right"></i> <a href="/n?2015-03-01">
+          Bests bots of December
+        </a>
       ';
 
       $ad = '';
@@ -81,11 +102,11 @@
           <div class="col-xs-6 col-sm-3">
             <ul>
               <li class="lin"><i class="fa fa-info-circle"></i> About</li>
-              <li><a href="/q">About the Bot Network</a> </li>
-              <li><a href="#">Developer Blog</a> </li>
-              <li><a href="/q/q">FAQ</a> </li>
-              <li><a href="#">Affiliates</a> </li>
-              <li><a href="#">Ads</a> </li>
+              <li><a href="/q">About the Bot Network</a></li>
+              <li><a href="#">Developer Blog</a></li>
+              <li><a href="/q/q">FAQ</a></li>
+              <li><a href="#">Affiliates</a></li>
+              <li><a href="#">Business</a></li>
             </ul>
           </div>
           <div class="col-xs-6 col-sm-3">
