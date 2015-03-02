@@ -241,7 +241,8 @@ if (isset($_POST["z"])) {
 if (isset($_POST["e"])) {
   $_POST["e"] = $UserSystem->sanitize($_POST["e"], "e");
   if ($session["email"] !== $_POST["e"]) {
-    if (hash("sha256", $_POST["pe"].$session["salt"]) === $session["password"]) {
+    $pass = hash("sha256", $_POST["pe"].$session["salt"]);
+    if ($pass === $session["password"]) {
       $hist = $Abian->historify("email.updated", "To: " . $_POST["e"]);
       $UserSystem->dbUpd(
         [
@@ -257,7 +258,8 @@ if (isset($_POST["e"])) {
         ]
       );
       $se = true;
-      if ($_POST["e"] == $session["oldEmail"] || $_POST["e"] == $session["email"]) $se = false;
+      if ($_POST["e"] == $session["oldEmail"] 
+        || $_POST["e"] == $session["email"]) $se = false;
       if ($se) {
         $UserSystem->sendMail(
           [$session["email"], $session["oldEmail"], $_POST["e"]],
@@ -470,10 +472,12 @@ foreach ($badges as $key => $badge) {
   if ($key === 0) continue;
   $desc = $badge["description"];
   $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
-  echo '<span class="label label-'.$badge["type"].'" data-toggle="popover" data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
+  echo '<span class="label label-'.$badge["type"].'" data-toggle="popover" 
+    data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
 }
 
-$emailChanged = $session["emailChanged"] > 0 ? date("Y-m-d\TH:i", $session["emailChanged"]) : "Never";
+$emailChanged = $session["emailChanged"] > 0 ? 
+  date("Y-m-d\TH:i", $session["emailChanged"]) : "Never";
 echo <<<EOT
         </div>
       </div>
