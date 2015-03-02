@@ -4,7 +4,7 @@ require_once("../../header.php");
 
 if (is_array($session)) $UserSystem->redirect301("/");
 
-$recaptcha = recaptcha_get_html($re["site"]);
+$recaptcha = recaptcha_get_html($re["site"], null, true);
 
 if (isset($_POST["u"])) {
   $resp = recaptcha_check_answer ($re["secret"], $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);

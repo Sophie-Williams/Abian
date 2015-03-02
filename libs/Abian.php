@@ -26,7 +26,7 @@ class Abian extends UserSystem {
       $badge = $this->sanitize($badge, "n");
       $user = $this->sanitize($user, "n");
       $sel = $this->dbSel(["badging", ["badge" => $badge, "user" => $user]]);
-      if ($sel[0] != 0) {
+      if ($sel[0] == 0) {
         $this->historify(
           "badge.add",
           "Added badge #$badge to user $user",

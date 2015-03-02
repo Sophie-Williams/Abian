@@ -1,7 +1,7 @@
 <?php
 require_once("/var/www/abian/header.php");
 if ($session === false) $UserSystem->redirect301("/u/login");
-$recaptcha = recaptcha_get_html($re["site"]);
+$recaptcha = recaptcha_get_html($re["site"], null, true);
 
 $error = "";
 if (isset($_POST["n"])) {
@@ -27,7 +27,8 @@ if (isset($_POST["n"])) {
       $dir = "/var/www/abian/dl/";
       $file = $dir . basename($UserSystem->sanitize($slug) . ".zip");
       $search = $UserSystem->dbSel(["bots", ["slug" => $slug]])[0];
-      if (!file_exists("/var/www/abian/dl/" . $slug . ".zip") || $search != 0) {
+      if (!file_exists("/var/www/abian/dl/" . $slug . ".zip") 
+        && $search === 0) {
         $size = $UserSystem->sanitize(
           array_change_key_case(
             get_headers(
@@ -84,6 +85,24 @@ if (isset($_POST["n"])) {
   }
 }
 
+if ($error != "") {
+  $post = [];
+  foreach ($_POST as $key => $value) {
+    $post[$key] = $UserSystem->sanitize($value);
+  }
+} else {
+  $post = [
+    "n" => "",
+    "d" => "",
+    "b" => "",
+    "f" => "",
+    "t" => ""
+  ];
+}
+
+$b = $post["b"];
+$d = $post["d"];
+
 echo <<<EOT
 <div class="col-xs-12">
   $error
@@ -92,18 +111,19 @@ echo <<<EOT
     <form class="form form-vertical" method="post" action="">
       <div class="form-group">
         <label for="n">Bot name</label>
-        <input type="text" class="form-control" id="n" name="n">
+        <input type="text" class="form-control" id="n" name="n" 
+          value="$post[n]">
       </div>
       <div class="form-group">
         <label for="d">Description</label>
-        <textarea name="d" id="d" class="form-control" rows="5"></textarea>
+        <textarea name="d" id="d" class="form-control" rows="5">$d</textarea>
         <span id="helpBlock" class="help-block">
           This will appear with your bot in search results.
         </span>
       </div>
       <div class="form-group">
         <label for="b">Page</label>
-        <textarea name="b" id="b" class="form-control" rows="15"></textarea>
+        <textarea name="b" id="b" class="form-control" rows="15">$b</textarea>
         <span id="helpBlock" class="help-block">
           Uses 
           <a href="http://s.zbee.me/bsz" target="_blank">
@@ -115,14 +135,16 @@ echo <<<EOT
       </div>
       <div class="form-group">
         <label for="f">URL to File</label>
-        <input type="text" class="form-control" id="f" name="f">
+        <input type="text" class="form-control" id="f" name="f" 
+          value="$post[f]">
         <span id="helpBlock" class="help-block">
           Must be a .zip file.
         </span>
       </div>
       <div class="form-group">
         <label for="t">Tags</label>
-        <input type="text" class="form-control" id="t" name="t">
+        <input type="text" class="form-control" id="t" name="t" 
+          value="$post[t]">
         <span id="helpBlock" class="help-block">
           Separate with commas, spaces are removed
         </span>
