@@ -63,6 +63,29 @@ EOT;
   $bot = $UserSystem->dbSel(["bots", ["slug" => $bot]]);
   if ($bot[0] == 1) {
     $bot = $bot[1];
+    $error = "";
+    if (isset($_POST["m"]) && is_array($session)) {
+      $r = $UserSystem->sanitize($_POST["r"], "n");
+      $r = $r == 0 ? null : $r;
+      $UserSystem->dbIns(
+        [
+          "comments",
+          [
+            "date" => time(),
+            "on" => "bot.".$bot["id"],
+            "user" => $session["id"],
+            "reply" => $r,
+            "message" => $UserSystem->sanitize($_POST["m"])
+          ]
+        ]
+      );
+      $error = '
+        <div class="alert alert-success">
+          Your comment has been added.
+        </div>
+      ';
+    }
+
     $Parsedown = new Parsedown();
     $bot["name"] = ucfirst($bot["name"]);
     $bot["user"] = intval($bot["user"]);
@@ -74,8 +97,10 @@ EOT;
         </a>
       ';
     }
+
     echo <<<EOT
     <div class="col-xs-12">
+      $error
       <div class="row">
         <div class="col-xs-12 col-sm-8">
           <h2>$bot[name]</h2>
@@ -130,6 +155,36 @@ echo <<<EOT
     </div>
 EOT;
   }
+
+  echo <<<EOT
+  <div class="modal fade" id="addComment" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <form action="" method="post">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" 
+              aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Add comment</h4>
+          </div>
+          <div class="modal-body">
+            <textarea class="form-control" rows="10" name="m"></textarea>
+            <input type="hidden" name="r" value="0">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Submit <i class="fa fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+EOT;
 }
 
 require_once("/var/www/abian/footer.php");

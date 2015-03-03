@@ -135,6 +135,7 @@ class Abian extends UserSystem {
   * @return boolean
   */
   public function getComments ($query, $num = false) {
+    global $session;
     $on = explode(".", $query["on"]);
     $type = $on[0];
     $data = ["comments", [], ["date", "desc"]];
@@ -148,12 +149,21 @@ class Abian extends UserSystem {
     $sel = $this->dbSel($data);
     if ($num === true) {
       if ($sel[0] > 1) {
-        echo "There are $sel[0] comments on this $type<br><br>";
+        echo "There are $sel[0] comments on this $type";
       } elseif ($sel[0] == 1) {
-        echo "There is 1 comment on this $type<br><br>";
+        echo "There is 1 comment on this $type";
       } else {
-        echo "There are no comments on this $type<br><br>";
+        echo "There are no comments on this $type";
       }
+    }
+    if (is_array($session)) {
+      echo '
+        <a class="btn btn-default btn-xs pull-right" data-toggle="modal"
+          data-target="#addComment">
+          Add Comment <i class="fa fa-pencil"></i>
+        </a>
+        <br><br>
+      ';
     }
     echo '<ul class="media-list">';
     foreach ($sel as $key => $comment) {
