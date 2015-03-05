@@ -59,7 +59,7 @@ if (is_array($session) && $bot === null) {
     </div>
   </div>
 EOT;
-} elseif (is_array($session) && $bot !== null) {
+} elseif ($bot !== null) {
   $bot = $UserSystem->dbSel(["bots", ["slug" => $bot]]);
   if ($bot[0] == 1) {
     $bot = $bot[1];
@@ -90,6 +90,7 @@ EOT;
     $bot["name"] = ucfirst($bot["name"]);
     $bot["user"] = intval($bot["user"]);
     $user = $UserSystem->session($bot["user"]);
+    $mine = "";
     if ($bot["user"] == $session["id"]) {
       $mine = '
         <a href="/b/e/?'.$bot["slug"].'" class="btn btn-default">
@@ -156,9 +157,11 @@ echo <<<EOT
 EOT;
   }
 
+
+  $recaptcha = recaptcha_get_html($re["site"], null, true);
   echo <<<EOT
   <div class="modal fade" id="addComment" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog">
       <form action="" method="post">
         <div class="modal-content">
           <div class="modal-header">
@@ -169,8 +172,10 @@ EOT;
             <h4 class="modal-title">Add comment</h4>
           </div>
           <div class="modal-body">
-            <textarea class="form-control" rows="10" name="m"></textarea>
+            <textarea class="form-control" rows="5" name="m"
+              maxlength="512"></textarea>
             <input type="hidden" name="r" value="0">
+            $recaptcha
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">

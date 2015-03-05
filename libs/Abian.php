@@ -160,25 +160,84 @@ class Abian extends UserSystem {
       echo '
         <a class="btn btn-default btn-xs pull-right" data-toggle="modal"
           data-target="#addComment">
-          Add Comment <i class="fa fa-pencil"></i>
+          Add Comment
         </a>
-        <br><br>
+      ';
+      echo '
+        <div class="modal fade" id="editComment" tabindex="-1"
+          role="dialog">
+          <div class="modal-dialog">
+            <form action="" method="post">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" 
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title">Edit comment</h4>
+                </div>
+                <div class="modal-body">
+                  <textarea class="form-control" rows="5" name="em"
+                    maxlength="512"></textarea>
+                  <input type="hidden" name="c" value="">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" 
+                    data-dismiss="modal">
+                    Close
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    Submit <i class="fa fa-paper-plane"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <script>
+        $("#editComment").on("show.bs.modal", function (event) {
+          var button = $(event.relatedTarget)
+          var comment = button.data("comment")
+          var message = button.data("message")
+          var modal = $(this)
+          modal.find("input").val(comment)
+          modal.find("textarea").html(message)
+        })
+        </script>
       ';
     }
-    echo '<ul class="media-list">';
+    echo '<br><br><ul class="media-list">';
     foreach ($sel as $key => $comment) {
       if ($key === 0) continue;
       if ($comment["reply"] !== null) continue;
+      $mod = "";
+      $message = $this->sanitize($comment["message"]);
       $user = $this->session(intval($comment["user"]));
       $email = md5(strtolower(trim($user["email"])));
+      if (is_array($session) && $session["id"] == $comment["user"]) {
+        $mod = '
+          <div class="well well-sm pull-right">
+            <a class="btn btn-xs btn-default" data-toggle="modal" 
+              data-target="#editComment" data-comment="'.$comment["id"].'"
+              data-message="'.$message.'">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a class="btn btn-xs btn-danger"><i class="fa fa-times"></i></a>
+          </div>
+        ';
+      }
       echo '
         <li class="media">
           <div class="media-left">
             <img src="https://www.gravatar.com/avatar/'.$email.'?s=64" />
           </div>
           <div class="media-body">
-            <h4 class="media-heading">'.$user["username"].'</h4>
-            <p>'.$this->sanitize($comment["message"]).'</p>
+            '.$mod.'
+            <h4 class="media-heading">
+              '.$user["username"].'
+              <small>'.date("Y-m-d\TH:i", $comment["date"]).'</small>
+            </h4>
+            <p>'.$message.'</p>
           </div>
         </li>
       ';
