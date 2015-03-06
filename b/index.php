@@ -85,6 +85,27 @@ EOT;
         </div>
       ';
     }
+    if (isset($_POST["em"]) && is_array($session)) {
+      $c = $UserSystem->sanitize($_POST["c"], "n");
+      $m = $UserSystem->sanitize($_POST["em"]);
+      $UserSystem->dbUpd(
+        [
+          "comments",
+          [
+            "message" => $m,
+            "dateUpdate" => time()
+          ],
+          [
+            "id" => $c
+          ]
+        ]
+      );
+      $error = '
+        <div class="alert alert-success">
+          Your comment has been updated.
+        </div>
+      ';
+    }
 
     $Parsedown = new Parsedown();
     $bot["name"] = ucfirst($bot["name"]);

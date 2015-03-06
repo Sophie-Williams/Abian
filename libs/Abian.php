@@ -214,6 +214,8 @@ class Abian extends UserSystem {
       $message = $this->sanitize($comment["message"]);
       $user = $this->session(intval($comment["user"]));
       $email = md5(strtolower(trim($user["email"])));
+      $edited = "";
+      if ($comment["dateUpdate"] != "0") $edited = " (edited)";
       if (is_array($session) && $session["id"] == $comment["user"]) {
         $mod = '
           <div class="well well-sm pull-right">
@@ -235,7 +237,7 @@ class Abian extends UserSystem {
             '.$mod.'
             <h4 class="media-heading">
               '.$user["username"].'
-              <small>'.date("Y-m-d\TH:i", $comment["date"]).'</small>
+              <small>'.date("Y-m-d\TH:i", $comment["date"]).$edited.'</small>
             </h4>
             <p>'.$message.'</p>
           </div>
