@@ -204,6 +204,46 @@ class Abian extends UserSystem {
           modal.find("textarea").html(message)
         })
         </script>
+        <div class="modal fade" id="removeComment" tabindex="-1"
+          role="dialog">
+          <div class="modal-dialog">
+            <form action="" method="post">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" 
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title">Remove this comment?</h4>
+                </div>
+                <div class="modal-body">
+                  <p></p>
+                  <input type="hidden" name="rc" value="">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" 
+                    data-dismiss="modal">
+                    Close
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <script>
+        $("#removeComment").on("show.bs.modal", function (event) {
+          var button = $(event.relatedTarget)
+          var comment = button.data("comment")
+          var message = button.data("message")
+          var modal = $(this)
+          modal.find("input").val(comment)
+          modal.find("p").html(message)
+          emojify.run();
+        })
+        </script>
       ';
     }
     echo '<br><br><ul class="media-list">';
@@ -212,6 +252,7 @@ class Abian extends UserSystem {
       if ($comment["reply"] !== null) continue;
       $mod = "";
       $message = $this->sanitize($comment["message"]);
+      $message = str_replace("\n", "<br>", $message);
       $user = $this->session(intval($comment["user"]));
       $email = md5(strtolower(trim($user["email"])));
       $edited = "";
@@ -224,7 +265,11 @@ class Abian extends UserSystem {
               data-message="'.$message.'">
               <i class="fa fa-pencil"></i>
             </a>
-            <a class="btn btn-xs btn-danger"><i class="fa fa-times"></i></a>
+            <a class="btn btn-xs btn-danger" data-toggle="modal" 
+              data-target="#removeComment" data-comment="'.$comment["id"].'"
+              data-message="'.$message.'">
+              <i class="fa fa-times"></i>
+            </a>
           </div>
         ';
       }

@@ -64,47 +64,84 @@ EOT;
   if ($bot[0] == 1) {
     $bot = $bot[1];
     $error = "";
-    if (isset($_POST["m"]) && is_array($session)) {
-      $r = $UserSystem->sanitize($_POST["r"], "n");
-      $r = $r == 0 ? null : $r;
-      $UserSystem->dbIns(
-        [
-          "comments",
+    if (is_array($session)) {
+      if (isset($_POST["m"])) {
+        $ipAddress = filter_var(
+          $_SERVER["REMOTE_ADDR"],
+          FILTER_SANITIZE_FULL_SPECIAL_CHARS
+        );
+        $resp = recaptcha_check_answer(
+          $re["secret"],
+          $ipAddress,
+          $_POST["recaptcha_challenge_field"],
+          $_POST["recaptcha_response_field"]
+        );
+        if (!$resp->is_valid) {
+          $error = '
+            <div class="alert alert-danger">
+              ReCAPTCHA was incorrect.
+            </div>
+          ';
+        } else {
+          $r = $UserSystem->sanitize($_POST["r"], "n");
+          $r = $r == 0 ? null : $r;
+          $UserSystem->dbIns(
+            [
+              "comments",
+              [
+                "date" => time(),
+                "on" => "bot.".$bot["id"],
+                "user" => $session["id"],
+                "reply" => $r,
+                "message" => $UserSystem->sanitize($_POST["m"])
+              ]
+            ]
+          );
+          $Abian->historify("comment.create", "On bot.".$bot["id"]);
+          $error = '
+            <div class="alert alert-success">
+              Your comment has been added.
+            </div>
+          ';
+        }
+      } elseif (isset($_POST["em"])) {
+        $c = $UserSystem->sanitize($_POST["c"], "n");
+        $m = $UserSystem->sanitize($_POST["em"]);
+        $UserSystem->dbUpd(
           [
-            "date" => time(),
-            "on" => "bot.".$bot["id"],
-            "user" => $session["id"],
-            "reply" => $r,
-            "message" => $UserSystem->sanitize($_POST["m"])
+            "comments",
+            [
+              "message" => $m,
+              "dateUpdate" => time()
+            ],
+            [
+              "id" => $c
+            ]
           ]
-        ]
-      );
-      $error = '
-        <div class="alert alert-success">
-          Your comment has been added.
-        </div>
-      ';
-    }
-    if (isset($_POST["em"]) && is_array($session)) {
-      $c = $UserSystem->sanitize($_POST["c"], "n");
-      $m = $UserSystem->sanitize($_POST["em"]);
-      $UserSystem->dbUpd(
-        [
-          "comments",
+        );
+        $Abian->historify("comment.edit", "Comment $c on bot.".$bot["id"]);
+        $error = '
+          <div class="alert alert-success">
+            Your comment has been updated.
+          </div>
+        ';
+      } elseif (isset($_POST["rc"])) {
+        $c = $UserSystem->sanitize($_POST["rc"], "n");
+        $UserSystem->dbDel(
           [
-            "message" => $m,
-            "dateUpdate" => time()
-          ],
-          [
-            "id" => $c
+            "comments",
+            [
+              "id" => $c
+            ]
           ]
-        ]
-      );
-      $error = '
-        <div class="alert alert-success">
-          Your comment has been updated.
-        </div>
-      ';
+        );
+        $Abian->historify("comment.removed", "Comment $c on bot.".$bot["id"]);
+        $error = '
+          <div class="alert alert-success">
+            Your comment has been removed.
+          </div>
+        ';
+      }
     }
 
     $Parsedown = new Parsedown();
