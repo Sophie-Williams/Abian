@@ -99,10 +99,10 @@ class Abian extends UserSystem {
       $upDate = date("Y-m-d", $bot["dateUpdate"]);
       if ($bot["dateUpdate"] != 0) $updated = " (Updated $upDate)";
       $formatted .= '
-        <div class="panel panel-default" id="'.$bot["slug"].'" 
+        <div class="panel panel-default" id="'.$bot["slug"].'"
           style="cursor:pointer">
           <div class="panel-heading">
-            '.$bot["name"].$by.' 
+            '.$bot["name"].$by.'
             <span class="pull-right">
               '.date("Y-m-d", $bot["dateCreate"]).$updated.'
             </span>
@@ -170,7 +170,7 @@ class Abian extends UserSystem {
             <form action="" method="post">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" 
+                  <button type="button" class="close" data-dismiss="modal"
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -182,7 +182,7 @@ class Abian extends UserSystem {
                   <input type="hidden" name="c" value="">
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" 
+                  <button type="button" class="btn btn-default"
                     data-dismiss="modal">
                     Close
                   </button>
@@ -210,7 +210,7 @@ class Abian extends UserSystem {
             <form action="" method="post">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" 
+                  <button type="button" class="close" data-dismiss="modal"
                     aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -221,7 +221,7 @@ class Abian extends UserSystem {
                   <input type="hidden" name="rc" value="">
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" 
+                  <button type="button" class="btn btn-default"
                     data-dismiss="modal">
                     Close
                   </button>
@@ -252,6 +252,7 @@ class Abian extends UserSystem {
       if ($comment["reply"] !== null) continue;
       $mod = "";
       $message = $this->sanitize($comment["message"]);
+      $umessage = $message;
       $message = str_replace("\n", "<br>", $message);
       $user = $this->session(intval($comment["user"]));
       $email = md5(strtolower(trim($user["email"])));
@@ -260,14 +261,14 @@ class Abian extends UserSystem {
       if (is_array($session) && $session["id"] == $comment["user"]) {
         $mod = '
           <div class="well well-sm pull-right">
-            <a class="btn btn-xs btn-default" data-toggle="modal" 
+            <a class="btn btn-xs btn-default" data-toggle="modal"
               data-target="#editComment" data-comment="'.$comment["id"].'"
-              data-message="'.$message.'">
+              data-message="'.$umessage.'">
               <i class="fa fa-pencil"></i>
             </a>
-            <a class="btn btn-xs btn-danger" data-toggle="modal" 
+            <a class="btn btn-xs btn-danger" data-toggle="modal"
               data-target="#removeComment" data-comment="'.$comment["id"].'"
-              data-message="'.$message.'">
+              data-message="'.$umessage.'">
               <i class="fa fa-times"></i>
             </a>
           </div>

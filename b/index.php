@@ -93,7 +93,9 @@ EOT;
                 "on" => "bot.".$bot["id"],
                 "user" => $session["id"],
                 "reply" => $r,
-                "message" => $UserSystem->sanitize($_POST["m"])
+                "message" => $UserSystem->sanitize(
+                  str_replace("<3", ":heart:", $_POST["m"])
+                )
               ]
             ]
           );
@@ -106,7 +108,7 @@ EOT;
         }
       } elseif (isset($_POST["em"])) {
         $c = $UserSystem->sanitize($_POST["c"], "n");
-        $m = $UserSystem->sanitize($_POST["em"]);
+        $m = $UserSystem->sanitize(str_replace("<3", ":heart:", $_POST["em"]));
         $UserSystem->dbUpd(
           [
             "comments",
@@ -195,7 +197,7 @@ $updated = $bot["dateUpdate"] != 0 ? "<br><br>Updated $upDate" : "";
 echo <<<EOT
         </div>
         <div class="col-xs-12 col-sm-3 text-center">
-            <img src="https://www.gravatar.com/avatar/$email?s=512" 
+            <img src="https://www.gravatar.com/avatar/$email?s=512"
               class="img-thumbnail" style="width:75%" />
             <br>
             Created by <a href="/u?$user[username]">$user[username]</a>
@@ -223,7 +225,7 @@ EOT;
       <form action="" method="post">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" 
+            <button type="button" class="close" data-dismiss="modal"
               aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
