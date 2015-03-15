@@ -17,7 +17,17 @@ if (is_array($session) && $bot !== null) {
     $error = "";
     if (isset($_POST["n"])) {
       if ($Abian->endsWith($_POST["f"], ".zip")) {
-        $slug = strtolower(preg_replace('/\PL/u', '', $_POST["n"]));
+        $slug = strtolower(
+          preg_replace(
+            "/\PL/u",
+            "",
+            preg_replace(
+              "/\:[^)]+\:/",
+              "",
+              $_POST["n"]
+            )
+          )
+        );
         $search = $UserSystem->dbSel(
           [
             "bots",
@@ -28,7 +38,7 @@ if (is_array($session) && $bot !== null) {
           ]
         )[0];
         if ($search === 0) {
-          if (file_get_contents("/var/www/abian/dl/" . $slug . ".zip") != 
+          if (file_get_contents("/var/www/abian/dl/" . $slug . ".zip") !=
             file_get_contents($_POST["f"])) {
             $file = file_put_contents(
               "/var/www/abian/dl/" . $slug . ".zip",
@@ -64,7 +74,7 @@ if (is_array($session) && $bot !== null) {
       } else {
         $error = '
           <div class="alert alert-danger">
-            File selected is not .zip file (application/zip or 
+            File selected is not .zip file (application/zip or
             application/x-zip-compressed).
           </div>
         ';
@@ -78,7 +88,7 @@ if (is_array($session) && $bot !== null) {
           <form class="form form-vertical" method="post" action="">
             <div class="form-group">
               <label for="n">Bot name</label>
-              <input type="text" class="form-control" id="n" name="n" 
+              <input type="text" class="form-control" id="n" name="n"
                 value="$bot[name]">
             </div>
             <div class="form-group">
@@ -92,17 +102,17 @@ if (is_array($session) && $bot !== null) {
               <label for="b">Page</label>
               <textarea name="b" class="form-control" rows="15">$b</textarea>
               <span id="helpBlock" class="help-block">
-                Uses 
+                Uses
                 <a href="http://s.zbee.me/bsz" target="_blank">
                   Github Flavored Markdown</a>
-                and 
+                and
                 <a href="https://s.zbee.me/nje" target="_blank">
                   emoji</a>.
               </span>
             </div>
             <div class="form-group">
               <label for="f">File</label>
-              <input type="text" class="form-control" id="f" name="f" 
+              <input type="text" class="form-control" id="f" name="f"
                 value="http://abian.zbee.me/dl/$bot[slug].zip">
               <span id="helpBlock" class="help-block">
                 Must be a .zip file.

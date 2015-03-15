@@ -120,19 +120,29 @@
             </ul>
           </div>
           <div class="col-xs-6 col-sm-3">
-            <b><i class="fa fa-code"></i> Code</b>
-            <br>
-            Abian was created by <a href="https://github.com/zbee">Zbee</a>.
-            <br>
-            <a href="http://opensource.org/" target="_blank">
-              <img src="/libs/img/OSI.png" style="width:30%">
-            </a>
-            <a href="http://github.com/zbee/abian" target="_blank">
-              <img src="/libs/img/GitHub.png" style="width:30%">
-            </a>
-            <a href="http://www.gnu.org/copyleft/gpl.html" target="_blank">
-              <img src="/libs/img/GPL.png" style="width:30%">
-            </a>
+            <ul>
+              <li class="lin" style="font-weight:normal">
+                <b><i class="fa fa-code"></i> Code</b>
+                <br>
+                <?php
+                $c = $Abian->getCommit();
+                $sc = substr($c, 0, 10);
+                echo '
+                <a href="https://GitHub.com/Zbee/Abian/commit/' . $c . '"
+                target="_blank" title="Commit '.$c.'">
+                  Abian</a>
+                ';
+                ?>
+                was created by <a href="https://github.com/zbee">Zbee</a>.
+                <br>
+                <a href="http://opensource.org/" target="_blank">
+                  <img src="/libs/img/OSI.png" style="width:25%"></a>
+                <a href="http://github.com/zbee/abian" target="_blank">
+                  <img src="/libs/img/GitHub.png" style="width:25%"></a>
+                <a href="http://www.gnu.org/copyleft/gpl.html" target="_blank">
+                  <img src="/libs/img/GPL.png" style="width:25%"></a>
+              </li>
+            </ul>
           </div>
           <div class="col-xs-6 col-sm-3">
             <ul>
@@ -150,7 +160,7 @@
           if (is_array($session)) {
             if ($session["timeZone"] == "America/Denver") {
               echo '
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-6">
                   Server - and your - time is ' . date("Y-m-d\TH:i", time()) . '
                 </div>
               ';
@@ -176,22 +186,12 @@
               </div>
             ';
           }
-          $c = $Abian->getCommit();
-          $sc = substr($c, 0, 10);
-          echo '
-            <div class="col-xs-12 col-sm-4">
-              Running
-              <a href="https://GitHub.com/Zbee/Abian/commit/' . $c . '"
-              target="_blank">
-                Abian/' . $sc . '
-              </a>
-            </div>
-          ';
           $timee = microtime(true);
-          $time = number_format(($timee - $times) / 60, 3);
+          $time = number_format(($timee - $times) / 60, 4);
           echo '
-            <div class="col-xs-12 col-sm-4">
-              This page loaded in '.$time.' seconds with '.$UserSystem->QUERIES.' queries.
+            <div class="col-xs-12 col-sm-6">
+              This page loaded in <b>'.$time.'</b> seconds with
+              <b>'.$UserSystem->QUERIES.'</b> queries.
             </div>
           ';
           ?>

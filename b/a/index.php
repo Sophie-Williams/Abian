@@ -23,11 +23,21 @@ if (isset($_POST["n"])) {
     ';
   } else {
     if ($Abian->endsWith($_POST["f"], ".zip")) {
-      $slug = strtolower(preg_replace('/\PL/u', '', $_POST["n"]));
+      $slug = strtolower(
+        preg_replace(
+          "/\PL/u",
+          "",
+          preg_replace(
+            "/\:[^)]+\:/",
+            "",
+            $_POST["n"]
+          )
+        )
+      );
       $dir = "/var/www/abian/dl/";
       $file = $dir . basename($UserSystem->sanitize($slug) . ".zip");
       $search = $UserSystem->dbSel(["bots", ["slug" => $slug]])[0];
-      if (!file_exists("/var/www/abian/dl/" . $slug . ".zip") 
+      if (!file_exists("/var/www/abian/dl/" . $slug . ".zip")
         && $search === 0) {
         $size = $UserSystem->sanitize(
           array_change_key_case(
@@ -111,7 +121,7 @@ echo <<<EOT
     <form class="form form-vertical" method="post" action="">
       <div class="form-group">
         <label for="n">Bot name</label>
-        <input type="text" class="form-control" id="n" name="n" 
+        <input type="text" class="form-control" id="n" name="n"
           value="$post[n]">
       </div>
       <div class="form-group">
@@ -125,17 +135,17 @@ echo <<<EOT
         <label for="b">Page</label>
         <textarea name="b" id="b" class="form-control" rows="15">$b</textarea>
         <span id="helpBlock" class="help-block">
-          Uses 
+          Uses
           <a href="http://s.zbee.me/bsz" target="_blank">
             Github Flavored Markdown</a>
-          and 
+          and
           <a href="https://s.zbee.me/nje" target="_blank">
             emoji</a>.
         </span>
       </div>
       <div class="form-group">
         <label for="f">URL to File</label>
-        <input type="text" class="form-control" id="f" name="f" 
+        <input type="text" class="form-control" id="f" name="f"
           value="$post[f]">
         <span id="helpBlock" class="help-block">
           Must be a .zip file.
@@ -143,7 +153,7 @@ echo <<<EOT
       </div>
       <div class="form-group">
         <label for="t">Tags</label>
-        <input type="text" class="form-control" id="t" name="t" 
+        <input type="text" class="form-control" id="t" name="t"
           value="$post[t]">
         <span id="helpBlock" class="help-block">
           Separate with commas, spaces are removed

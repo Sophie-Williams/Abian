@@ -270,7 +270,7 @@ class Abian extends UserSystem {
             </a>
             <a class="btn btn-xs btn-danger" data-toggle="modal"
               data-target="#removeComment" data-comment="'.$comment["id"].'"
-              data-message="'.$umessage.'">
+              data-message="'.$message.'">
               <i class="fa fa-times"></i>
             </a>
           </div>
