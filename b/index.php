@@ -109,6 +109,9 @@ EOT;
       } elseif (isset($_POST["em"])) {
         $c = $UserSystem->sanitize($_POST["c"], "n");
         $m = $UserSystem->sanitize(str_replace("<3", ":heart:", $_POST["em"]));
+        $om = $UserSystem->sanitize(str_replace("<3", ":heart:", $_POST["om"]));
+        $diff = strlen($m) - strlen($om);
+        $diff = $diff > 0 ? "+".$diff : $diff;
         $UserSystem->dbUpd(
           [
             "comments",
@@ -121,7 +124,7 @@ EOT;
             ]
           ]
         );
-        $Abian->historify("comment.edit", "Comment $c on bot.".$bot["id"]);
+        $Abian->historify("comment.edit", "Comment $c on bot.$bot[id] ($diff)");
         $error = '
           <div class="alert alert-success">
             Your comment has been updated.

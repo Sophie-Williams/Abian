@@ -180,6 +180,7 @@ class Abian extends UserSystem {
                   <textarea class="form-control" rows="5" name="em"
                     maxlength="512"></textarea>
                   <input type="hidden" name="c" value="">
+                  <input type="hidden" name="om" value="">
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default"
@@ -200,7 +201,8 @@ class Abian extends UserSystem {
           var comment = button.data("comment")
           var message = button.data("message")
           var modal = $(this)
-          modal.find("input").val(comment)
+          modal.find("input[name=\'c\']").val(comment)
+          modal.find("input[name=\'om\']").val(message)
           modal.find("textarea").html(message)
         })
         </script>
