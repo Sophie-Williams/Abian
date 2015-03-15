@@ -1,4 +1,5 @@
 <?php
+$times = microtime(true);
 if ($_SERVER["HTTP_X_FORWARDED_PROTO"] != "https"
   && json_decode($_SERVER["HTTP_CF_VISITOR"])->scheme != "https"
   && !isset($chillS)) {

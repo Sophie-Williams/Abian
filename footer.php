@@ -150,7 +150,7 @@
           if (is_array($session)) {
             if ($session["timeZone"] == "America/Denver") {
               echo '
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-4">
                   Server - and your - time is ' . date("Y-m-d\TH:i", time()) . '
                 </div>
               ';
@@ -179,12 +179,19 @@
           $c = $Abian->getCommit();
           $sc = substr($c, 0, 10);
           echo '
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12 col-sm-4">
               Running
               <a href="https://GitHub.com/Zbee/Abian/commit/' . $c . '"
               target="_blank">
                 Abian/' . $sc . '
               </a>
+            </div>
+          ';
+          $timee = microtime(true);
+          $time = number_format(($timee - $times) / 60, 3);
+          echo '
+            <div class="col-xs-12 col-sm-4">
+              This page loaded in '.$time.' seconds with '.$UserSystem->QUERIES.' queries.
             </div>
           ';
           ?>

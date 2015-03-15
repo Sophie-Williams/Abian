@@ -11,6 +11,7 @@
 */
 class Utils {
   var $DATABASE = '';
+  var $QUERIES = 0;
 
   /**
   * Initializes the class and connects to the database.

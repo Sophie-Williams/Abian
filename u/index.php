@@ -83,14 +83,19 @@ EOT;
 
 $badged = $UserSystem->dbSel(["badging", ["user" => $user["id"]]]);
 if ($badged[0] > 0) {
-  $badges = $UserSystem->dbSel(["badges", ["type" => ["!=", "a"]]]);
-  foreach ($badged as $key => $badgeb) {
+  $badges = $UserSystem->dbSel(
+    ["badges", ["id" => ["!=", "a"]], ["order", "asc"]]
+  );
+  foreach ($badges as $key => $badge) {
     if ($key === 0) continue;
-    foreach ($badges as $badge) {
+    foreach ($badged as $badgeb) {
       if ($badge["id"] == $badgeb["badge"]) {
         $desc = $badge["description"];
         $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
-        echo '<span class="label label-'.$badge["type"].'" data-toggle="popover" data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
+        echo '<span class="label label-'.$badge["type"].'" data-toggle="popover"
+            data-placement="top" data-content="'.$desc.'">
+            '.$badge["name"].'
+          </span> &nbsp;';
       }
     }
   }

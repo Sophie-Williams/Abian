@@ -529,7 +529,7 @@ class Abian extends UserSystem {
   }
 
   /**
-  * Returns the full name of the country given the country's ISO 3166 ALPHA-2 code
+  * Returns the full name of the country given the country's ISO 3166 ALPHA-2
   * Example: $Abian->codeToCountry("AF")
   *
   * @access public
@@ -537,7 +537,8 @@ class Abian extends UserSystem {
   * @return string
   */
   public function codeToCountry ($code) {
-    $countries = [ #https://github.com/umpirsky/country-list/blob/master/country/cldr/en/country.php
+    #https://github.com/umpirsky/country-list/blob/master/country/cldr/en/country.php
+    $countries = [
       "AF" => "Afghanistan",
       "AL" => "Albania",
       "DZ" => "Algeria",

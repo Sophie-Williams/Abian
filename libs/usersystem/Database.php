@@ -50,6 +50,7 @@ class Database extends Utils {
     $stmt = $this->DATABASE->prepare("
       INSERT INTO $data[0] ($cols) VALUES ($entries)
     "); #Twitch @Sniperzeelite I love u 5 ever!!!
+    $this->QUERIES += 1;
     return $stmt->execute($enArr);
   }
 
@@ -94,6 +95,7 @@ class Database extends Utils {
     $stmt = $this->DATABASE->prepare("
       UPDATE $data[0] SET $update WHERE $equals
     ");
+    $this->QUERIES += 1;
     return $stmt->execute($qArr);
   }
 
@@ -122,6 +124,7 @@ class Database extends Utils {
     $stmt = $this->DATABASE->prepare("
       DELETE FROM ".$data[0]." WHERE $equals
     ");
+    $this->QUERIES += 1;
     return $stmt->execute($eqArr);
   }
 
@@ -159,7 +162,7 @@ class Database extends Utils {
     }
     $equals = substr($equals, 5);
     if (isset($data[2])) {
-      $order = "order by ".$data[2][0]." ".$data[2][1];
+      $order = "order by ".$this->quoteIdent($data[2][0])." ".$data[2][1];
     } else {
       $order = "";
     }
@@ -174,6 +177,7 @@ class Database extends Utils {
         array_push($arr, $row);
       }
     }
+    $this->QUERIES += 1;
     return $arr;
   }
 }
