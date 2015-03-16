@@ -97,7 +97,9 @@ class Abian extends UserSystem {
       $by = $name === true ? ' by '.$user : '';
       $updated = "";
       $upDate = date("Y-m-d", $bot["dateUpdate"]);
-      if ($bot["dateUpdate"] != 0) $updated = " (Updated $upDate)";
+      if ($bot["dateUpdate"] != $bot["dateCreate"]) {
+        $updated = " (Updated $upDate)";
+      }
       $formatted .= '
         <div class="panel panel-default" id="'.$bot["slug"].'"
           style="cursor:pointer">

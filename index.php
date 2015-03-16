@@ -6,7 +6,7 @@ if (isset($_GET["loggedin"])) {
   echo "<div class='alert alert-success'>You have been logged in.</div>";
 }
 
-echo $Abian->getBots(["id" => ["!=", "a"], "sort" => ["dateCreate", "desc"]]);
+echo $Abian->getBots(["id" => ["!=", "a"], "sort" => ["dateUpdate", "desc"]]);
 
 require_once("footer.php");
 ?>

@@ -258,7 +258,7 @@ if (isset($_POST["e"])) {
         ]
       );
       $se = true;
-      if ($_POST["e"] == $session["oldEmail"] 
+      if ($_POST["e"] == $session["oldEmail"]
         || $_POST["e"] == $session["email"]) $se = false;
       if ($se) {
         $UserSystem->sendMail(
@@ -450,7 +450,7 @@ echo <<<EOT
           <a href="https://github.com/$session[githubName]" target="_blank">
             $session[githubName]</a>
           <br>
-          <a class="btn btn-block btn-primary" 
+          <a class="btn btn-block btn-primary"
             href="https://github.com/login/oauth/authorize?scope=
             &client_id=$gh[client]">
             <i class="fa fa-github"></i>
@@ -467,16 +467,18 @@ echo <<<EOT
         <div class="panel-body">
 EOT;
 
-$badges = $UserSystem->dbSel(["badges", ["type" => ["!=", "a"]]]);
+$badges = $UserSystem->dbSel(
+  ["badges", ["id" => ["!=", "a"]], ["order", "asc"]]
+);
 foreach ($badges as $key => $badge) {
   if ($key === 0) continue;
   $desc = $badge["description"];
   $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
-  echo '<span class="label label-'.$badge["type"].'" data-toggle="popover" 
+  echo '<span class="label label-'.$badge["type"].'" data-toggle="popover"
     data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
 }
 
-$emailChanged = $session["emailChanged"] > 0 ? 
+$emailChanged = $session["emailChanged"] > 0 ?
   date("Y-m-d\TH:i", $session["emailChanged"]) : "Never";
 echo <<<EOT
         </div>
@@ -679,7 +681,7 @@ foreach ($history as $hist) {
   echo "<tr".$ext.">
       <td>".date("Y-m-d\TH:i", $hist["date"])."</td>
       <td>
-        <span class='f32'><i class='flag ".strtolower($hist["actorA2"])."' 
+        <span class='f32'><i class='flag ".strtolower($hist["actorA2"])."'
           title='".$hist["actorA2"]."'>&nbsp;</i></span>
         ".$hist["actorIp"]."
       </td>

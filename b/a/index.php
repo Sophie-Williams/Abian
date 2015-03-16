@@ -28,7 +28,7 @@ if (isset($_POST["n"])) {
           "/\PL/u",
           "",
           preg_replace(
-            "/\:[^)]+\:/",
+            "/\:[^:]+\:/",
             "",
             $_POST["n"]
           )
@@ -63,6 +63,7 @@ if (isset($_POST["n"])) {
                 "name" => $UserSystem->sanitize($_POST["n"]),
                 "description" => $UserSystem->sanitize($_POST["d"]),
                 "dateCreate" => time(),
+                "dateUpdate" => time(),
                 "member" => $m,
                 "user" => $session["id"]
               ]

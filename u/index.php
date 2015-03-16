@@ -112,7 +112,7 @@ EOT;
 $bots = $Abian->getBots(
   [
     "user" => $user["id"],
-    "sort" => ["dateCreate", "desc"]
+    "sort" => ["dateUpdate", "desc"]
   ],
   true,
   false

@@ -22,7 +22,7 @@ if (is_array($session) && $bot !== null) {
             "/\PL/u",
             "",
             preg_replace(
-              "/\:[^)]+\:/",
+              "/\:[^:]+\:/",
               "",
               $_POST["n"]
             )
