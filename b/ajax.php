@@ -14,6 +14,7 @@ if (isset($_POST["up"]) || isset($_POST["down"])) {
 
   $id = $UserSystem->sanitize($from, "n");
   $user = $UserSystem->sanitize($_POST["user"], "n");
+  $target = $UserSystem->sanitize($_POST["target"], "n");
   $votes = $UserSystem->dbSel(["votes", ["on" => "bot.".$id, "user" => $user]]);
   
   if ($votes[0] == 0) {
@@ -23,7 +24,8 @@ if (isset($_POST["up"]) || isset($_POST["down"])) {
         [
           "user" => $user,
           "on" => "bot." . $id,
-          "type" => $type
+          "type" => $type,
+          "target" => $target
         ]
       ]
     );
@@ -45,7 +47,8 @@ if (isset($_POST["up"]) || isset($_POST["down"])) {
           [
             "user" => $user,
             "on" => "bot." . $id,
-            "type" => $type
+            "type" => $type,
+            "target" => $target
           ]
         ]
       );

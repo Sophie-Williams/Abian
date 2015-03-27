@@ -186,11 +186,11 @@ EOT;
         </div>
         <div class="col-xs-12 col-sm-4 text-right">
           <div class="btn-group">
-            <a id="botUp" onClick="sendVote(1, 'bot', $bot[id], $session[id])"
+            <a id="botUp" onClick="sendVote(1, 'bot', $bot[id], $session[id], $user[id])"
               class="btn btn-default text-success $upFill">
               <i class="fa fa-arrow-up"></i>
             </a>
-            <a id="botDown" onClick="sendVote(0, 'bot', $bot[id], $session[id])"
+            <a id="botDown" onClick="sendVote(0, 'bot', $bot[id], $session[id], $user[id])"
               class="btn btn-default text-danger $downFill">
               <i class="fa fa-arrow-down"></i>
             </a>

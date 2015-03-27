@@ -21,12 +21,12 @@
 * @param integer user
 * @return null
 */
-function sendVote (type, on, onId, user) {
+function sendVote (type, on, onId, user, target) {
   if (type == 0) {
     $.ajax({
       type: "POST",
       url: "ajax.php",
-      data: {down:onId,user:user},
+      data: {down:onId,user:user,target:target},
       dataType: "json",
       context: document.body,
       async: true,
@@ -45,7 +45,7 @@ function sendVote (type, on, onId, user) {
     $.ajax({
       type: "POST",
       url: "ajax.php",
-      data: {up:onId,user:user},
+      data: {up:onId,user:user,target:target},
       dataType: "json",
       context: document.body,
       async: true,

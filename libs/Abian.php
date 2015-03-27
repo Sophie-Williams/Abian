@@ -472,7 +472,17 @@ class Abian extends UserSystem {
     }
     $xp += $xFB;
 
-    return $xp;
+    #Check XP from votes    
+    $xFV = 0;
+    $votes = $this->dbSel(["votes", ["target" => $user]]); #all votes for user
+    foreach ($votes as $key => $vote) { #each vote
+      if ($key === 0) continue; #skip the number of votes
+      if ($vote["type"] == 1) $xFV += 0.75; #add 0.75 for upvotes
+      if ($vote["type"] == 0) $xFV -= 1; #subtract 1 for downvotes
+    }
+    $xp += round($xFV);
+
+    return $xp; #no correct if xp<0 because negative levels are fine
   }
 
   /**
