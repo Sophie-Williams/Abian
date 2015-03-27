@@ -66,6 +66,7 @@ $xp = $Abian->calcXP($session["id"]);
 
   <script src="/libs/js/jquery.js"></script>
   <script src="/libs/js/emojify.js"></script>
+  <script src="/libs/js/Abian.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-inverse navbar-fixed-top">

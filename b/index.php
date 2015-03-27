@@ -162,6 +162,21 @@ EOT;
       ';
     }
 
+    $upFill = $downFill = "";
+    $vote = $UserSystem->dbSel(
+      [
+        "votes",
+        ["on" => "bot.".$bot["id"], "user" => $session["id"]]
+      ]
+    );
+    if ($vote[0] !== 0) {
+      if ($vote[1]["type"] == 1) {
+        $upFill = "btn-success";
+      } else {
+        $downFill = "btn-danger";
+      }
+    }
+
     echo <<<EOT
     <div class="col-xs-12">
       $error
@@ -171,10 +186,12 @@ EOT;
         </div>
         <div class="col-xs-12 col-sm-4 text-right">
           <div class="btn-group">
-            <a href="#" class="btn btn-default text-success">
+            <a id="botUp" onClick="sendVote(1, 'bot', $bot[id], $session[id])"
+              class="btn btn-default text-success $upFill">
               <i class="fa fa-arrow-up"></i>
             </a>
-            <a href="#" class="btn btn-default text-danger">
+            <a id="botDown" onClick="sendVote(0, 'bot', $bot[id], $session[id])"
+              class="btn btn-default text-danger $downFill">
               <i class="fa fa-arrow-down"></i>
             </a>
           </div>
