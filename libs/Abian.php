@@ -462,12 +462,14 @@ class Abian extends UserSystem {
 
     #Check XP from badges
     $xFB = 0;
-    $badges = $this->dbSel(["badges", ["value" => [">", 0]]]); #all badges with value
     $badging = $this->dbSel(["badging", ["user" => $user]]); #all badges user has
-    unset($badges[0], $badging[0]);
-    foreach ($badging as $badge) { #each badge user has
-      foreach ($badges as $b) { #check if it's one of the valued badges
-        if ($b["id"] == $badge["badge"]) $xFB += intval($b["value"]); #if yes, add value
+    if ($badging[0] > 0) {
+      $badges = $this->dbSel(["badges", ["value" => [">", 0]]]); #all badges with value
+      unset($badges[0], $badging[0]);
+      foreach ($badging as $badge) { #each badge user has
+        foreach ($badges as $b) { #check if it's one of the valued badges
+          if ($b["id"] == $badge["badge"]) $xFB += intval($b["value"]); #if yes, add value
+        }
       }
     }
     $xp += $xFB;
