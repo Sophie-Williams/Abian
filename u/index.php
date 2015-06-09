@@ -91,7 +91,11 @@ if ($badged[0] > 0) {
     foreach ($badged as $badgeb) {
       if ($badge["id"] == $badgeb["badge"]) {
         $desc = $badge["description"];
-        $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
+        $desc = str_replace(
+          "%s",
+          str_pad(dechex(substr($user["id"], 0, 6)), 6, "0", STR_PAD_LEFT),
+          $desc
+        );
         echo '<span class="label label-'.$badge["type"].'" data-toggle="popover"
             data-placement="top" data-content="'.$desc.'">
             '.$badge["name"].'

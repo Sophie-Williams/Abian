@@ -4,23 +4,6 @@ if (!is_array($session)) $UserSystem->redirect301("/u/login");
 #if ($session["title"] !== "Moderator") $UserSystem->redirect301("/");
 ?>
 
-
-<div class="row">
-  <div class="col-xs-12">
-    <div class="alert alert-info">
-      <h2>No more manual AQ verifying!</h2>
-      As of 2015-06-08 staff will no longer need to manually verify that AQ 
-      accounts either. <a href="#">Zbee</a> is switching us over to a system
-      where there will be 1 button to click and their profile will be scraped.
-      <br>
-      Once the cron job system is brought up, the system will do the scraping
-      too.
-      <Br><br>
-      <a href="#" class="btn btn-info btn-lg">Read More</a>
-    </div>
-  </div>
-</div>
-
 <div class="row">
   <div class="col-xs-12 col-sm-6">
     <div class="panel panel-default">
@@ -43,6 +26,12 @@ if (!is_array($session)) $UserSystem->redirect301("/u/login");
           </div>
           <div class="col-xs-12 col-sm-6">
             <a href="#" class="btn btn-default btn-block">Reported</a>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <a href="u/v/" class="btn btn-default btn-block">Statistics</a>
           </div>
         </div>
       </div>
@@ -106,6 +95,35 @@ if (!is_array($session)) $UserSystem->redirect301("/u/login");
           </div>
           <div class="col-xs-12 col-sm-6">
             <a href="#" class="btn btn-default btn-block">Financial Info</a>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <a href="#" class="btn btn-default btn-block">DMCAs / C&Ds</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-building"></i> Website</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <a href="#" class="btn btn-default btn-block">Blog</a>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <a href="#" class="btn btn-default btn-block">Staff</a>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <a href="#" class="btn btn-default btn-block">Statistics</a>
           </div>
         </div>
       </div>

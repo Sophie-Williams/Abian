@@ -29,8 +29,8 @@ if (!is_array($session)) $UserSystem->redirect301("/u/login");
               "users",
               [
                 "aqName" => ["!=", ""],
-                "aqVerified" => "0"
-                #,"id" => ["!=", $session["id"]]
+                "aqVerified" => "0",
+                "id" => ["!=", $session["id"]]
               ]
             ]
           );
@@ -58,7 +58,7 @@ if (!is_array($session)) $UserSystem->redirect301("/u/login");
         async: true,
         complete: function(res, stato) {
           console.log(res);
-          if (res.responseJSON.s == "4") {
+          if (res.responseJSON.s == "7") {
             btn.html('Verified <i class="fa fa-check"></i>')
               .removeClass("btn-priamry").addClass("btn-success");
           } else {
