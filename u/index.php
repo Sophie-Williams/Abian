@@ -27,7 +27,7 @@ EOT;
 
 if (!empty($user["twitchName"])) echo '<a target="_blank" href="https://twitch.tv/'.$user["twitchName"].'" class="list-group-item">Twitch: '.$user["twitchName"].'</a>';
 if (!empty($user["githubName"])) echo '<a target="_blank" href="https://github.com/'.$user["githubName"].'" class="list-group-item">GitHub: '.$user["githubName"].'</a>';
-if (!empty($user["aqName"])) echo '<a target="_blank" href="http://www.aq.com/aw-character.asp?id='.$user["aqName"].'" class="list-group-item">AQW: '.$user["aqName"].'</a>';
+if (!empty($user["aqName"]) && $user["aqVerified"] == 1) echo '<a target="_blank" href="http://www.aq.com/character.asp?id='.$user["aqName"].'" class="list-group-item">AQW: '.$user["aqName"].'</a>';
 
 $dateR = date("Y-m-d", $user["dateRegistered"]);
 $dateL = date("Y-m-d\TH:i", $user["lastActive"]);

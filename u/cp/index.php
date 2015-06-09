@@ -195,7 +195,8 @@ if (isset($_POST["a"])) {
       [
         "users",
         [
-          "aqName" => $_POST["a"]
+          "aqName" => $_POST["a"],
+          "aqVerified" => 0
         ],
         [
           "id" => $session["id"]
