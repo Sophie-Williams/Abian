@@ -12,6 +12,60 @@
 class Abian extends UserSystem {
 
   /**
+  * Checks if a user's AQ name is really their own
+  * Example: $Abian->verifyAQ("Bob")
+  *
+  * @access public
+  * @param string $aq
+  * @param integer $user
+  * @return boolean
+  */
+  public function verifyAQ ($aq, $user) {
+    $a = urlencode($this->sanitize($aq, "s"));
+    $u = $this->sanitize($user, "n");
+
+    $u = $this->dbSel(["users", ["id" => $u]]);
+    if ($u[0] !== 1) return "user";
+
+    $u = $u[1];
+
+    $trim = substr(
+      file_get_contents(
+        "http://www.aq.com/character.asp?id=" . $a,
+        false,
+        null,
+        0,
+        16500
+      ),
+      16250
+    );
+    $trim = explode("intColorTrim=", $trim);
+    if (!isset($trim[1])) return "aqName";
+    $trim = $trim[1];
+
+    $trim = explode("&", substr($trim, 13))[0];
+    $trim = dechex($trim);
+
+    $dec = dechex(substr($u["id"], 0, 6));
+    if ($trim != $dec) return "match";
+
+    $updated = $this->dbUpd(
+      [
+        "users",
+        [
+          "aqVerified" => "1"
+        ],
+        [
+          "id" => $u["id"]
+        ]
+      ]
+    );
+    if (!$updated) return "update";
+
+    return true;
+  }
+
+  /**
   * Adds a badge to a user
   * Example: $Abian->giveBadge($badge, $user)
   *

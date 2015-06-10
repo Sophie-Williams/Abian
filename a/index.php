@@ -22,16 +22,10 @@ if (!is_array($session)) $UserSystem->redirect301("/u/login");
         <br>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <a href="u/v/" class="btn btn-default btn-block">Verify AQ Accounts</a>
+            <a href="#" class="btn btn-default btn-block">Statistics</a>
           </div>
           <div class="col-xs-12 col-sm-6">
             <a href="#" class="btn btn-default btn-block">Reported</a>
-          </div>
-        </div>
-        <br>
-        <div class="row">
-          <div class="col-xs-12 col-sm-6">
-            <a href="u/v/" class="btn btn-default btn-block">Statistics</a>
           </div>
         </div>
       </div>

@@ -186,31 +186,59 @@ if (isset($_POST["c"])) {
 if (isset($_POST["a"])) {
   $_POST["a"] = $UserSystem->sanitize($_POST["a"]);
   if ($session["aqName"] !== $_POST["a"]) {
-    if (empty($session["aqName"])) {
-      $hist = $Abian->historify("aqName.added", $_POST["a"]);
-    } else {
-      $hist = $Abian->historify("aqName.updated", "To: " . $_POST["a"]);
-    }
-    $UserSystem->dbUpd(
-      [
-        "users",
+    $aqVerify = $Abian->verifyAQ($_POST["a"], $session["id"]);
+    if ($aqVerify === true) {
+      if (empty($session["aqName"])) {
+        $hist = $Abian->historify("aqName.added", $_POST["a"]);
+      } else {
+        $hist = $Abian->historify("aqName.updated", "To: " . $_POST["a"]);
+      }
+      $UserSystem->dbUpd(
         [
-          "aqName" => $_POST["a"],
-          "aqVerified" => 0
-        ],
-        [
-          "id" => $session["id"]
+          "users",
+          [
+            "aqName" => $_POST["a"]
+          ],
+          [
+            "id" => $session["id"]
+          ]
         ]
-      ]
-    );
-    $session["aqName"] = $_POST["a"];
+      );
+      $session["aqName"] = $_POST["a"];
+      $error = "<div class='col-xs-12'>
+        <div class='alert alert-success'>
+          Adventure Quest Worlds username updated to ".$_POST["a"].". This will
+          now be displayed publicly on your profile.
+        </div>
+      </div>";
+    } elseif ($aqVerify === "aqName") {
+      $error = "<div class='col-xs-12'>
+        <div class='alert alert-danger'>
+          Adventure Quest Worlds username did not match an AQ user or that user
+          is banned / suspended.
+        </div>
+      </div>";
+    } elseif ($aqVerify === "match") {
+      $error = "<div class='col-xs-12'>
+        <div class='alert alert-danger'>
+          Adventure Quest Worlds user does not have the correct armor trim.
+        </div>
+      </div>";
+    } else {
+      $error = "<div class='col-xs-12'>
+        <div class='alert alert-danger'>
+          For some reason your Adventure Quest Worlds username could not be
+          updated because of a server error.
+        </div>
+      </div>";
+    }
+  } else {
+    $error = "<div class='col-xs-12'>
+      <div class='alert alert-success'>
+        Adventure Quest Worlds username stayed the same.
+      </div>
+    </div>";
   }
-  $error = "<div class='col-xs-12'>
-    <div class='alert alert-success'>
-      Adventure Quest Worlds username updated to ".$_POST["a"].". This will
-      now be displayed publicly on your profile.
-    </div>
-  </div>";
 }
 
 if (isset($_POST["z"])) {
@@ -385,6 +413,7 @@ EOT;
 $twURL = "https://api.twitch.tv/kraken/oauth2/authorize";
 $twURL .= "?response_type=code&client_id=$tw[client]";
 $twURL .= "&redirect_uri=https://abian.zbee.me/u/cp?tw&scope=user_read";
+$aqVerify = str_pad(dechex(substr($session["id"], 0, 6)), 6, "0", STR_PAD_LEFT);
 
 echo <<<EOT
 <div class="col-xs-12 col-sm-10">
@@ -415,8 +444,20 @@ echo <<<EOT
         <div class="panel-body">
           <form class="form form-vertical" method="post" action="">
             <div class="form-group">
-              <label for="a">Currently: $session[aqName]</label>
+              <label for="a">
+                Currently: $session[aqName]
+              </label>
               <input type="text" class="form-control" id="a" name="a">
+              <span id="helpBlock" class="help-block">
+                (make your armor trim <u>#$aqVerify</u> to verify
+                <a onClick="$('#aq').toggle()" style="cursor:pointer">?</a>)
+                <div id="aq" class="well text-center" style="display:none">
+                  <img src="/libs/img/aq.gif" style="width:100%">
+                  <br>
+                  <a href="/q/aq">Still need help?</a>
+                  <br>
+                </div>
+              </span>
             </div>
             <button type="submit" class="btn btn-primary btn-block">
               Update AQW Name
@@ -474,7 +515,6 @@ $badges = $UserSystem->dbSel(
 foreach ($badges as $key => $badge) {
   if ($key === 0) continue;
   $desc = $badge["description"];
-  $desc = str_replace("%aq", substr($session["id"], 0, 2), $desc);
   echo '<span class="label label-'.$badge["type"].'" data-toggle="popover"
     data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
 }
