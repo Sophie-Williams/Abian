@@ -673,3 +673,38 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
 
+
+
+
+Utilizes [UserSystem](https://github.com/Zbee/UserSystem/commit/e4c6fa).
+
+> Copyright (c) 2014-2015 Ethan Henderson; GPLv3 License
+
+Utilizes [reCAPTCHA](http://recaptcha.net).
+
+> Copyright (c) 2007 reCAPTCHA -- http://recaptcha.net; Authors: Mike Crawford 
+and Ben Maurer; MIT License
+
+Utilizes [country-list](https://github.com/umpirsky/country-list/commit/6fbb67).
+
+> Copyright (c) Саша Стаменковић <umpirsky@gmail.com>; MIT License
+
+Utilizes [emojify.js](https://github.com/hassankhan/emojify.js/commit/63b8b0).
+
+> Copyright (c) 2014 Hassan Khan, http://hassankhan.me contact@hassankhan.me; 
+MIT License
+
+Utilizes [Bootstrap](https://github.com/twbs/bootstrap/commit/bcf7dd).
+
+> Code and documentation copyright 2011-2015 Twitter, Inc.; Authors: 
+[mdo](http://github.com/mdo) and [fat](http://github.com/fat); MIT License
+
+Utilizes 
+[Font Awesome](https://github.com/FortAwesome/Font-Awesome/releases/tag/v4.3.0).
+
+> Copyright (c) 2012-2015 [Dave Grandy](https://github.com/davegandy); MIT 
+License
+
+Utilizes [Parsedown](https://github.com/erusev/parsedown/releases/tag/1.5.1).
+
+> Copyright (c) 2013 Emanuil Rusev, erusev.com; MIT License
