@@ -1,9 +1,10 @@
 <?php
 require_once("../../header.php");
+$error = "";
 
 if (is_array($session)) $UserSystem->redirect301("/");
 
-if (isset($_POST["u"])) {
+if (isset($_POST["u"]) && isset($_POST["p"])) {
   $login = $UserSystem->logIn($_POST["u"], $_POST["p"]);
   if ($login === true) $error = $UserSystem->redirect301("/?loggedin");
   if ($login === "twoStep") $error = "<div class='alert alert-danger'>TwoStep login enabled.<br>Check your email for the link to finish logging in.</div>";

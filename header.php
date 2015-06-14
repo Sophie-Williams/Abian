@@ -19,13 +19,13 @@ if ($session === true) {
   $session = $UserSystem->session();
   date_default_timezone_set($session["timeZone"]);
   $Abian->lastActive($session["id"]);
+  $xp = $Abian->calcXP($session["id"]);
 } elseif ($session === "ban") {
-  echo "You are banned from using Abian. If you are unsure why, please open an issue on github.com/zbee/abian.";
+  echo "You are banned from using Abian.";
   exit;
 } else {
   $session = false;
 }
-$xp = $Abian->calcXP($session["id"]);
 ?>
 
 <!DOCTYPE html>
@@ -90,7 +90,7 @@ $xp = $Abian->calcXP($session["id"]);
             <li><a href="/u/register">Register</a></li>
           <?php elseif (is_array($session)): ?>
             <li><a href="/u/?<?=$session["username"]?>">
-              <!--<img src="https://www.gravatar.com/avatar/<?=md5(strtolower(trim($session["email"])))?>?s=32" style="height:20px" class="img-rounded" />-->
+              <img src="<?=$Abian->getAvatar($session["id"], true)?>" style="height:20px" class="img-circle" />
               <?=$session["username"]?>
               <span class="badge"><?=$Abian->calcLevel($xp)[0]?></span>
             </a></li>

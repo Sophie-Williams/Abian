@@ -4,16 +4,22 @@ require_once("/var/www/abian/header.php");
 
 <h1>Frequently Asked Questions</h1>
 
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#1"></i> How do I download / report / upvote / downvote / comment on a bot?</a>
-<div class="collapse well" id="1">
+<a class="btn btn-default btn-block" id="usebots" href="#usebots">
+  How do I download / report / upvote / downvote / comment on a bot?
+</a>
+<div class="well">
   <p>
     <i class="fa fa-share-square"></i>
     To do any functions regarding a bot, you must go to it's bot page by clicking it's title in the listings.
   </p>
 </div>
+
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#2"></i> Will this get me banned from AQW?</a>
-<div class="collapse well" id="2">
+
+<a class="btn btn-default btn-block" id="banned" href="#banned">
+  Will this get me banned from AQW?
+</a>
+<div class="well">
   <p>
     <i class="fa fa-share-square"></i>
     <strong>For just using the site</strong>
@@ -32,9 +38,13 @@ require_once("/var/www/abian/header.php");
     It is a 1/1,000,000,000 chance that you will be banned for using a bot from the bot net. We advise though that you use your own digression in choosing and running bots, use bots that have a good score, and test bots on a test account first.
   </p>
 </div>
+
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#3"></i> Is botting legal?</a>
-<div class="collapse well" id="3">
+
+<a class="btn btn-default btn-block" id="bottinglegal" href="#bottinglegal">
+  Is botting legal?
+</a>
+<div class="well">
     <p>
       <i class="fa fa-share-square"></i>
       Yes, well, sort of.
@@ -48,9 +58,13 @@ require_once("/var/www/abian/header.php");
       Artix Entertainment has tried to take action against users by claiming that the bots use copyrighted materials and submit a DMCA notice to them, but as you can read <a href="../legality">HERE</a>, they know the bots are not using copyrighted material.
     </p>
 </div>
+
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#4"></i> Is the Bot Net legal?</a>
-<div class="collapse well" id="4">
+
+<a class="btn btn-default btn-block" id="abianlegal" href="#abianlegal">
+  Is Abian legal?
+</a>
+<div class="well">
     <p>
       <i class="fa fa-share-square"></i>
       Yes.
@@ -59,17 +73,21 @@ require_once("/var/www/abian/header.php");
       <br><br>
       However, as you may note from the basic legal run-down and the DMCA/C&D info page, almost no illegal content can even make it onto the site.<br>
       <ul>
-        <li>- Pictures of the game are not allowed, as they do use copyrighted material</li>
-        <li>- Bots do not use any copyrighted material</li>
-        <li>- Botting clients are a client for accessing AQW and use no copyrighted material</li>
+        <li>Pictures of the game are not allowed, as they do use copyrighted material</li>
+        <li>Bots do not use any copyrighted material</li>
+        <li>Botting clients are a client for accessing AQW and use no copyrighted material</li>
       </ul>
       <br><br>
       Links to videos/pictures of anything copyrighted by Artix Entertainment (and all other companies if they submit even 1 DMCA) in posts/comments/bot descriptions will normally be removed, to help us comply with laws.
     </p>
 </div>
+
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#5"></i> I'm banned! What now?</a>
-<div class="collapse well" id="5">
+
+<a class="btn btn-default btn-block" id="ambanned" href="#ambanned">
+  I'm banned! What now?
+</a>
+<div class="well">
     <p>
       <i class="fa fa-share-square"></i>
       Unfortunately, we cannot help you in this case. You can create a new account, and start playing again though.
@@ -79,9 +97,13 @@ require_once("/var/www/abian/header.php");
       If you're a premium member on this site and you've just been banned, you can contact us about a refund if you no longer intend to play AQW.
     </p>
 </div>
+
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#6"></i> Why the ads on the network?</a>
-<div class="collapse well" id="6">
+
+<a class="btn btn-default btn-block" id="whyads" href="#whyads">
+  Why the ads on the network?
+</a>
+<div class="well">
     <p>
       <i class="fa fa-share-square"></i>
       We wish we didn't need ads on the network, but the site is <a href="https://github.com/Zbee/Abian/blob/6dac7b50e5d4a9e5c0d3014e4632df92a299bee9/README.md#financial" target="_blank">expensive</a> to keep running and there are not enough premium user to support it.
@@ -94,8 +116,10 @@ require_once("/var/www/abian/header.php");
     </p>
 </div>
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#7"></i> Who built the Abian Bot Network?</a>
-<div class="collapse well" id="7">
+<a class="btn btn-default btn-block" id="whobuilt" href="#whobuilt">
+  Who built the Abian Bot Network?
+</a>
+<div class="well">
     <p>
       <i class="fa fa-share-square"></i>
       Abian was developed primarily by <a href="https://GitHub.com/Zbee">Zbee (Ethan Henderson)</a>.
@@ -103,9 +127,13 @@ require_once("/var/www/abian/header.php");
       Some other users (marked with the contributor, hacker, or developer badge) also helped at some point in the development of Abian and are listed on the <a href="#">Affiliates Page</a>.
     </p>
 </div>
+
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#8"></i> What is a premium user?</a>
-<div class="collapse well" id="8">
+
+<a class="btn btn-default btn-block" id="premium" href="#premium">
+  What is a premium user?
+</a>
+<div class="well">
     <p>
       <i class="fa fa-share-square"></i>
       A premium user is a user that pays $2/month to help support the network, as well as to gain access to these perks:
@@ -121,9 +149,13 @@ require_once("/var/www/abian/header.php");
       To become a premium user, and learn more, please go <a href="#">here</a>.
     </p>
 </div>
+
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#9"></i> What happens if there is a DMCA/C&D registered against my bot?</a>
-<div class="collapse well" id="9">
+
+<a class="btn btn-default btn-block" id="dmcaonme" href="#dmcaonme">
+  What happens if there is a DMCA/C&D registered against my bot?
+</a>
+<div class="well">
     <p>
       <i class="fa fa-share-square"></i>
       We will first go through all of your bot and determine if there is anything using Artix Entertainment's copyrighted material (you have a picture link your description, a comment has a picture, anything like that).
@@ -135,9 +167,13 @@ require_once("/var/www/abian/header.php");
       But as you can read <a href="../legality">HERE</a> they know that the bots themselves are not using any copyrighted material, so the only things that they could have us take down are things like images or videos which use their art.
     </p>
 </div>
+
 <br>
-<a class="btn btn-default btn-block" data-toggle="collapse" data-target="#10"></i> What is the team's response to DMCA's/C&D's in general?</a>
-<div class="collapse well" id="10">
+
+<a class="btn btn-default btn-block" id="dmcaresponse" href="#dmcaresponse">
+  What is the team's response to DMCA's/C&D's in general?
+</a>
+<div class="well">
     <p>
       <i class="fa fa-share-square"></i>
       As you can see on our <a href="#">Transparency Info page</a>, we send a copy of each notice to the <a href="http://www.chillingeffects.org/">Chilling Effects Project</a> for publication.

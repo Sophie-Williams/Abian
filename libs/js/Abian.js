@@ -12,20 +12,23 @@
 
 /**
 * Sends data to the local ajax.php script for voting
-* Example: <a onClick="sendVote(1, 'bot.2', 0)"">Hi</a>
+* Example: <a onClick="sendVote(1, 'bot', 2, $sess['id']), $user['id']">Vote</a>
 *
 * @access public
 * @param integer type
 * @param string on
 * @param integer onId
 * @param integer user
+* @param integer target
+* @param string location
 * @return null
 */
-function sendVote (type, on, onId, user, target) {
+function sendVote (type, on, onId, user, target, location) {
+  location = typeof location !== 'undefined' ? location : '';
   if (type == 0) {
     $.ajax({
       type: "POST",
-      url: "ajax.php",
+      url: location + "ajax.php",
       data: {down:onId,user:user,target:target},
       dataType: "json",
       context: document.body,
@@ -44,7 +47,7 @@ function sendVote (type, on, onId, user, target) {
   } else {
     $.ajax({
       type: "POST",
-      url: "ajax.php",
+      url: location + "ajax.php",
       data: {up:onId,user:user,target:target},
       dataType: "json",
       context: document.body,

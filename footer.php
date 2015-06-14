@@ -223,10 +223,13 @@
             if ($stmt[0] > 0) {
               unset($stmt[0]);
               shuffle($stmt);
-              $ad = '
+              $ad = '&nbsp;
                 <a href="'.$stmt[0]['link'].'" target="_blank">
                   '.$stmt[0]["content"].'
                 </a>
+                <a href="/u/?redir='.$stmt[0]['owner'].'" target="_blank">
+                  <img src="'.$Abian->getAvatar($stmt[0]['owner'], true).'" 
+                  style="height:20px" class="img-circle pull-left" /></a>
               ';
               $UserSystem->dbUpd(
                 [

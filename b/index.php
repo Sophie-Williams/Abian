@@ -210,14 +210,14 @@ EOT;
 
 echo $Parsedown->text($bot["body"]);
 
-$email = md5(strtolower(trim($user["email"])));
+$gravatar = $Abian->getAvatar($user["id"]);
 $date = date("Y-m-d\TH:i", $bot["dateCreate"]);
 $upDate = date("Y-m-d\TH:i", $bot["dateUpdate"]);
 $updated = $bot["dateUpdate"] != 0 ? "<br><br>Updated $upDate" : "";
 echo <<<EOT
         </div>
         <div class="col-xs-12 col-sm-3 text-center">
-            <img src="https://www.gravatar.com/avatar/$email?s=512"
+            <img src="$gravatar"
               class="img-thumbnail" style="width:75%" />
             <br>
             Created by <a href="/u?$user[username]">$user[username]</a>

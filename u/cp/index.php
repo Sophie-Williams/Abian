@@ -445,7 +445,10 @@ echo <<<EOT
           <form class="form form-vertical" method="post" action="">
             <div class="form-group">
               <label for="a">
-                Currently: $session[aqName]
+                Currently: 
+                <a href="http://www.aq.com/character.asp?id=$session[aqName]"
+                  target="_blank">
+                  $session[aqName]</a>
               </label>
               <input type="text" class="form-control" id="a" name="a">
               <span id="helpBlock" class="help-block">
@@ -460,7 +463,8 @@ echo <<<EOT
               </span>
             </div>
             <button type="submit" class="btn btn-primary btn-block">
-              Update AQW Name
+              <i class="fa fa-gamepad"></i>
+              Verify AQW
             </button>
           </form>
         </div>
@@ -472,9 +476,11 @@ echo <<<EOT
       <div class="panel panel-default">
         <div class="panel-heading">Twitch Username</div>
         <div class="panel-body">
-          Currently:
-          <a href="https://twitch.tv/$session[twitchName]" target="_blank">
-            $session[twitchName]</a>
+          <b>
+            Currently:
+            <a href="https://twitch.tv/$session[twitchName]" target="_blank">
+              $session[twitchName]</a>
+          </b>
           <br>
           <a class="btn btn-block btn-primary" href="$twURL">
             <i class="fa fa-twitch"></i>
@@ -488,9 +494,11 @@ echo <<<EOT
       <div class="panel panel-default">
         <div class="panel-heading">GitHub Username</div>
         <div class="panel-body">
-          Currently:
-          <a href="https://github.com/$session[githubName]" target="_blank">
-            $session[githubName]</a>
+          <b>
+            Currently:
+            <a href="https://github.com/$session[githubName]" target="_blank">
+              $session[githubName]</a>
+          </b>
           <br>
           <a class="btn btn-block btn-primary"
             href="https://github.com/login/oauth/authorize?scope=
@@ -517,11 +525,47 @@ foreach ($badges as $key => $badge) {
   $desc = $badge["description"];
   echo '<span class="label label-'.$badge["type"].'" data-toggle="popover"
     data-placement="top" data-content="'.$desc.'">'.$badge["name"].'</span> ';
-}
+};
 
 $emailChanged = $session["emailChanged"] > 0 ?
   date("Y-m-d\TH:i", $session["emailChanged"]) : "Never";
+
+$avatar = $Abian->getAvatar($session["id"]);
 echo <<<EOT
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Avatar</div>
+        <div class="panel-body">
+          Your avatar is being handled by <a href="https://gravatar.com/">
+          Gravatar</a> using the email <b>$session[email]</b>. Your Gravatar
+          was grabbed at sign-up.
+          <br><br>
+          <div class="row">
+            <div class="col-xs-12 col-sm-4 text-center">
+              We have
+              <img src="$avatar" class="img-responsive" />
+            </div>
+            <div class="col-xs-12 col-sm-4 text-center">
+              <br>If you've updated your Gravatar, let us cache the new one.
+              <br>
+              <i class="fa fa-arrow-right fa-2x hidden-xs"></i>
+              <i class="fa fa-arrow-down fa-2x visible-xs-inline"></i>
+            </div>
+            <div class="col-xs-12 col-sm-4 text-center">
+              <a>
+                <span class="fa-stack fa-5x">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i id="actor" class="fa fa-refresh fa-stack-1x fa-inverse"
+                    onClick="$(this).addClass('fa-spin')"></i>
+                </span>
+              </a>
+              <div id="info"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -736,6 +780,42 @@ echo <<<EOT
     </table>
   </div>
 </div>
+<script type="text/javascript">
+$("#actor").click(function() {
+  var actor = $(this);
+  $.ajax({
+    type: "POST",
+    url: "ajax.php",
+    data: {i: $session[id], e: "$session[email]"},
+    dataType: "json",
+    context: document.body,
+    async: true,
+    complete: function(res, stato) {
+      if (res.responseJSON.success == "1") {
+        actor.removeClass("fa-refresh fa-smile-o fa-frown-o fa-meh-o fa-spin")
+          .addClass("fa-smile-o");
+        $("#info").html("Already up to date.");
+      } else if (res.responseJSON.success == "3") {
+        actor.removeClass("fa-refresh fa-smile-o frown-o fa-meh-o fa-spin")
+          .addClass("fa-smile-o");
+        $("#info").html("Successfully updated.");
+      } else if (res.responseJSON.success == "0") {
+        actor.removeClass("fa-refresh fa-smile-o fa-frown-o fa-meh-o fa-spin")
+          .addClass("fa-frown-o");
+        $("#info").html("You broke the input.");
+      } else if (res.responseJSON.success == "2") {
+        actor.removeClass("fa-refresh fa-smile-o fa-frown-o fa-meh-o fa-spin")
+          .addClass("fa-frown-o");
+        $("#info").html("Failed to copy Gravatar.");
+      } else {
+        actor.removeClass("fa-refresh fa-smile-o fa-frown-o fa-meh-o fa-spin")
+          .addClass("fa-meh-o");
+        $("#info").html("Something broke:<br>" + res);
+      }
+    }
+  });
+});
+</script>
 EOT;
 
 require_once("../../footer.php");

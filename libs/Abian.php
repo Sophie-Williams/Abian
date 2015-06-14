@@ -12,13 +12,46 @@
 class Abian extends UserSystem {
 
   /**
+  * Gets a user's avatar (from cache, or caches it)
+  * Example: $Abian->getAvatar(1)
+  *
+  * @access public
+  * @param integer $user
+  * @param boolean $small
+  * @param boolean $http
+  * @return mixed
+  */
+  public function getAvatar ($user, $small = false, $http = true) {
+    $preface = $http === true
+      ? "https://abian.zbee.me/cache/"
+      : "/var/www/abian/cache/";
+    if (file_exists("/var/www/abian/cache/$user.jpg")) {
+      return $small === true
+        ? "$preface$user-32x.jpg"
+        : "$preface$user.jpg";
+    } else {
+      $search = $this->dbSel(["users", ["id" => $user]]);
+      if ($search[0] !== 1) return "user";
+      $e = md5(strtolower(trim($search[1]["email"])));
+      $l = "https://www.gravatar.com/avatar/".$e;
+      $file32 = "/var/www/abian/cache/$user-32x.jpg";
+      $file = "/var/www/abian/cache/$user.jpg";
+      if (!@copy($l."?s=512", $file)) return "copy";
+      if (!@copy($l."?s=32", $file32)) return "copy";
+      return $small === true
+        ? "$preface$user-32x.jpg"
+        : "$preface$user.jpg";
+    }
+  }
+
+  /**
   * Checks if a user's AQ name is really their own
   * Example: $Abian->verifyAQ("Bob")
   *
   * @access public
   * @param string $aq
   * @param integer $user
-  * @return boolean
+  * @return mixed
   */
   public function verifyAQ ($aq, $user) {
     $a = urlencode($this->sanitize($aq, "s"));
@@ -97,10 +130,10 @@ class Abian extends UserSystem {
 
   /**
   * Returns bots according to a query
-  * Example: $Abian->getBots(["user" => 0, "sort" => ["date", "desc"]])
+  * Example: $Abian->lastActive()
   *
   * @access public
-  * @param array $query
+  * @param integer $user
   * @return mixed
   */
   public function lastActive ($user) {
@@ -313,7 +346,7 @@ class Abian extends UserSystem {
       $umessage = $message;
       $message = str_replace("\n", "<br>", $message);
       $user = $this->session(intval($comment["user"]));
-      $email = md5(strtolower(trim($user["email"])));
+      $gravatar = $this->getAvatar($user["id"]);
       $edited = "";
       if ($comment["dateUpdate"] != "0") $edited = " (edited)";
       if (is_array($session) && $session["id"] == $comment["user"]) {
@@ -335,7 +368,7 @@ class Abian extends UserSystem {
       echo '
         <li class="media">
           <div class="media-left">
-            <img src="https://www.gravatar.com/avatar/'.$email.'?s=64" />
+            <img src="'.$gravatar.'" />
           </div>
           <div class="media-body">
             '.$mod.'
