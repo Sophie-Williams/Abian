@@ -21,7 +21,7 @@ if ($session === true) {
   $Abian->lastActive($session["id"]);
   $xp = $Abian->calcXP($session["id"]);
 } elseif ($session === "ban") {
-  echo "You are banned from using Abian.";
+  echo "You're banned.'";
   exit;
 } else {
   $session = false;
@@ -65,6 +65,7 @@ if ($session === true) {
   <![endif]-->
 
   <script src="/libs/js/jquery.js"></script>
+  <script src="/libs/js/timeago.js"></script>
   <script src="/libs/js/emojify.js"></script>
   <script src="/libs/js/Abian.js"></script>
 </head>
@@ -89,15 +90,15 @@ if ($session === true) {
             <li><a href="/u/login">Login</a></li>
             <li><a href="/u/register">Register</a></li>
           <?php elseif (is_array($session)): ?>
-            <li><a href="/u/?<?=$session["username"]?>">
+            <li><a href="/u/?<?=$session["username"]?>" title="Profile">
               <img src="<?=$Abian->getAvatar($session["id"], true)?>" style="height:20px" class="img-circle" />
               <?=$session["username"]?>
               <span class="badge"><?=$Abian->calcLevel($xp)[0]?></span>
             </a></li>
-            <li><a href="/b"><i class="fa fa-folder-open"></i></a></li>
-            <li><a href="/u/cp"><i class="fa fa-cog"></i></a></li>
-            <li><a href="/a"><i class="fa fa-database"></i></a></li>
-            <li><a href="/u/logout"><i class="fa fa-sign-out"></i></a></li>
+            <li><a href="/b" title="Bots"><i class="fa fa-folder-open"></i></a></li>
+            <li><a href="/u/cp" title="Control Panel"><i class="fa fa-cog"></i></a></li>
+            <li><a href="/a" title="Admin Panel"><i class="fa fa-database"></i></a></li>
+            <li><a href="/u/logout" title="Logout"><i class="fa fa-sign-out"></i></a></li>
           <?php endif; ?>
         </ul>
       </div><!--/.nav-collapse -->

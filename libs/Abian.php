@@ -368,7 +368,7 @@ class Abian extends UserSystem {
       echo '
         <li class="media">
           <div class="media-left">
-            <img src="'.$gravatar.'" />
+            <img src="'.$gravatar.'" width="64" />
           </div>
           <div class="media-body">
             '.$mod.'

@@ -13,19 +13,25 @@ if (!is_array($session)) $UserSystem->redirect301("/u/login");
       <div class="panel-body">
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <a href="#" class="btn btn-default btn-block">Ban Appeals</a>
+            <a href="u/a" class="btn btn-default btn-block">Ban Appeals</a>
           </div>
           <div class="col-xs-12 col-sm-6">
-            <a href="#" class="btn btn-default btn-block">Banned</a>
+            <a href="u/b" class="btn btn-default btn-block">Banned</a>
           </div>
         </div>
         <br>
         <div class="row">
           <div class="col-xs-12 col-sm-6">
-            <a href="#" class="btn btn-default btn-block">Statistics</a>
+            <a href="u/s" class="btn btn-default btn-block">Statistics</a>
           </div>
           <div class="col-xs-12 col-sm-6">
-            <a href="#" class="btn btn-default btn-block">Reported</a>
+            <a href="/r" class="btn btn-default btn-block">Reported</a>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <a href="u/u" class="btn btn-default btn-block">Browse</a>
           </div>
         </div>
       </div>

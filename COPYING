@@ -708,3 +708,8 @@ License
 Utilizes [Parsedown](https://github.com/erusev/parsedown/releases/tag/1.5.1).
 
 > Copyright (c) 2013 Emanuil Rusev, erusev.com; MIT License
+
+Utilizes [Timeago](https://github.com/rmm5t/jquery-timeago/commit/bf9d36).
+
+> Copyright (c) 2008-2015, Ryan McGeary (ryan -[at]- mcgeary [*dot*] org); MIT
+License

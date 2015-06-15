@@ -273,6 +273,7 @@
     $('[data-toggle="popover"]').popover();
     emojify.setConfig({ignore_emoticons: true});
     emojify.run();
+    $("time.timeago").timeago();
   });
   </script>
 </body>
