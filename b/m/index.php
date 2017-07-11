@@ -1,5 +1,5 @@
 <?php
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 if ($session === false) $UserSystem->redirect301("/u/login");
 
 $bots = $UserSystem->dbSel(["bots", ["user" => $session["id"]]]);
@@ -67,5 +67,5 @@ echo <<<EOT
   </div>
 EOT;
 
-require_once("/var/www/abian/footer.php");
+require_once("/var/www/Abian/footer.php");
 ?>

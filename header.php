@@ -8,16 +8,16 @@ if ($_SERVER["HTTP_X_FORWARDED_PROTO"] != "https"
   header("Location: $redirect");
 }
 if (!isset($sidebar)) $sidebar = true;
-require_once("/var/www/abian/_secret_keys.php");
-require_once("/var/www/abian/libs/usersystem/config.php");
-require_once("/var/www/abian/libs/Parsedown.php");
-require_once("/var/www/abian/libs/Abian.php");
-require_once("/var/www/abian/libs/recaptcha.php");
+require_once("/var/www/Abian/_secret_keys.php");
+require_once("/var/www/Abian/libs/usersystem/config.php");
+require_once("/var/www/Abian/libs/Parsedown.php");
+require_once("/var/www/Abian/libs/Abian.php");
+require_once("/var/www/Abian/libs/recaptcha.php");
 $Abian = new Abian;
 $session = $UserSystem->verifySession();
 if ($session === true) {
   $session = $UserSystem->session();
-  date_default_timezone_set($session["timeZone"]);
+  if ($session["timeZone"] !== "") date_default_timezone_set($session["timeZone"]);
   $Abian->lastActive($session["id"]);
   $xp = $Abian->calcXP($session["id"]);
 } elseif ($session === "ban") {

@@ -167,7 +167,7 @@
             } else {
               date_default_timezone_set("America/Denver");
               $server = date("Y-m-d h:i:s A");
-              date_default_timezone_set($session["timeZone"]);
+              if ($session["timeZone"] !== "") date_default_timezone_set($session["timeZone"]);
               $user = date("Y-m-d h:i:s A");
               $ahead = abs((strtotime($server) - strtotime($user)) / 3600);
               $ahead = $ahead>0 ?$ahead." hours ahead" : $ahead." hours behind";

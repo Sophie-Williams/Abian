@@ -24,8 +24,8 @@ class Abian extends UserSystem {
   public function getAvatar ($user, $small = false, $http = true) {
     $preface = $http === true
       ? "https://abian.zbee.me/cache/"
-      : "/var/www/abian/cache/";
-    if (file_exists("/var/www/abian/cache/$user.jpg")) {
+      : "/var/www/Abian/cache/";
+    if (file_exists("/var/www/Abian/cache/$user.jpg")) {
       return $small === true
         ? "$preface$user-32x.jpg"
         : "$preface$user.jpg";
@@ -34,10 +34,11 @@ class Abian extends UserSystem {
       if ($search[0] !== 1) return "user";
       $e = md5(strtolower(trim($search[1]["email"])));
       $l = "https://www.gravatar.com/avatar/".$e;
-      $file32 = "/var/www/abian/cache/$user-32x.jpg";
-      $file = "/var/www/abian/cache/$user.jpg";
-      if (!@copy($l."?s=512", $file)) return "copy";
-      if (!@copy($l."?s=32", $file32)) return "copy";
+      $file32 = "/var/www/Abian/cache/$user-32x.jpg";
+      $file = "/var/www/Abian/cache/$user.jpg";
+      print copy($l."?s=512", $file);
+      if (!@copy($l."?s=512", $file)) return "copy1";
+      if (!@copy($l."?s=32", $file32)) return "copy2";
       return $small === true
         ? "$preface$user-32x.jpg"
         : "$preface$user.jpg";
@@ -62,24 +63,21 @@ class Abian extends UserSystem {
 
     $u = $u[1];
 
-    $trim = substr(
-      file_get_contents(
-        "http://www.aq.com/character.asp?id=" . $a,
-        false,
-        null,
-        0,
-        16500
-      ),
-      16250
+    $trim = file_get_contents(
+      "http://www.aq.com/character.asp?id=" . $a,
+      false,
+      null,
+      0
     );
     $trim = explode("intColorTrim=", $trim);
     if (!isset($trim[1])) return "aqName";
     $trim = $trim[1];
 
-    $trim = explode("&", substr($trim, 13))[0];
-    $trim = dechex($trim);
+    $trim = explode("&", $trim)[0];
+    $trim = str_pad(dechex($trim), 6, "0", STR_PAD_LEFT);
 
-    $dec = dechex(substr($u["id"], 0, 6));
+    $dec = str_pad(dechex(substr($u["id"], 0, 6)), 6, "0", STR_PAD_LEFT);
+
     if ($trim != $dec) return "match";
 
     $updated = $this->dbUpd(
@@ -141,7 +139,7 @@ class Abian extends UserSystem {
       $_SERVER["REMOTE_ADDR"],
       FILTER_SANITIZE_FULL_SPECIAL_CHARS
     );
-    if (ENCRYPTION === true) $ipAddress = encrypt($ipAddress, $username);
+    if (ENCRYPTION === true) $ipAddress = encrypt($ipAddress, $user);
     return $this->dbUpd(
       [
         "users",
@@ -439,8 +437,13 @@ class Abian extends UserSystem {
   */
   public function getCommit() {
     #Check if cache is reliable, if not fetch it again
-    $cached = explode(":", file_get_contents("/var/www/abian/libs/commit.txt"));
-    $date = $cached[0]; $commit = $cached[1];
+    if (file_exists("/var/www/Abian/libs/commit.txt")) {
+        $cached = explode(":", file_get_contents("/var/www/Abian/libs/commit.txt"));
+        $date = $cached[0];
+        $commit = $cached[1];
+    } else {
+      $date = 0;
+    }
     if ($date === date("YmdHi", time())) {
       return $commit;
     } else {
@@ -453,7 +456,7 @@ class Abian extends UserSystem {
       $data = json_decode($data, true);
       $return = $data[0]["sha"];
       file_put_contents(
-        "/var/www/abian/libs/commit.txt",
+        "/var/www/Abian/libs/commit.txt",
         date("YmdHi", time()) . ":" . $return
       );
       return $return;

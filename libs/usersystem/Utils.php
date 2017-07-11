@@ -212,13 +212,13 @@ class Utils {
   * Example: $UserSystem->insertUserBlob("bob", "twoStep")
   *
   * @access public
-  * @param string $username
+  * @param integer $user
   * @param mixed $action
   * @return boolean
   */
-  public function insertUserBlob ($id, $action = "session") {
-    $hash = $this->createSalt($id);
-    $hash = $hash.md5($id.$hash);
+  public function insertUserBlob ($user, $action = "session") {
+    $hash = $this->createSalt($user);
+    $hash = $hash.md5($user.$hash);
     $ipAddress = filter_var(
       $_SERVER["REMOTE_ADDR"],
       FILTER_SANITIZE_FULL_SPECIAL_CHARS
@@ -228,13 +228,13 @@ class Utils {
       FILTER_SANITIZE_FULL_SPECIAL_CHARS
     );
     if (ENCRYPTION === true) {
-      $ipAddress = encrypt($ipAddress, $username);
+      $ipAddress = encrypt($ipAddress, $user);
     }
-    $this->dbIns(
+    if ($try = $this->dbIns(
       [
         "userblobs",
         [
-          "user" => $id,
+          "user" => $user,
           "code" => $hash,
           "action" => $action,
           "ip" => $ipAddress,
@@ -242,8 +242,11 @@ class Utils {
           "date" => time()
         ]
       ]
-    );
-    return $hash;
+    )) {
+      return $hash;
+    } else {
+      return "failinsert";
+    }
   }
 
   /**

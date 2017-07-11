@@ -1,5 +1,5 @@
 <?php
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 if (isset($_GET["loggedin"])) {
   $info = "In " . $Abian->codeToCountry($_SERVER["HTTP_CF_IPCOUNTRY"]) . " using " . $Abian->getBrowser() . " on " . $Abian->getOS();
   $hist = $Abian->historify("user.login", $info);
@@ -8,5 +8,5 @@ if (isset($_GET["loggedin"])) {
 
 echo $Abian->getBots(["id" => ["!=", "a"], "sort" => ["dateUpdate", "desc"]]);
 
-require_once("footer.php");
+require_once("/var/www/Abian/footer.php");
 ?>

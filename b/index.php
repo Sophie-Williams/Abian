@@ -1,5 +1,5 @@
 <?php
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 $bot = null;
 if (isset($_GET) && count($_GET) > 0) {
   $bot = array_search(array_values($_GET)[0], $_GET);
@@ -272,5 +272,5 @@ EOT;
 EOT;
 }
 
-require_once("/var/www/abian/footer.php");
+require_once("/var/www/Abian/footer.php");
 ?>

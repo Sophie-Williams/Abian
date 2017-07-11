@@ -1,5 +1,5 @@
 <?php
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 ?>
 
 <h1>Frequently Asked Questions</h1>
@@ -183,5 +183,5 @@ require_once("/var/www/abian/header.php");
 </div>
 
 <?php
-require_once("/var/www/abian/footer.php");
+require_once("/var/www/Abian/footer.php");
 ?>

@@ -1,5 +1,5 @@
 <?php
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 if (!is_array($session)) $UserSystem->redirect301("/u/login");
 #if ($session["title"] !== "Moderator") $UserSystem->redirect301("/");
 $users = $UserSystem->dbSel(["users", ["username" => ["!=", ""]]]);
@@ -66,4 +66,4 @@ if ($numUsers > 0) foreach ($users as $user) {
   </div>
 </div>
 
-<?php require_once("/var/www/abian/footer.php"); ?>
+<?php require_once("/var/www/Abian/footer.php"); ?>

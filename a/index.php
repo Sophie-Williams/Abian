@@ -1,5 +1,5 @@
 <?php
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 if (!is_array($session)) $UserSystem->redirect301("/u/login");
 #if ($session["title"] !== "Moderator") $UserSystem->redirect301("/");
 ?>
@@ -132,5 +132,5 @@ if (!is_array($session)) $UserSystem->redirect301("/u/login");
 </div>
 
 <?php
-require_once("/var/www/abian/footer.php");
+require_once("/var/www/Abian/footer.php");
 ?>

@@ -1,6 +1,6 @@
 <?php
-require_once("/var/www/abian/_secret_keys.php");
-require_once("/var/www/abian/libs/usersystem/config.php");
+require_once("/var/www/Abian/_secret_keys.php");
+require_once("/var/www/Abian/libs/usersystem/config.php");
 $response = "";
 
 if (isset($_POST["up"]) || isset($_POST["down"])) {

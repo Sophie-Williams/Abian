@@ -1,5 +1,5 @@
 <?php
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 if ($session === false) $UserSystem->redirect301("/u/login");
 $recaptcha = recaptcha_get_html($re["site"], null, true);
 
@@ -34,10 +34,10 @@ if (isset($_POST["n"])) {
           )
         )
       );
-      $dir = "/var/www/abian/dl/";
+      $dir = "/var/www/Abian/dl/";
       $file = $dir . basename($UserSystem->sanitize($slug) . ".zip");
       $search = $UserSystem->dbSel(["bots", ["slug" => $slug]])[0];
-      if (!file_exists("/var/www/abian/dl/" . $slug . ".zip")
+      if (!file_exists("/var/www/Abian/dl/" . $slug . ".zip")
         && $search === 0) {
         $size = $UserSystem->sanitize(
           array_change_key_case(
@@ -50,7 +50,7 @@ if (isset($_POST["n"])) {
         );
         if ($size < 5500000) {
           file_put_contents(
-            "/var/www/abian/dl/" . $slug . ".zip",
+            "/var/www/Abian/dl/" . $slug . ".zip",
             file_get_contents($_POST["f"])
           );
           $m = $_POST["m"] == 1 ? 1 : 0;
@@ -189,5 +189,5 @@ echo <<<EOT
 </div>
 EOT;
 
-require_once("/var/www/abian/footer.php");
+require_once("/var/www/Abian/footer.php");
 ?>

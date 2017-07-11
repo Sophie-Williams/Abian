@@ -2,7 +2,7 @@
 $sidebar = false;
 require_once("../../header.php");
 
-if (is_array($session)) $UserSystem->redirect301("/");
+if (is_array($session)) $UserSystem->redirect301("/?sess");
 
 $recaptcha = recaptcha_get_html($re["site"], null, true);
 
@@ -14,7 +14,7 @@ if (isset($_POST["u"])) {
     if ($_POST["p"] === $_POST["cp"]) {
       $register = $UserSystem->addUser($_POST["u"], $_POST["p"], $_POST["e"]);
       if ($register === true) {
-        $UserSystem->redirect301("/");
+        //$UserSystem->redirect301("/?registered");
       }
     } else {
       echo "You suck. Stupid";

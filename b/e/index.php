@@ -1,5 +1,5 @@
 <?php
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 $bot = null;
 if (isset($_GET) && count($_GET) > 0) {
   $bot = array_search(array_values($_GET)[0], $_GET);
@@ -38,10 +38,10 @@ if (is_array($session) && $bot !== null) {
           ]
         )[0];
         if ($search === 0) {
-          if (file_get_contents("/var/www/abian/dl/" . $slug . ".zip") !=
+          if (file_get_contents("/var/www/Abian/dl/" . $slug . ".zip") !=
             file_get_contents($_POST["f"])) {
             $file = file_put_contents(
-              "/var/www/abian/dl/" . $slug . ".zip",
+              "/var/www/Abian/dl/" . $slug . ".zip",
               file_get_contents($_POST["f"])
             );
           }
@@ -153,5 +153,5 @@ EOT;
   }
 }
 
-require_once("/var/www/abian/footer.php");
+require_once("/var/www/Abian/footer.php");
 ?>

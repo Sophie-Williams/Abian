@@ -46,7 +46,7 @@ class Database extends Utils {
     }
     $cols = substr($cols, 0, -2);
     $entries = substr($entries, 0, -2);
-    #print($this->str_replace_arr("?", $enArr, "INSERT INTO $data[0] ($cols) VALUES ($entries)"));
+    //print($this->str_replace_arr("?", $enArr, "INSERT INTO $data[0] ($cols) VALUES ($entries)"));
     $stmt = $this->DATABASE->prepare("
       INSERT INTO $data[0] ($cols) VALUES ($entries)
     "); #Twitch @Sniperzeelite I love u 5 ever!!!
@@ -140,6 +140,7 @@ class Database extends Utils {
   public function dbSel ($data) {
     $data[0] = $this->quoteIdent(DB_PREFACE.ucfirst($data[0]));
     $dataArr = [];
+
     foreach ($data[1] as $col => $item) {
       array_push(
         $dataArr,
@@ -149,6 +150,7 @@ class Database extends Utils {
         ]
       );
     }
+
     $equals = '';
     $qmark = [];
     foreach ($dataArr as $item) {
@@ -161,12 +163,13 @@ class Database extends Utils {
       array_push($qmark, $item[1]);
     }
     $equals = substr($equals, 5);
+
     if (isset($data[2])) {
       $order = "order by ".$this->quoteIdent($data[2][0])." ".$data[2][1];
     } else {
       $order = "";
     }
-    #print($this->str_replace_arr("?", $qmark, "select * from ".$data[0]." where $equals ".$order));
+    //print($this->str_replace_arr("?", $qmark, "select * from ".$data[0]." where $equals ".$order));
     $stmt = $this->DATABASE->prepare("
       select * from ".$data[0]." where $equals ".$order."
     ");

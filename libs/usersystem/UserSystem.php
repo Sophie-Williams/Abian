@@ -152,16 +152,17 @@ class UserSystem extends Database {
              }
            }
 
-           $this->dbIns(["users", $data]);
-           $blob = $this->insertUserBlob($username, "activate");
-           $link = $this->sanitize(
-             URL_PREFACE."://".DOMAIN."/".ACTIVATE_PG."/?blob={$blob}",
-             "u"
-           );
-           $mail = $this->sendMail(
-             $email,
-             "Activate your ".SITENAME." account",
-             "           Hello {$username}
+           if ($this->dbIns(["users", $data])) {
+             $blob = $this->insertUserBlob($username, "activate");
+             var_dump($blob);
+             $link = $this->sanitize(
+               URL_PREFACE . "://" . DOMAIN . "/" . ACTIVATE_PG . "/?blob={$blob}",
+               "u"
+             );
+             $mail = $this->sendMail(
+               $email,
+               "Activate your " . SITENAME . " account",
+               "           Hello {$username}
 
              To activate your account, click the link below.
              {$link}
@@ -171,8 +172,11 @@ class UserSystem extends Database {
              If this wasn't you, you can ignore this email.
 
              Thank you"
-           );
-           return $mail;
+             );
+             return $mail;
+           } else {
+             return "insertbad";
+           }
         } else {
           return "emailbad";
         }

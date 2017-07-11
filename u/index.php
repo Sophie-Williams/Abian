@@ -1,6 +1,6 @@
 <?php
 $sidebar = false;
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 $user = null;
 if (isset($_GET["redir"]))
   $UserSystem->redirect301(
@@ -103,7 +103,7 @@ EOT;
 $badged = $UserSystem->dbSel(["badging", ["user" => $user["id"]]]);
 if ($badged[0] > 0) {
   $badges = $UserSystem->dbSel(
-    ["badges", ["id" => ["!=", "a"]], ["order", "asc"]]
+    ["badges", ["id" => ["!=", "a"]], ["type", "asc"]]
   );
   foreach ($badges as $key => $badge) {
     if ($key === 0) continue;
@@ -145,5 +145,5 @@ echo <<<EOT
 </div>
 EOT;
 
-require_once("/var/www/abian/footer.php");
+require_once("/var/www/Abian/footer.php");
 ?>

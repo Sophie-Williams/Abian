@@ -1,8 +1,8 @@
 <?php
 #0: invalid input, 1: already most recent, 2: failed to copy, 3: updated
-require_once("/var/www/abian/_secret_keys.php");
-require_once("/var/www/abian/libs/usersystem/config.php");
-require_once("/var/www/abian/libs/Abian.php");
+require_once("/var/www/Abian/_secret_keys.php");
+require_once("/var/www/Abian/libs/usersystem/config.php");
+require_once("/var/www/Abian/libs/Abian.php");
 $Abian = new Abian;
 
 if (!isset($_POST["i"]) || !isset($_POST["e"])) {
@@ -15,8 +15,8 @@ $e = $UserSystem->sanitize($_POST["e"]);
 
 $link = "https://www.gravatar.com/avatar/".md5(strtolower(trim($e)));
 $hash = hash_file("sha512", $link."?s=32");
-$file32 = "/var/www/abian/cache/$i-32x.jpg";
-$file = "/var/www/abian/cache/$i.jpg";
+$file32 = "/var/www/Abian/cache/$i-32x.jpg";
+$file = "/var/www/Abian/cache/$i.jpg";
 
 if (is_file($file32) && $hash === hash_file("sha512", $file32)) {
   echo json_encode(["success"=>"1"]);

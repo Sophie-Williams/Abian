@@ -1,7 +1,7 @@
 <?php
 $sidebar = false;
 if (isset($_GET["code"])) $chillS = true;
-require_once("/var/www/abian/header.php");
+require_once("/var/www/Abian/header.php");
 if ($session === false) $UserSystem->redirect301("/u/login");
 
 $error = "";
@@ -518,7 +518,7 @@ echo <<<EOT
 EOT;
 
 $badges = $UserSystem->dbSel(
-  ["badges", ["id" => ["!=", "a"]], ["order", "asc"]]
+  ["badges", ["id" => ["!=", "0"]], ["type", "asc"]]
 );
 foreach ($badges as $key => $badge) {
   if ($key === 0) continue;
